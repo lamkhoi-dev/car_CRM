@@ -61,7 +61,7 @@ const VehicleCard = ({ vehicle, index = 0 }: VehicleCardProps) => {
               <span className="text-sm text-muted-foreground">/ngày</span>
             </div>
             <span className="rounded-lg bg-secondary px-3 py-1.5 text-xs font-medium text-secondary-foreground transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
-              View Details
+              Xem chi tiết
             </span>
           </div>
         </div>

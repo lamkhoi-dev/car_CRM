@@ -100,23 +100,23 @@ const VehicleForm = ({ initial, onSubmit, onCancel, loading }: VehicleFormProps)
     <form onSubmit={handleSubmit} className="space-y-3">
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label className="mb-1 block text-xs font-medium">Name *</label>
+          <label className="mb-1 block text-xs font-medium">Tên xe *</label>
           <input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required
             className="w-full rounded-lg border border-border bg-secondary px-3 py-2 text-sm focus:border-primary focus:outline-none" />
         </div>
         <div>
-          <label className="mb-1 block text-xs font-medium">Type</label>
+          <label className="mb-1 block text-xs font-medium">Loại xe</label>
           <select value={form.type} onChange={(e) => setForm({ ...form, type: e.target.value as Vehicle['type'] })}
             className="w-full rounded-lg border border-border bg-secondary px-3 py-2 text-sm focus:border-primary focus:outline-none">
-            <option value="car">Car</option>
+            <option value="car">Sedan</option>
             <option value="suv">SUV</option>
-            <option value="luxury">Luxury</option>
-            <option value="bike">Bike</option>
+            <option value="luxury">Sang trọng</option>
+            <option value="bike">Xe máy</option>
           </select>
         </div>
       </div>
       <div>
-        <label className="mb-1 block text-xs font-medium">Description</label>
+        <label className="mb-1 block text-xs font-medium">Mô tả</label>
         <textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} rows={2}
           className="w-full rounded-lg border border-border bg-secondary px-3 py-2 text-sm focus:border-primary focus:outline-none" />
       </div>
@@ -132,14 +132,14 @@ const VehicleForm = ({ initial, onSubmit, onCancel, loading }: VehicleFormProps)
             className="w-full rounded-lg border border-border bg-secondary px-3 py-2 text-sm focus:border-primary focus:outline-none" />
         </div>
         <div>
-          <label className="mb-1 block text-xs font-medium">Seats</label>
+          <label className="mb-1 block text-xs font-medium">Chỗ ngồi</label>
           <input type="number" value={form.seats} onChange={(e) => setForm({ ...form, seats: Number(e.target.value) })}
             className="w-full rounded-lg border border-border bg-secondary px-3 py-2 text-sm focus:border-primary focus:outline-none" />
         </div>
       </div>
       <div className="grid grid-cols-3 gap-3">
         <div>
-          <label className="mb-1 block text-xs font-medium">Transmission</label>
+          <label className="mb-1 block text-xs font-medium">Hộp số</label>
           <select value={form.transmission} onChange={(e) => setForm({ ...form, transmission: e.target.value })}
             className="w-full rounded-lg border border-border bg-secondary px-3 py-2 text-sm focus:border-primary focus:outline-none">
             <option>Automatic</option>
@@ -147,29 +147,29 @@ const VehicleForm = ({ initial, onSubmit, onCancel, loading }: VehicleFormProps)
           </select>
         </div>
         <div>
-          <label className="mb-1 block text-xs font-medium">Fuel</label>
+          <label className="mb-1 block text-xs font-medium">Nhiên liệu</label>
           <select value={form.fuel} onChange={(e) => setForm({ ...form, fuel: e.target.value })}
             className="w-full rounded-lg border border-border bg-secondary px-3 py-2 text-sm focus:border-primary focus:outline-none">
-            <option>Petrol</option>
-            <option>Diesel</option>
-            <option>Electric</option>
+            <option>Xăng</option>
+            <option>Dầu</option>
+            <option>Điện</option>
             <option>Hybrid</option>
           </select>
         </div>
         <div>
-          <label className="mb-1 block text-xs font-medium">Rating</label>
+          <label className="mb-1 block text-xs font-medium">Đánh giá</label>
           <input type="number" step="0.1" min="0" max="5" value={form.rating} onChange={(e) => setForm({ ...form, rating: Number(e.target.value) })}
             className="w-full rounded-lg border border-border bg-secondary px-3 py-2 text-sm focus:border-primary focus:outline-none" />
         </div>
       </div>
       <div>
-        <label className="mb-1 block text-xs font-medium">Features (comma separated)</label>
+        <label className="mb-1 block text-xs font-medium">Tính năng (cách nhau bởi dấu phẩy)</label>
         <input value={form.features} onChange={(e) => setForm({ ...form, features: e.target.value })}
           placeholder="Autopilot, Premium Sound, ..."
           className="w-full rounded-lg border border-border bg-secondary px-3 py-2 text-sm focus:border-primary focus:outline-none" />
       </div>
       <div>
-        <label className="mb-1 block text-xs font-medium">Images</label>
+        <label className="mb-1 block text-xs font-medium">Hình ảnh</label>
         <div className="flex flex-wrap gap-2 mb-2">
           {form.images.map((img, i) => (
             <div key={i} className="relative">
@@ -183,11 +183,11 @@ const VehicleForm = ({ initial, onSubmit, onCancel, loading }: VehicleFormProps)
         </div>
         <label className="flex cursor-pointer items-center gap-2 rounded-lg border border-dashed border-border p-2 text-xs text-muted-foreground hover:border-primary hover:text-primary">
           <Upload className="h-4 w-4" />
-          {uploading ? 'Uploading...' : 'Upload Image'}
+          {uploading ? 'Đang tải...' : 'Tải ảnh lên'}
           <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" disabled={uploading} />
         </label>
         <div className="mt-2">
-          <input placeholder="Or paste image URL and press Enter" onKeyDown={(e) => {
+          <input placeholder="Hoặc dán URL ảnh và nhấn Enter" onKeyDown={(e) => {
             if (e.key === 'Enter') {
               e.preventDefault();
               const url = (e.target as HTMLInputElement).value.trim();
@@ -203,9 +203,9 @@ const VehicleForm = ({ initial, onSubmit, onCancel, loading }: VehicleFormProps)
       <div className="flex gap-2 pt-2">
         <button type="submit" disabled={loading}
           className="flex-1 rounded-lg bg-primary py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-50">
-          {loading ? 'Saving...' : initial ? 'Update' : 'Create'}
+          {loading ? 'Đang lưu...' : initial ? 'Cập nhật' : 'Tạo mới'}
         </button>
-        <button type="button" onClick={onCancel} className="rounded-lg bg-secondary px-4 py-2.5 text-sm">Cancel</button>
+        <button type="button" onClick={onCancel} className="rounded-lg bg-secondary px-4 py-2.5 text-sm">Huỷ</button>
       </div>
     </form>
   );
@@ -238,48 +238,48 @@ const BlogForm = ({ initial, onSubmit, onCancel, loading }: BlogFormProps) => {
   return (
     <form onSubmit={handleSubmit} className="space-y-3">
       <div>
-        <label className="mb-1 block text-xs font-medium">Title *</label>
+        <label className="mb-1 block text-xs font-medium">Tiêu đề *</label>
         <input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} required
           className="w-full rounded-lg border border-border bg-secondary px-3 py-2 text-sm focus:border-primary focus:outline-none" />
       </div>
       <div>
-        <label className="mb-1 block text-xs font-medium">Excerpt</label>
+        <label className="mb-1 block text-xs font-medium">Tóm tắt</label>
         <input value={form.excerpt} onChange={(e) => setForm({ ...form, excerpt: e.target.value })}
           className="w-full rounded-lg border border-border bg-secondary px-3 py-2 text-sm focus:border-primary focus:outline-none" />
       </div>
       <div>
-        <label className="mb-1 block text-xs font-medium">Content *</label>
+        <label className="mb-1 block text-xs font-medium">Nội dung *</label>
         <textarea value={form.content} onChange={(e) => setForm({ ...form, content: e.target.value })} rows={6} required
           className="w-full rounded-lg border border-border bg-secondary px-3 py-2 text-sm focus:border-primary focus:outline-none" />
       </div>
       <div className="grid grid-cols-3 gap-3">
         <div>
-          <label className="mb-1 block text-xs font-medium">Author</label>
+          <label className="mb-1 block text-xs font-medium">Tác giả</label>
           <input value={form.author} onChange={(e) => setForm({ ...form, author: e.target.value })}
             className="w-full rounded-lg border border-border bg-secondary px-3 py-2 text-sm focus:border-primary focus:outline-none" />
         </div>
         <div>
-          <label className="mb-1 block text-xs font-medium">Category</label>
+          <label className="mb-1 block text-xs font-medium">Danh mục</label>
           <input value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })}
             className="w-full rounded-lg border border-border bg-secondary px-3 py-2 text-sm focus:border-primary focus:outline-none" />
         </div>
         <div>
-          <label className="mb-1 block text-xs font-medium">Read Time</label>
+          <label className="mb-1 block text-xs font-medium">Thời gian đọc</label>
           <input value={form.readTime} onChange={(e) => setForm({ ...form, readTime: e.target.value })}
             className="w-full rounded-lg border border-border bg-secondary px-3 py-2 text-sm focus:border-primary focus:outline-none" />
         </div>
       </div>
       <div>
-        <label className="mb-1 block text-xs font-medium">Image URL</label>
+        <label className="mb-1 block text-xs font-medium">URL hình ảnh</label>
         <input value={form.image} onChange={(e) => setForm({ ...form, image: e.target.value })}
           className="w-full rounded-lg border border-border bg-secondary px-3 py-2 text-sm focus:border-primary focus:outline-none" />
       </div>
       <div className="flex gap-2 pt-2">
         <button type="submit" disabled={loading}
           className="flex-1 rounded-lg bg-primary py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-50">
-          {loading ? 'Saving...' : initial ? 'Update' : 'Create'}
+          {loading ? 'Đang lưu...' : initial ? 'Cập nhật' : 'Tạo mới'}
         </button>
-        <button type="button" onClick={onCancel} className="rounded-lg bg-secondary px-4 py-2.5 text-sm">Cancel</button>
+        <button type="button" onClick={onCancel} className="rounded-lg bg-secondary px-4 py-2.5 text-sm">Huỷ</button>
       </div>
     </form>
   );
@@ -317,9 +317,9 @@ const Admin = () => {
   const [seeding, setSeeding] = useState(false);
 
   const tabs = [
-    { id: "dashboard" as Tab, label: "Dashboard", icon: LayoutDashboard },
-    { id: "vehicles" as Tab, label: "Vehicles", icon: Car },
-    { id: "bookings" as Tab, label: "Bookings", icon: CalendarDays },
+    { id: "dashboard" as Tab, label: "Tổng quan", icon: LayoutDashboard },
+    { id: "vehicles" as Tab, label: "Xe", icon: Car },
+    { id: "bookings" as Tab, label: "Đơn đặt", icon: CalendarDays },
     { id: "blog" as Tab, label: "Blog", icon: BookOpen },
   ];
 
@@ -436,19 +436,19 @@ const Admin = () => {
           <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 mx-auto">
             <KeyRound className="h-6 w-6 text-primary" />
           </div>
-          <h2 className="mb-1 text-center font-display text-xl font-bold">Admin Login</h2>
-          <p className="mb-4 text-center text-xs text-muted-foreground">Enter your admin secret to access the panel</p>
+          <h2 className="mb-1 text-center font-display text-xl font-bold">Đăng nhập Admin</h2>
+          <p className="mb-4 text-center text-xs text-muted-foreground">Nhập mật khẩu admin để truy cập bảng điều khiển</p>
           <form onSubmit={handleLogin}>
             <input
               type="password"
               value={secretInput}
               onChange={(e) => setSecretInput(e.target.value)}
-              placeholder="Admin secret..."
+              placeholder="Mật khẩu admin..."
               className="mb-3 w-full rounded-lg border border-border bg-secondary px-4 py-3 text-sm focus:border-primary focus:outline-none"
             />
             <button type="submit"
               className="w-full rounded-lg bg-primary py-3 text-sm font-semibold text-primary-foreground">
-              Login
+              Đăng nhập
             </button>
           </form>
         </motion.div>
@@ -465,8 +465,8 @@ const Admin = () => {
           className="mb-6 flex items-center justify-between"
         >
           <div>
-            <h1 className="mb-1 font-display text-2xl font-bold">Admin Panel</h1>
-            <p className="text-sm text-muted-foreground">Manage your fleet & bookings</p>
+            <h1 className="mb-1 font-display text-2xl font-bold">Quản trị</h1>
+            <p className="text-sm text-muted-foreground">Quản lý đội xe & đơn đặt</p>
           </div>
           <div className="flex gap-2">
             <button onClick={handleSeed} disabled={seeding}
@@ -476,7 +476,7 @@ const Admin = () => {
             </button>
             <button onClick={handleLogout}
               className="rounded-lg bg-secondary px-3 py-2 text-xs font-medium text-muted-foreground hover:text-destructive">
-              Logout
+              Đăng xuất
             </button>
           </div>
         </motion.div>
@@ -512,10 +512,10 @@ const Admin = () => {
               <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
                   {[
-                    { label: "Total Bookings", value: bookings.length, icon: CalendarDays, color: "text-primary" },
-                    { label: "Pending", value: pendingCount, icon: Clock, color: "text-warning" },
+                    { label: "Tổng đơn", value: bookings.length, icon: CalendarDays, color: "text-primary" },
+                    { label: "Chờ duyệt", value: pendingCount, icon: Clock, color: "text-warning" },
                     { label: "Doanh thu", value: formatVND(totalRevenue), icon: DollarSign, color: "text-success" },
-                    { label: "Vehicles", value: vehicles.length, icon: Car, color: "text-accent" },
+                    { label: "Số xe", value: vehicles.length, icon: Car, color: "text-accent" },
                   ].map((stat) => (
                     <div key={stat.label} className="rounded-xl bg-card p-4 card-shadow">
                       <stat.icon className={`mb-2 h-5 w-5 ${stat.color}`} />
@@ -526,7 +526,7 @@ const Admin = () => {
                 </div>
 
                 <div className="rounded-xl bg-card p-4 card-shadow">
-                  <h3 className="mb-3 font-display text-sm font-bold">Recent Bookings</h3>
+                  <h3 className="mb-3 font-display text-sm font-bold">Đơn đặt gần đây</h3>
                   {loadingBookings ? (
                     <div className="flex justify-center py-4"><Loader2 className="h-5 w-5 animate-spin text-primary" /></div>
                   ) : (
@@ -547,7 +547,7 @@ const Admin = () => {
                         );
                       })}
                       {bookings.length === 0 && (
-                        <p className="text-center text-sm text-muted-foreground py-4">No bookings yet</p>
+                        <p className="text-center text-sm text-muted-foreground py-4">Chưa có đơn đặt</p>
                       )}
                     </div>
                   )}
@@ -561,7 +561,7 @@ const Admin = () => {
                 {showVehicleForm ? (
                   <div className="rounded-xl bg-card p-4 card-shadow">
                     <h3 className="mb-3 font-display text-sm font-bold">
-                      {editingVehicle ? 'Edit Vehicle' : 'Add New Vehicle'}
+                      {editingVehicle ? 'Sửa xe' : 'Thêm xe mới'}
                     </h3>
                     <VehicleForm
                       initial={editingVehicle}
@@ -573,7 +573,7 @@ const Admin = () => {
                 ) : (
                   <button onClick={() => { setEditingVehicle(undefined); setShowVehicleForm(true); }}
                     className="flex w-full items-center justify-center gap-2 rounded-xl border-2 border-dashed border-border py-4 text-sm font-medium text-muted-foreground transition-colors hover:border-primary hover:text-primary">
-                    <Plus className="h-4 w-4" /> Add New Vehicle
+                    <Plus className="h-4 w-4" /> Thêm xe mới
                   </button>
                 )}
                 {loadingVehicles ? (
@@ -606,7 +606,7 @@ const Admin = () => {
                 {loadingBookings ? (
                   <div className="flex justify-center py-8"><Loader2 className="h-6 w-6 animate-spin text-primary" /></div>
                 ) : bookings.length === 0 ? (
-                  <p className="text-center text-sm text-muted-foreground py-12">No bookings yet</p>
+                  <p className="text-center text-sm text-muted-foreground py-12">Chưa có đơn đặt</p>
                 ) : bookings.map((b) => {
                   const StatusIcon = statusIcons[b.status] || AlertCircle;
                   return (
@@ -619,10 +619,10 @@ const Admin = () => {
                         </span>
                       </div>
                       <div className="mb-3 grid grid-cols-2 gap-2 text-xs text-muted-foreground">
-                        <div>Customer: {b.customerName}</div>
-                        <div>Phone: {b.customerPhone}</div>
-                        <div>From: {b.startDate}</div>
-                        <div>To: {b.endDate}</div>
+                        <div>Khách: {b.customerName}</div>
+                        <div>SĐT: {b.customerPhone}</div>
+                        <div>Từ: {b.startDate}</div>
+                        <div>Đến: {b.endDate}</div>
                       </div>
                       <div className="mb-3 flex items-center justify-between">
                         <span className="text-sm font-bold">{formatVND(b.totalPrice)}</span>
@@ -635,14 +635,14 @@ const Admin = () => {
                             disabled={updateBookingStatus.isPending}
                             className="flex-1 rounded-lg bg-success/10 py-2 text-xs font-medium text-success hover:bg-success/20 disabled:opacity-50"
                           >
-                            Confirm
+                            Xác nhận
                           </button>
                           <button
                             onClick={() => handleBookingStatus(b.id, "cancelled")}
                             disabled={updateBookingStatus.isPending}
                             className="flex-1 rounded-lg bg-destructive/10 py-2 text-xs font-medium text-destructive hover:bg-destructive/20 disabled:opacity-50"
                           >
-                            Cancel
+                            Huỷ
                           </button>
                         </div>
                       )}
@@ -658,7 +658,7 @@ const Admin = () => {
                 {showBlogForm ? (
                   <div className="rounded-xl bg-card p-4 card-shadow">
                     <h3 className="mb-3 font-display text-sm font-bold">
-                      {editingBlog ? 'Edit Post' : 'Create New Post'}
+                      {editingBlog ? 'Sửa bài' : 'Tạo bài mới'}
                     </h3>
                     <BlogForm
                       initial={editingBlog}
@@ -670,7 +670,7 @@ const Admin = () => {
                 ) : (
                   <button onClick={() => { setEditingBlog(undefined); setShowBlogForm(true); }}
                     className="flex w-full items-center justify-center gap-2 rounded-xl border-2 border-dashed border-border py-4 text-sm font-medium text-muted-foreground transition-colors hover:border-primary hover:text-primary">
-                    <Plus className="h-4 w-4" /> Create New Post
+                    <Plus className="h-4 w-4" /> Tạo bài mới
                   </button>
                 )}
                 {loadingBlogs ? (

@@ -8,10 +8,9 @@ const Navbar = () => {
   const location = useLocation();
 
   const links = [
-    { to: "/", label: "Home" },
-    { to: "/vehicles", label: "Vehicles" },
+    { to: "/", label: "Trang chủ" },
+    { to: "/vehicles", label: "Xe" },
     { to: "/blog", label: "Blog" },
-    { to: "/admin", label: "Admin" },
   ];
 
   return (
@@ -50,7 +49,7 @@ const Navbar = () => {
           to="/vehicles"
           className="hidden rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition-all hover:opacity-90 md:block"
         >
-          Rent Now
+          Thuê Ngay
         </Link>
 
         {/* Mobile menu button */}

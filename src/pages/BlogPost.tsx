@@ -19,7 +19,7 @@ const BlogPost = () => {
   if (!post) {
     return (
       <div className="flex min-h-screen items-center justify-center pt-16">
-        <p className="text-muted-foreground">Post not found</p>
+        <p className="text-muted-foreground">Không tìm thấy bài viết</p>
       </div>
     );
   }
@@ -42,7 +42,7 @@ const BlogPost = () => {
             onClick={() => navigate(-1)}
             className="mb-4 flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
           >
-            <ArrowLeft className="h-4 w-4" /> Back
+            <ArrowLeft className="h-4 w-4" /> Quay lại
           </button>
 
           <span className="mb-2 inline-block rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">

@@ -54,7 +54,7 @@ const BookingPage = () => {
   if (!vehicle) {
     return (
       <div className="flex min-h-screen items-center justify-center pt-16">
-        <p className="text-muted-foreground">Vehicle not found</p>
+        <p className="text-muted-foreground">Không tìm thấy xe</p>
       </div>
     );
   }
@@ -62,19 +62,19 @@ const BookingPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.name || !form.phone || !form.startDate || !form.endDate) {
-      toast.error("Please fill in all fields");
+      toast.error("Vui lòng điền đầy đủ thông tin");
       return;
     }
     if (form.startDate < today) {
-      toast.error("Start date cannot be in the past");
+      toast.error("Ngày bắt đầu không thể trong quá khứ");
       return;
     }
     if (form.endDate <= form.startDate) {
-      toast.error("End date must be after start date");
+      toast.error("Ngày kết thúc phải sau ngày bắt đầu");
       return;
     }
     if (totalDays <= 0) {
-      toast.error("Invalid date range");
+      toast.error("Khoảng ngày không hợp lệ");
       return;
     }
 
@@ -89,9 +89,9 @@ const BookingPage = () => {
         totalPrice,
       });
       setSubmitted(true);
-      toast.success("Booking request submitted!");
+      toast.success("Đã gửi yêu cầu đặt xe!");
     } catch (err: any) {
-      toast.error(err.message || "Booking failed. Please try again.");
+      toast.error(err.message || "Đặt xe thất bại. Vui lòng thử lại.");
     }
   };
 
@@ -105,9 +105,9 @@ const BookingPage = () => {
         >
           <Check className="h-8 w-8 text-success" />
         </motion.div>
-        <h2 className="mb-2 font-display text-xl font-bold">Booking Submitted!</h2>
+        <h2 className="mb-2 font-display text-xl font-bold">Đặt Xe Thành Công!</h2>
         <p className="mb-2 text-center text-sm text-muted-foreground">
-          Your booking for {vehicle.name} has been received.
+          Yêu cầu đặt xe {vehicle.name} đã được ghi nhận.
         </p>
         <p className="mb-6 text-center text-sm font-semibold text-primary">
           {totalDays} ngày · {formatVND(totalPrice)}
@@ -116,7 +116,7 @@ const BookingPage = () => {
           onClick={() => navigate("/vehicles")}
           className="rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground"
         >
-          Browse More Vehicles
+          Xem Thêm Xe
         </button>
       </div>
     );
@@ -133,10 +133,10 @@ const BookingPage = () => {
             onClick={() => navigate(-1)}
             className="mb-4 mt-4 flex items-center gap-1 text-sm text-muted-foreground"
           >
-            <ArrowLeft className="h-4 w-4" /> Back
+            <ArrowLeft className="h-4 w-4" /> Quay lại
           </button>
 
-          <h1 className="mb-1 font-display text-2xl font-bold">Book {vehicle.name}</h1>
+          <h1 className="mb-1 font-display text-2xl font-bold">Đặt xe {vehicle.name}</h1>
           <p className="mb-6 text-sm text-muted-foreground">
             {formatVND(vehicle.pricePerDay)}/ngày · {formatVND(vehicle.pricePerHour)}/giờ
           </p>
@@ -152,30 +152,30 @@ const BookingPage = () => {
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="mb-1.5 block text-sm font-medium">Full Name</label>
+              <label className="mb-1.5 block text-sm font-medium">Họ và tên</label>
               <input
                 type="text"
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
-                placeholder="Your full name"
+                placeholder="Nhập họ và tên"
                 className="w-full rounded-xl border border-border bg-card px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
               />
             </div>
 
             <div>
-              <label className="mb-1.5 block text-sm font-medium">Phone Number</label>
+              <label className="mb-1.5 block text-sm font-medium">Số điện thoại</label>
               <input
                 type="tel"
                 value={form.phone}
                 onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                placeholder="+1 234 567 890"
+                placeholder="0912 345 678"
                 className="w-full rounded-xl border border-border bg-card px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
               />
             </div>
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="mb-1.5 block text-sm font-medium">Start Date</label>
+                <label className="mb-1.5 block text-sm font-medium">Ngày bắt đầu</label>
                 <div className="relative">
                   <CalendarDays className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                   <input
@@ -188,7 +188,7 @@ const BookingPage = () => {
                 </div>
               </div>
               <div>
-                <label className="mb-1.5 block text-sm font-medium">End Date</label>
+                <label className="mb-1.5 block text-sm font-medium">Ngày kết thúc</label>
                 <div className="relative">
                   <CalendarDays className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                   <input
@@ -209,14 +209,14 @@ const BookingPage = () => {
                 animate={{ opacity: 1, height: 'auto' }}
                 className="rounded-xl bg-secondary p-4"
               >
-                <h3 className="mb-2 text-sm font-semibold">Price Summary</h3>
+                <h3 className="mb-2 text-sm font-semibold">Chi tiết giá</h3>
                 <div className="space-y-1 text-sm">
                   <div className="flex justify-between text-muted-foreground">
                     <span>{formatVND(vehicle.pricePerDay)} x {totalDays} ngày</span>
                     <span>{formatVND(totalPrice)}</span>
                   </div>
                   <div className="flex justify-between border-t border-border pt-1 font-bold">
-                    <span>Total</span>
+                    <span>Tổng cộng</span>
                     <span className="text-primary">{formatVND(totalPrice)}</span>
                   </div>
                 </div>

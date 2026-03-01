@@ -22,7 +22,7 @@ const VehicleDetail = () => {
   if (!vehicle) {
     return (
       <div className="flex min-h-screen items-center justify-center pt-16">
-        <p className="text-muted-foreground">Vehicle not found</p>
+        <p className="text-muted-foreground">Không tìm thấy xe</p>
       </div>
     );
   }
@@ -85,9 +85,9 @@ const VehicleDetail = () => {
           {/* Specs */}
           <div className="mb-4 grid grid-cols-3 gap-3">
             {[
-              { icon: Users, label: "Seats", value: vehicle.seats },
-              { icon: Settings, label: "Trans.", value: vehicle.transmission },
-              { icon: Fuel, label: "Fuel", value: vehicle.fuel },
+              { icon: Users, label: "Chỗ ngồi", value: vehicle.seats },
+              { icon: Settings, label: "Hộp số", value: vehicle.transmission },
+              { icon: Fuel, label: "Nhiên liệu", value: vehicle.fuel },
             ].map((spec) => (
               <div key={spec.label} className="rounded-lg bg-secondary p-3 text-center">
                 <spec.icon className="mx-auto mb-1 h-4 w-4 text-muted-foreground" />
@@ -99,7 +99,7 @@ const VehicleDetail = () => {
 
           {/* Features */}
           <div className="mb-4">
-            <h3 className="mb-2 text-sm font-semibold">Features</h3>
+            <h3 className="mb-2 text-sm font-semibold">Tính năng</h3>
             <div className="flex flex-wrap gap-2">
               {vehicle.features.map((f) => (
                 <span key={f} className="rounded-full bg-secondary px-3 py-1 text-xs text-secondary-foreground">
@@ -109,23 +109,23 @@ const VehicleDetail = () => {
             </div>
           </div>
 
-          {/* Pricing */}
-          <div className="flex items-center justify-between rounded-lg bg-secondary p-4">
-            <div>
-              <div className="text-sm text-muted-foreground">From</div>
-              <div className="flex items-baseline gap-1">
+          {/* Pricing + Book Now */}
+          <div className="rounded-lg bg-secondary p-4">
+            <div className="mb-3 flex items-baseline justify-between">
+              <div>
+                <div className="text-xs text-muted-foreground">Giá từ</div>
                 <span className="font-display text-2xl font-bold">{formatVND(vehicle.pricePerDay)}</span>
                 <span className="text-sm text-muted-foreground">/ngày</span>
               </div>
-              <div className="text-xs text-muted-foreground">
+              <div className="text-right text-xs text-muted-foreground">
                 hoặc {formatVND(vehicle.pricePerHour)}/giờ
               </div>
             </div>
             <Link
               to={`/booking/${vehicle.id}`}
-              className="flex items-center gap-1 rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-all hover:opacity-90"
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-3.5 text-sm font-semibold text-primary-foreground transition-all hover:opacity-90"
             >
-              Book Now <ChevronRight className="h-4 w-4" />
+              Đặt Xe Ngay <ChevronRight className="h-4 w-4" />
             </Link>
           </div>
         </motion.div>

@@ -27,10 +27,10 @@ const Vehicles = () => {
           className="mb-6"
         >
           <h1 className="mb-1 font-display text-2xl font-bold sm:text-3xl">
-            Our Fleet
+            Đội Xe Của Chúng Tôi
           </h1>
           <p className="text-sm text-muted-foreground">
-            Choose your perfect ride
+            Chọn chiếc xe hoàn hảo cho bạn
           </p>
         </motion.div>
 
@@ -45,7 +45,7 @@ const Vehicles = () => {
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <input
               type="text"
-              placeholder="Search vehicles..."
+              placeholder="Tìm kiếm xe..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="w-full rounded-xl border border-border bg-card py-3 pl-10 pr-4 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
@@ -81,7 +81,7 @@ const Vehicles = () => {
         {filtered.length === 0 && (
           <div className="py-20 text-center">
             <SlidersHorizontal className="mx-auto mb-3 h-8 w-8 text-muted-foreground" />
-            <p className="text-muted-foreground">No vehicles found</p>
+            <p className="text-muted-foreground">Không tìm thấy xe nào</p>
           </div>
         )}
       </div>

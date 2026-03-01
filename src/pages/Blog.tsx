@@ -15,7 +15,7 @@ const Blog = () => {
           className="mb-8"
         >
           <h1 className="mb-1 font-display text-2xl font-bold sm:text-3xl">Blog</h1>
-          <p className="text-sm text-muted-foreground">Stories, tips & insights</p>
+          <p className="text-sm text-muted-foreground">Tin tức, kinh nghiệm & chia sẻ</p>
         </motion.div>
 
         <div className="space-y-4">

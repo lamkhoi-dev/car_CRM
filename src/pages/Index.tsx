@@ -36,17 +36,17 @@ const Index = () => {
               transition={{ delay: 0.3 }}
               className="mb-4 inline-block rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-xs font-medium text-primary backdrop-blur-sm"
             >
-              Premium Vehicle Rental
+              Dịch vụ cho thuê xe sang
             </motion.span>
 
             <h1 className="mb-6 font-display text-4xl font-black leading-tight tracking-tight text-foreground sm:text-5xl md:text-7xl">
-              Drive the{" "}
-              <span className="gradient-text">Extraordinary</span>
+              Trải nghiệm{" "}
+              <span className="gradient-text">Đẳng Cấp</span>
             </h1>
 
             <p className="mx-auto mb-8 max-w-xl text-base text-muted-foreground sm:text-lg">
-              Unlock premium vehicles for any occasion. Seamless booking, 
-              exceptional service, unforgettable experiences.
+              Cho thuê xe sang cho mọi dịp. Đặt xe nhanh chóng,
+              dịch vụ chuyên nghiệp, trải nghiệm khó quên.
             </p>
 
             <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
@@ -54,14 +54,14 @@ const Index = () => {
                 to="/vehicles"
                 className="group flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-8 py-4 text-sm font-semibold text-primary-foreground transition-all hover:opacity-90 sm:w-auto"
               >
-                Rent Now
+                Thuê Ngay
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Link>
               <Link
                 to="/vehicles"
                 className="flex w-full items-center justify-center gap-2 rounded-xl border border-border bg-secondary/50 px-8 py-4 text-sm font-semibold text-secondary-foreground backdrop-blur-sm transition-all hover:bg-secondary sm:w-auto"
               >
-                Browse Fleet
+                Xem Đội Xe
               </Link>
             </div>
           </motion.div>
@@ -88,9 +88,9 @@ const Index = () => {
       <section className="border-b border-border/50 bg-card/50">
         <div className="container grid grid-cols-3 divide-x divide-border/50 py-8">
           {[
-            { value: "500+", label: "Vehicles" },
-            { value: "10K+", label: "Happy Clients" },
-            { value: "4.9", label: "Avg Rating" },
+            { value: "50+", label: "Xe sang" },
+            { value: "2K+", label: "Khách hàng" },
+            { value: "4.9", label: "Đánh giá" },
           ].map((stat) => (
             <motion.div
               key={stat.label}
@@ -118,18 +118,18 @@ const Index = () => {
             className="mb-10 text-center"
           >
             <h2 className="mb-2 font-display text-2xl font-bold sm:text-3xl">
-              Why Choose Us
+              Tại Sao Chọn Chúng Tôi
             </h2>
             <p className="text-sm text-muted-foreground">
-              Premium service at every touchpoint
+              Dịch vụ cao cấp ở mọi khâu
             </p>
           </motion.div>
 
           <div className="grid gap-4 sm:grid-cols-3">
             {[
-              { icon: Shield, title: "Fully Insured", desc: "Complete coverage on every rental for your peace of mind." },
-              { icon: Clock, title: "24/7 Support", desc: "Round-the-clock assistance whenever you need it." },
-              { icon: Star, title: "Premium Fleet", desc: "Only the finest vehicles, maintained to perfection." },
+              { icon: Shield, title: "Bảo hiểm toàn diện", desc: "Bảo hiểm đầy đủ cho mọi chuyến đi, an tâm tuyệt đối." },
+              { icon: Clock, title: "Hỗ trợ 24/7", desc: "Đội ngũ hỗ trợ luôn sẵn sàng mọi lúc bạn cần." },
+              { icon: Star, title: "Đội xe cao cấp", desc: "Chỉ những chiếc xe hạng sang, bảo dưỡng hoàn hảo." },
             ].map((feature, i) => (
               <motion.div
                 key={feature.title}
@@ -156,17 +156,17 @@ const Index = () => {
           <div className="mb-8 flex items-center justify-between">
             <div>
               <h2 className="font-display text-2xl font-bold sm:text-3xl">
-                Featured Vehicles
+                Xe Nổi Bật
               </h2>
               <p className="text-sm text-muted-foreground">
-                Hand-picked for an exceptional experience
+                Được tuyển chọn cho trải nghiệm tuyệt vời
               </p>
             </div>
             <Link
               to="/vehicles"
               className="hidden items-center gap-1 text-sm font-medium text-primary sm:flex"
             >
-              View All <ChevronRight className="h-4 w-4" />
+              Xem tất cả <ChevronRight className="h-4 w-4" />
             </Link>
           </div>
 
@@ -182,7 +182,7 @@ const Index = () => {
             to="/vehicles"
             className="mt-6 flex items-center justify-center gap-1 text-sm font-medium text-primary sm:hidden"
           >
-            View All Vehicles <ChevronRight className="h-4 w-4" />
+            Xem tất cả xe <ChevronRight className="h-4 w-4" />
           </Link>
         </div>
       </section>
@@ -197,10 +197,10 @@ const Index = () => {
             className="mb-10 text-center"
           >
             <h2 className="mb-2 font-display text-2xl font-bold sm:text-3xl">
-              What Our Clients Say
+              Khách Hàng Nói Gì
             </h2>
             <p className="text-sm text-muted-foreground">
-              Real experiences from real drivers
+              Trải nghiệm thực từ khách hàng thực
             </p>
           </motion.div>
 
@@ -247,16 +247,16 @@ const Index = () => {
             <div className="absolute inset-0 opacity-20" style={{ background: "var(--gradient-primary)" }} />
             <div className="relative z-10">
               <h2 className="mb-3 font-display text-2xl font-bold sm:text-4xl">
-                Ready to Hit the Road?
+                Sẵn Sàng Lên Đường?
               </h2>
               <p className="mx-auto mb-6 max-w-md text-sm text-muted-foreground">
-                Browse our fleet and book your dream vehicle in minutes.
+                Khám phá đội xe và đặt xe mơ ước chỉ trong vài phút.
               </p>
               <Link
                 to="/vehicles"
                 className="inline-flex items-center gap-2 rounded-xl bg-primary px-8 py-4 text-sm font-semibold text-primary-foreground transition-all hover:opacity-90"
               >
-                Explore Vehicles <ArrowRight className="h-4 w-4" />
+                Khám Phá Ngay <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
           </motion.div>
@@ -267,7 +267,7 @@ const Index = () => {
       <footer className="border-t border-border/50 py-8">
         <div className="container text-center">
           <p className="text-xs text-muted-foreground">
-            © 2026 DriveFlux. All rights reserved.
+            © 2026 DriveFlux. Mọi quyền được bảo lưu.
           </p>
         </div>
       </footer>

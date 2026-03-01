@@ -1,12 +1,11 @@
 import { Link, useLocation } from "react-router-dom";
-import { Home, Car, BookOpen, User } from "lucide-react";
+import { Home, Car, BookOpen } from "lucide-react";
 import { motion } from "framer-motion";
 
 const navItems = [
-  { to: "/", icon: Home, label: "Home" },
-  { to: "/vehicles", icon: Car, label: "Vehicles" },
+  { to: "/", icon: Home, label: "Trang chủ" },
+  { to: "/vehicles", icon: Car, label: "Xe" },
   { to: "/blog", icon: BookOpen, label: "Blog" },
-  { to: "/admin", icon: User, label: "Admin" },
 ];
 
 const BottomNav = () => {
