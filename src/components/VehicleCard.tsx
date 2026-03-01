@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
-import { Star } from "lucide-react";
+import { Star, ChevronLeft, ChevronRight } from "lucide-react";
 import { motion } from "framer-motion";
+import { useState } from "react";
 import type { Vehicle } from "@/lib/api";
 import { formatVND } from "@/lib/utils";
 
@@ -10,6 +11,21 @@ interface VehicleCardProps {
 }
 
 const VehicleCard = ({ vehicle, index = 0 }: VehicleCardProps) => {
+  const [imgIdx, setImgIdx] = useState(0);
+  const images = vehicle.images;
+  const hasMultiple = images.length > 1;
+
+  const prev = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setImgIdx((i) => (i - 1 + images.length) % images.length);
+  };
+  const next = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setImgIdx((i) => (i + 1) % images.length);
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
@@ -23,13 +39,46 @@ const VehicleCard = ({ vehicle, index = 0 }: VehicleCardProps) => {
       >
         <div className="relative aspect-[16/10] overflow-hidden">
           <img
-            src={vehicle.images[0]}
+            src={images[imgIdx]}
             alt={vehicle.name}
-            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
             loading="lazy"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-background/60 to-transparent" />
-          <div className="absolute bottom-3 left-3">
+          <div className="absolute inset-0 bg-gradient-to-t from-white/40 to-transparent" />
+
+          {/* Prev / Next arrows — only on hover, only if multiple */}
+          {hasMultiple && (
+            <>
+              <button
+                onClick={prev}
+                className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-white/70 p-1 text-foreground opacity-0 shadow backdrop-blur-sm transition-opacity group-hover:opacity-100"
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </button>
+              <button
+                onClick={next}
+                className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-white/70 p-1 text-foreground opacity-0 shadow backdrop-blur-sm transition-opacity group-hover:opacity-100"
+              >
+                <ChevronRight className="h-4 w-4" />
+              </button>
+            </>
+          )}
+
+          {/* Dots */}
+          {hasMultiple && (
+            <div className="absolute bottom-2 left-1/2 flex -translate-x-1/2 gap-1">
+              {images.map((_, i) => (
+                <span
+                  key={i}
+                  className={`block h-1.5 rounded-full transition-all ${
+                    i === imgIdx ? "w-4 bg-primary" : "w-1.5 bg-white/70"
+                  }`}
+                />
+              ))}
+            </div>
+          )}
+
+          <div className="absolute top-3 left-3">
             <span className="rounded-full bg-primary/90 px-3 py-1 text-xs font-semibold text-primary-foreground backdrop-blur-sm">
               {vehicle.type.toUpperCase()}
             </span>

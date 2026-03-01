@@ -39,7 +39,7 @@ const VehicleDetail = () => {
           alt={vehicle.name}
           className="h-64 w-full object-cover sm:h-96"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background/30" />
+        <div className="absolute inset-0 bg-gradient-to-t from-white/70 via-transparent to-white/20" />
 
         <button
           onClick={() => navigate(-1)}

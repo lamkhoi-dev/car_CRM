@@ -20,8 +20,8 @@ const Index = () => {
           alt="Luxury vehicle"
           className="absolute inset-0 h-full w-full object-cover"
         />
-        <div className="absolute inset-0" style={{ background: "var(--gradient-hero)" }} />
-        <div className="absolute inset-0 bg-background/50" />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.75) 100%)" }} />
+        <div className="absolute inset-0 bg-white/30" />
 
         <div className="container relative z-10 px-4 text-center">
           <motion.div
