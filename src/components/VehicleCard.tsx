@@ -44,7 +44,7 @@ const VehicleCard = ({ vehicle, index = 0 }: VehicleCardProps) => {
             className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
             loading="lazy"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-white/40 to-transparent" />
+          <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/20 to-transparent" />
 
           {/* Prev / Next arrows — only on hover, only if multiple */}
           {hasMultiple && (
