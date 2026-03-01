@@ -12,6 +12,7 @@ import VehicleDetail from "./pages/VehicleDetail";
 import BookingPage from "./pages/BookingPage";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
+import MyBookings from "./pages/MyBookings";
 import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 
@@ -32,6 +33,7 @@ const App = () => (
             <Route path="/booking/:id" element={<BookingPage />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:id" element={<BlogPost />} />
+            <Route path="/my-bookings" element={<MyBookings />} />
             <Route path="/admin" element={<Admin />} />
             <Route path="*" element={<NotFound />} />
           </Routes>

@@ -1,11 +1,11 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowLeft, CalendarDays, Check, Loader2 } from "lucide-react";
 import { useState, useMemo } from "react";
 import { useVehicle } from "@/hooks/useVehicles";
 import { useCreateBooking } from "@/hooks/useBookings";
 import { toast } from "sonner";
-import { formatVND } from "@/lib/utils";
+import { formatVND, getDeviceId } from "@/lib/utils";
 
 const BookingPage = () => {
   const { id } = useParams();
@@ -87,6 +87,7 @@ const BookingPage = () => {
         startDate: form.startDate,
         endDate: form.endDate,
         totalPrice,
+        deviceId: getDeviceId(),
       });
       setSubmitted(true);
       toast.success("Đã gửi yêu cầu đặt xe!");
@@ -112,12 +113,20 @@ const BookingPage = () => {
         <p className="mb-6 text-center text-sm font-semibold text-primary">
           {totalDays} ngày · {formatVND(totalPrice)}
         </p>
-        <button
-          onClick={() => navigate("/vehicles")}
-          className="rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground"
-        >
-          Xem Thêm Xe
-        </button>
+        <div className="flex gap-3">
+          <Link
+            to="/my-bookings"
+            className="rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground"
+          >
+            Xem đơn của tôi
+          </Link>
+          <button
+            onClick={() => navigate("/vehicles")}
+            className="rounded-xl bg-secondary px-6 py-3 text-sm font-semibold text-secondary-foreground"
+          >
+            Xem Thêm Xe
+          </button>
+        </div>
       </div>
     );
   }

@@ -11,7 +11,7 @@ import { useBlogPosts, useCreateBlogPost, useUpdateBlogPost, useDeleteBlogPost }
 import { uploadApi, seedApi } from "@/lib/api";
 import type { Vehicle, Booking, BlogPost } from "@/lib/api";
 import { toast } from "sonner";
-import { formatVND } from "@/lib/utils";
+import { formatVND, formatDateTime } from "@/lib/utils";
 
 type Tab = "dashboard" | "vehicles" | "bookings" | "blog";
 
@@ -623,6 +623,9 @@ const Admin = () => {
                         <div>SĐT: {b.customerPhone}</div>
                         <div>Từ: {b.startDate}</div>
                         <div>Đến: {b.endDate}</div>
+                      </div>
+                      <div className="mb-1 text-[11px] text-muted-foreground">
+                        Đặt lúc: {formatDateTime(b.createdAt)}
                       </div>
                       <div className="mb-3 flex items-center justify-between">
                         <span className="text-sm font-bold">{formatVND(b.totalPrice)}</span>

@@ -26,6 +26,7 @@ export interface Booking {
   endDate: string;
   status: 'pending' | 'confirmed' | 'cancelled';
   totalPrice: number;
+  deviceId: string;
   createdAt: string;
 }
 
@@ -103,6 +104,7 @@ export const vehiclesApi = {
 
 export const bookingsApi = {
   getAll: () => fetchJson<Booking[]>('/bookings'),
+  getByDevice: (deviceId: string) => fetchJson<Booking[]>(`/bookings?deviceId=${encodeURIComponent(deviceId)}`),
   create: (data: Omit<Booking, 'id' | 'status' | 'createdAt'>) =>
     fetchJson<Booking>('/bookings', { method: 'POST', body: JSON.stringify(data) }),
   updateStatus: (id: string, status: Booking['status']) =>

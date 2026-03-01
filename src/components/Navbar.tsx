@@ -11,6 +11,7 @@ const Navbar = () => {
   const links = [
     { to: "/", label: "Trang chủ" },
     { to: "/vehicles", label: "Xe" },
+    { to: "/my-bookings", label: "Đơn của tôi" },
     { to: "/blog", label: "Blog" },
   ];
 

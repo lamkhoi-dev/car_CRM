@@ -26,6 +26,7 @@ export interface BookingDoc {
   endDate: string;
   status: 'pending' | 'confirmed' | 'cancelled';
   totalPrice: number;
+  deviceId: string;
   createdAt: string;
 }
 

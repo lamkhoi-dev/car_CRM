@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { bookingsApi } from '@/lib/api';
 import type { Booking } from '@/lib/api';
+import { getDeviceId } from '@/lib/utils';
 
 export function useBookings() {
   return useQuery({
@@ -9,12 +10,22 @@ export function useBookings() {
   });
 }
 
+export function useMyBookings() {
+  const deviceId = getDeviceId();
+  return useQuery({
+    queryKey: ['bookings', 'device', deviceId],
+    queryFn: () => bookingsApi.getByDevice(deviceId),
+  });
+}
+
 export function useCreateBooking() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (data: Omit<Booking, 'id' | 'status' | 'createdAt'>) =>
       bookingsApi.create(data),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['bookings'] }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['bookings'] });
+    },
   });
 }
 

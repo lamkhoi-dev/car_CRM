@@ -1,10 +1,11 @@
 import { Link, useLocation } from "react-router-dom";
-import { Home, Car, BookOpen } from "lucide-react";
+import { Home, Car, BookOpen, ClipboardList } from "lucide-react";
 import { motion } from "framer-motion";
 
 const navItems = [
   { to: "/", icon: Home, label: "Trang chủ" },
   { to: "/vehicles", icon: Car, label: "Xe" },
+  { to: "/my-bookings", icon: ClipboardList, label: "Đơn" },
   { to: "/blog", icon: BookOpen, label: "Blog" },
 ];
 

@@ -12,12 +12,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const col = db.collection('bookings');
 
     if (req.method === 'GET') {
-      const docs = await col.find({}).sort({ createdAt: -1 }).toArray();
+      // Support ?deviceId=xxx to filter bookings by device
+      const { deviceId } = req.query;
+      const filter = deviceId ? { deviceId: String(deviceId) } : {};
+      const docs = await col.find(filter).sort({ createdAt: -1 }).toArray();
       return res.json(docs.map(toJSON));
     }
 
     if (req.method === 'POST') {
-      const { vehicleId, vehicleName, customerName, customerPhone, startDate, endDate, totalPrice } = req.body;
+      const { vehicleId, vehicleName, customerName, customerPhone, startDate, endDate, totalPrice, deviceId } = req.body;
 
       if (!vehicleId || !customerName || !customerPhone || !startDate || !endDate) {
         return res.status(400).json({ error: 'Missing required fields' });
@@ -32,7 +35,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         endDate,
         status: 'pending' as const,
         totalPrice: Number(totalPrice) || 0,
-        createdAt: new Date().toISOString().split('T')[0],
+        deviceId: deviceId || '',
+        createdAt: new Date().toISOString(),
       };
 
       const result = await col.insertOne(doc);
