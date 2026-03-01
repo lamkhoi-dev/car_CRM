@@ -9,7 +9,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   if (req.method !== 'GET') return methodNotAllowed(res);
 
-  const db = await getDb();
-  const docs = await db.collection('testimonials').find({}).toArray();
-  return res.json(docs.map(toJSON));
+  try {
+    const db = await getDb();
+    const docs = await db.collection('testimonials').find({}).toArray();
+    return res.json(docs.map(toJSON));
+  } catch (err: any) {
+    console.error('API /testimonials error:', err);
+    return res.status(500).json({ error: err.message || 'Internal server error' });
+  }
 }

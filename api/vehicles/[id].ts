@@ -18,46 +18,48 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(400).json({ error: 'Invalid id format' });
   }
 
-  const db = await getDb();
-  const col = db.collection('vehicles');
+  try {
+    const db = await getDb();
+    const col = db.collection('vehicles');
 
-  // GET /api/vehicles/:id
-  if (req.method === 'GET') {
-    const doc = await col.findOne({ _id: objectId });
-    if (!doc) return res.status(404).json({ error: 'Vehicle not found' });
-    return res.json(toJSON(doc));
+    if (req.method === 'GET') {
+      const doc = await col.findOne({ _id: objectId });
+      if (!doc) return res.status(404).json({ error: 'Vehicle not found' });
+      return res.json(toJSON(doc));
+    }
+
+    if (req.method === 'PUT') {
+      if (!isAdmin(req)) return res.status(401).json({ error: 'Unauthorized' });
+
+      const updates = { ...req.body };
+      delete updates.id;
+      delete updates._id;
+
+      if (updates.pricePerDay) updates.pricePerDay = Number(updates.pricePerDay);
+      if (updates.pricePerHour) updates.pricePerHour = Number(updates.pricePerHour);
+      if (updates.seats) updates.seats = Number(updates.seats);
+      if (updates.rating) updates.rating = Number(updates.rating);
+
+      const result = await col.findOneAndUpdate(
+        { _id: objectId },
+        { $set: updates },
+        { returnDocument: 'after' }
+      );
+
+      if (!result) return res.status(404).json({ error: 'Vehicle not found' });
+      return res.json(toJSON(result));
+    }
+
+    if (req.method === 'DELETE') {
+      if (!isAdmin(req)) return res.status(401).json({ error: 'Unauthorized' });
+      const result = await col.deleteOne({ _id: objectId });
+      if (result.deletedCount === 0) return res.status(404).json({ error: 'Vehicle not found' });
+      return res.json({ success: true });
+    }
+
+    return methodNotAllowed(res);
+  } catch (err: any) {
+    console.error('API /vehicles/[id] error:', err);
+    return res.status(500).json({ error: err.message || 'Internal server error' });
   }
-
-  // PUT /api/vehicles/:id — cập nhật xe (admin)
-  if (req.method === 'PUT') {
-    if (!isAdmin(req)) return res.status(401).json({ error: 'Unauthorized' });
-
-    const updates = { ...req.body };
-    delete updates.id;
-    delete updates._id;
-
-    if (updates.pricePerDay) updates.pricePerDay = Number(updates.pricePerDay);
-    if (updates.pricePerHour) updates.pricePerHour = Number(updates.pricePerHour);
-    if (updates.seats) updates.seats = Number(updates.seats);
-    if (updates.rating) updates.rating = Number(updates.rating);
-
-    const result = await col.findOneAndUpdate(
-      { _id: objectId },
-      { $set: updates },
-      { returnDocument: 'after' }
-    );
-
-    if (!result) return res.status(404).json({ error: 'Vehicle not found' });
-    return res.json(toJSON(result));
-  }
-
-  // DELETE /api/vehicles/:id — xóa xe (admin)
-  if (req.method === 'DELETE') {
-    if (!isAdmin(req)) return res.status(401).json({ error: 'Unauthorized' });
-    const result = await col.deleteOne({ _id: objectId });
-    if (result.deletedCount === 0) return res.status(404).json({ error: 'Vehicle not found' });
-    return res.json({ success: true });
-  }
-
-  return methodNotAllowed(res);
 }

@@ -7,38 +7,41 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   setCors(res);
   if (req.method === 'OPTIONS') return res.status(200).end();
 
-  const db = await getDb();
-  const col = db.collection('bookings');
+  try {
+    const db = await getDb();
+    const col = db.collection('bookings');
 
-  // GET /api/bookings — danh sách booking (admin)
-  if (req.method === 'GET') {
-    const docs = await col.find({}).sort({ createdAt: -1 }).toArray();
-    return res.json(docs.map(toJSON));
-  }
-
-  // POST /api/bookings — tạo booking mới (public)
-  if (req.method === 'POST') {
-    const { vehicleId, vehicleName, customerName, customerPhone, startDate, endDate, totalPrice } = req.body;
-
-    if (!vehicleId || !customerName || !customerPhone || !startDate || !endDate) {
-      return res.status(400).json({ error: 'Missing required fields' });
+    if (req.method === 'GET') {
+      const docs = await col.find({}).sort({ createdAt: -1 }).toArray();
+      return res.json(docs.map(toJSON));
     }
 
-    const doc = {
-      vehicleId,
-      vehicleName: vehicleName || '',
-      customerName,
-      customerPhone,
-      startDate,
-      endDate,
-      status: 'pending' as const,
-      totalPrice: Number(totalPrice) || 0,
-      createdAt: new Date().toISOString().split('T')[0],
-    };
+    if (req.method === 'POST') {
+      const { vehicleId, vehicleName, customerName, customerPhone, startDate, endDate, totalPrice } = req.body;
 
-    const result = await col.insertOne(doc);
-    return res.status(201).json({ id: result.insertedId.toString(), ...doc });
+      if (!vehicleId || !customerName || !customerPhone || !startDate || !endDate) {
+        return res.status(400).json({ error: 'Missing required fields' });
+      }
+
+      const doc = {
+        vehicleId,
+        vehicleName: vehicleName || '',
+        customerName,
+        customerPhone,
+        startDate,
+        endDate,
+        status: 'pending' as const,
+        totalPrice: Number(totalPrice) || 0,
+        createdAt: new Date().toISOString().split('T')[0],
+      };
+
+      const result = await col.insertOne(doc);
+      return res.status(201).json({ id: result.insertedId.toString(), ...doc });
+    }
+
+    return methodNotAllowed(res);
+  } catch (err: any) {
+    console.error('API /bookings error:', err);
+    return res.status(500).json({ error: err.message || 'Internal server error' });
   }
-
-  return methodNotAllowed(res);
 }

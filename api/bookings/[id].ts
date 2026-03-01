@@ -18,42 +18,44 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(400).json({ error: 'Invalid id format' });
   }
 
-  const db = await getDb();
-  const col = db.collection('bookings');
+  try {
+    const db = await getDb();
+    const col = db.collection('bookings');
 
-  // GET /api/bookings/:id
-  if (req.method === 'GET') {
-    const doc = await col.findOne({ _id: objectId });
-    if (!doc) return res.status(404).json({ error: 'Booking not found' });
-    return res.json(toJSON(doc));
-  }
-
-  // PUT /api/bookings/:id — cập nhật status (admin)
-  if (req.method === 'PUT') {
-    if (!isAdmin(req)) return res.status(401).json({ error: 'Unauthorized' });
-
-    const { status } = req.body;
-    if (!['pending', 'confirmed', 'cancelled'].includes(status)) {
-      return res.status(400).json({ error: 'Invalid status' });
+    if (req.method === 'GET') {
+      const doc = await col.findOne({ _id: objectId });
+      if (!doc) return res.status(404).json({ error: 'Booking not found' });
+      return res.json(toJSON(doc));
     }
 
-    const result = await col.findOneAndUpdate(
-      { _id: objectId },
-      { $set: { status } },
-      { returnDocument: 'after' }
-    );
+    if (req.method === 'PUT') {
+      if (!isAdmin(req)) return res.status(401).json({ error: 'Unauthorized' });
 
-    if (!result) return res.status(404).json({ error: 'Booking not found' });
-    return res.json(toJSON(result));
+      const { status } = req.body;
+      if (!['pending', 'confirmed', 'cancelled'].includes(status)) {
+        return res.status(400).json({ error: 'Invalid status' });
+      }
+
+      const result = await col.findOneAndUpdate(
+        { _id: objectId },
+        { $set: { status } },
+        { returnDocument: 'after' }
+      );
+
+      if (!result) return res.status(404).json({ error: 'Booking not found' });
+      return res.json(toJSON(result));
+    }
+
+    if (req.method === 'DELETE') {
+      if (!isAdmin(req)) return res.status(401).json({ error: 'Unauthorized' });
+      const result = await col.deleteOne({ _id: objectId });
+      if (result.deletedCount === 0) return res.status(404).json({ error: 'Booking not found' });
+      return res.json({ success: true });
+    }
+
+    return methodNotAllowed(res);
+  } catch (err: any) {
+    console.error('API /bookings/[id] error:', err);
+    return res.status(500).json({ error: err.message || 'Internal server error' });
   }
-
-  // DELETE /api/bookings/:id — xóa booking (admin)
-  if (req.method === 'DELETE') {
-    if (!isAdmin(req)) return res.status(401).json({ error: 'Unauthorized' });
-    const result = await col.deleteOne({ _id: objectId });
-    if (result.deletedCount === 0) return res.status(404).json({ error: 'Booking not found' });
-    return res.json({ success: true });
-  }
-
-  return methodNotAllowed(res);
 }
