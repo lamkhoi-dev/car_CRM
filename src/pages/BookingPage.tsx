@@ -5,6 +5,7 @@ import { useState, useMemo } from "react";
 import { useVehicle } from "@/hooks/useVehicles";
 import { useCreateBooking } from "@/hooks/useBookings";
 import { toast } from "sonner";
+import { formatVND } from "@/lib/utils";
 
 const BookingPage = () => {
   const { id } = useParams();
@@ -109,7 +110,7 @@ const BookingPage = () => {
           Your booking for {vehicle.name} has been received.
         </p>
         <p className="mb-6 text-center text-sm font-semibold text-primary">
-          {totalDays} days · ${totalPrice}
+          {totalDays} ngày · {formatVND(totalPrice)}
         </p>
         <button
           onClick={() => navigate("/vehicles")}
@@ -137,7 +138,7 @@ const BookingPage = () => {
 
           <h1 className="mb-1 font-display text-2xl font-bold">Book {vehicle.name}</h1>
           <p className="mb-6 text-sm text-muted-foreground">
-            ${vehicle.pricePerDay}/day · ${vehicle.pricePerHour}/hour
+            {formatVND(vehicle.pricePerDay)}/ngày · {formatVND(vehicle.pricePerHour)}/giờ
           </p>
 
           {/* Vehicle preview */}
@@ -211,12 +212,12 @@ const BookingPage = () => {
                 <h3 className="mb-2 text-sm font-semibold">Price Summary</h3>
                 <div className="space-y-1 text-sm">
                   <div className="flex justify-between text-muted-foreground">
-                    <span>${vehicle.pricePerDay} x {totalDays} {totalDays === 1 ? 'day' : 'days'}</span>
-                    <span>${totalPrice}</span>
+                    <span>{formatVND(vehicle.pricePerDay)} x {totalDays} ngày</span>
+                    <span>{formatVND(totalPrice)}</span>
                   </div>
                   <div className="flex justify-between border-t border-border pt-1 font-bold">
                     <span>Total</span>
-                    <span className="text-primary">${totalPrice}</span>
+                    <span className="text-primary">{formatVND(totalPrice)}</span>
                   </div>
                 </div>
               </motion.div>
@@ -227,7 +228,7 @@ const BookingPage = () => {
               disabled={createBooking.isPending}
               className="w-full rounded-xl bg-primary py-4 text-sm font-semibold text-primary-foreground transition-all hover:opacity-90 disabled:opacity-50"
             >
-              {createBooking.isPending ? 'Submitting...' : `Submit Booking${totalPrice > 0 ? ` · $${totalPrice}` : ''}`}
+              {createBooking.isPending ? 'Đang gửi...' : `Đặt xe${totalPrice > 0 ? ` · ${formatVND(totalPrice)}` : ''}`}
             </button>
           </form>
         </motion.div>

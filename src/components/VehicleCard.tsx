@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Star } from "lucide-react";
 import { motion } from "framer-motion";
 import type { Vehicle } from "@/lib/api";
+import { formatVND } from "@/lib/utils";
 
 interface VehicleCardProps {
   vehicle: Vehicle;
@@ -55,9 +56,9 @@ const VehicleCard = ({ vehicle, index = 0 }: VehicleCardProps) => {
           <div className="flex items-center justify-between border-t border-border/50 pt-3">
             <div>
               <span className="text-xl font-bold text-foreground">
-                ${vehicle.pricePerDay}
+                {formatVND(vehicle.pricePerDay)}
               </span>
-              <span className="text-sm text-muted-foreground">/day</span>
+              <span className="text-sm text-muted-foreground">/ngày</span>
             </div>
             <span className="rounded-lg bg-secondary px-3 py-1.5 text-xs font-medium text-secondary-foreground transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
               View Details

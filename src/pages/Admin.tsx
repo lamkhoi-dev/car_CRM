@@ -11,6 +11,7 @@ import { useBlogPosts, useCreateBlogPost, useUpdateBlogPost, useDeleteBlogPost }
 import { uploadApi, seedApi } from "@/lib/api";
 import type { Vehicle, Booking, BlogPost } from "@/lib/api";
 import { toast } from "sonner";
+import { formatVND } from "@/lib/utils";
 
 type Tab = "dashboard" | "vehicles" | "bookings" | "blog";
 
@@ -121,12 +122,12 @@ const VehicleForm = ({ initial, onSubmit, onCancel, loading }: VehicleFormProps)
       </div>
       <div className="grid grid-cols-3 gap-3">
         <div>
-          <label className="mb-1 block text-xs font-medium">$/Day</label>
+          <label className="mb-1 block text-xs font-medium">VNĐ/Ngày</label>
           <input type="number" value={form.pricePerDay} onChange={(e) => setForm({ ...form, pricePerDay: Number(e.target.value) })}
             className="w-full rounded-lg border border-border bg-secondary px-3 py-2 text-sm focus:border-primary focus:outline-none" />
         </div>
         <div>
-          <label className="mb-1 block text-xs font-medium">$/Hour</label>
+          <label className="mb-1 block text-xs font-medium">VNĐ/Giờ</label>
           <input type="number" value={form.pricePerHour} onChange={(e) => setForm({ ...form, pricePerHour: Number(e.target.value) })}
             className="w-full rounded-lg border border-border bg-secondary px-3 py-2 text-sm focus:border-primary focus:outline-none" />
         </div>
@@ -513,7 +514,7 @@ const Admin = () => {
                   {[
                     { label: "Total Bookings", value: bookings.length, icon: CalendarDays, color: "text-primary" },
                     { label: "Pending", value: pendingCount, icon: Clock, color: "text-warning" },
-                    { label: "Revenue", value: `$${totalRevenue.toLocaleString()}`, icon: DollarSign, color: "text-success" },
+                    { label: "Doanh thu", value: formatVND(totalRevenue), icon: DollarSign, color: "text-success" },
                     { label: "Vehicles", value: vehicles.length, icon: Car, color: "text-accent" },
                   ].map((stat) => (
                     <div key={stat.label} className="rounded-xl bg-card p-4 card-shadow">
@@ -582,7 +583,7 @@ const Admin = () => {
                     <img src={v.images[0] || 'https://placehold.co/80x64?text=No+Image'} alt={v.name} className="h-16 w-20 rounded-lg object-cover" />
                     <div className="flex-1 min-w-0">
                       <div className="text-sm font-semibold truncate">{v.name}</div>
-                      <div className="text-xs text-muted-foreground">${v.pricePerDay}/day · {v.type}</div>
+                      <div className="text-xs text-muted-foreground">{formatVND(v.pricePerDay)}/ngày · {v.type}</div>
                     </div>
                     <div className="flex gap-1">
                       <button onClick={() => { setEditingVehicle(v); setShowVehicleForm(true); }}
@@ -624,7 +625,7 @@ const Admin = () => {
                         <div>To: {b.endDate}</div>
                       </div>
                       <div className="mb-3 flex items-center justify-between">
-                        <span className="text-sm font-bold">${b.totalPrice}</span>
+                        <span className="text-sm font-bold">{formatVND(b.totalPrice)}</span>
                         <span className="text-xs text-muted-foreground">ID: {b.id.slice(-6)}</span>
                       </div>
                       {b.status === "pending" && (

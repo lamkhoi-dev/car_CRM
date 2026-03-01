@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { ArrowLeft, Star, Users, Fuel, Settings, ChevronRight, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { useVehicle } from "@/hooks/useVehicles";
+import { formatVND } from "@/lib/utils";
 
 const VehicleDetail = () => {
   const { id } = useParams();
@@ -113,11 +114,11 @@ const VehicleDetail = () => {
             <div>
               <div className="text-sm text-muted-foreground">From</div>
               <div className="flex items-baseline gap-1">
-                <span className="font-display text-2xl font-bold">${vehicle.pricePerDay}</span>
-                <span className="text-sm text-muted-foreground">/day</span>
+                <span className="font-display text-2xl font-bold">{formatVND(vehicle.pricePerDay)}</span>
+                <span className="text-sm text-muted-foreground">/ngày</span>
               </div>
               <div className="text-xs text-muted-foreground">
-                or ${vehicle.pricePerHour}/hour
+                hoặc {formatVND(vehicle.pricePerHour)}/giờ
               </div>
             </div>
             <Link
