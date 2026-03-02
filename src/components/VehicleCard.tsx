@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Star, ChevronLeft, ChevronRight } from "lucide-react";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, useRef, useCallback } from "react";
 import type { Vehicle } from "@/lib/api";
 import { formatVND } from "@/lib/utils";
 
@@ -14,6 +14,31 @@ const VehicleCard = ({ vehicle, index = 0 }: VehicleCardProps) => {
   const [imgIdx, setImgIdx] = useState(0);
   const images = vehicle.images;
   const hasMultiple = images.length > 1;
+
+  /* ── Touch / swipe support ── */
+  const touchRef = useRef<{ startX: number; startY: number; swiped: boolean } | null>(null);
+
+  const onTouchStart = useCallback((e: React.TouchEvent) => {
+    if (!hasMultiple) return;
+    touchRef.current = { startX: e.touches[0].clientX, startY: e.touches[0].clientY, swiped: false };
+  }, [hasMultiple]);
+
+  const onTouchMove = useCallback((e: React.TouchEvent) => {
+    if (!touchRef.current || touchRef.current.swiped) return;
+    const dx = e.touches[0].clientX - touchRef.current.startX;
+    const dy = e.touches[0].clientY - touchRef.current.startY;
+    // Only act if horizontal swipe is dominant
+    if (Math.abs(dx) > 30 && Math.abs(dx) > Math.abs(dy) * 1.2) {
+      e.preventDefault();
+      touchRef.current.swiped = true;
+      setImgIdx((i) => dx < 0
+        ? (i + 1) % images.length
+        : (i - 1 + images.length) % images.length
+      );
+    }
+  }, [images.length]);
+
+  const onTouchEnd = useCallback(() => { touchRef.current = null; }, []);
 
   const prev = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -37,12 +62,18 @@ const VehicleCard = ({ vehicle, index = 0 }: VehicleCardProps) => {
         to={`/vehicles/${vehicle.id}`}
         className="group block overflow-hidden rounded-xl bg-card card-shadow transition-all duration-300 hover:card-shadow-hover"
       >
-        <div className="relative aspect-[16/10] overflow-hidden">
+        <div
+          className="relative aspect-[16/10] overflow-hidden"
+          onTouchStart={onTouchStart}
+          onTouchMove={onTouchMove}
+          onTouchEnd={onTouchEnd}
+        >
           <img
             src={images[imgIdx]}
             alt={vehicle.name}
             className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
             loading="lazy"
+            draggable={false}
           />
           <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/20 to-transparent" />
 
