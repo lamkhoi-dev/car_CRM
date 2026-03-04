@@ -23,7 +23,7 @@
     <script>
       // Apply saved theme (or system default) before first paint to avoid flash
       (function(){
-        var t = localStorage.getItem('theme') || 'system';
+        var t = localStorage.getItem('theme') || 'light';
         var dark = t === 'dark' || (t === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
         if (dark) document.documentElement.classList.add('dark');
       })();

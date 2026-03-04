@@ -9,7 +9,7 @@ interface ThemeProviderState {
 }
 
 const ThemeContext = createContext<ThemeProviderState>({
-  theme: "system",
+  theme: "light",
   resolved: "light",
   setTheme: () => {},
 });
@@ -19,7 +19,7 @@ export const useTheme = () => useContext(ThemeContext);
 export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
   const [theme, setThemeState] = useState<Theme>(() => {
     if (typeof window === "undefined") return "system";
-    return (localStorage.getItem("theme") as Theme) || "system";
+    return (localStorage.getItem("theme") as Theme) || "light";
   });
 
   const [resolved, setResolved] = useState<"light" | "dark">(() => {
