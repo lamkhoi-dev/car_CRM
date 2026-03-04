@@ -15,6 +15,7 @@ import BlogPost from "./pages/BlogPost";
 import MyBookings from "./pages/MyBookings";
 import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
+import ContactWidget from "@/components/ContactWidget";
 
 const queryClient = new QueryClient();
 
@@ -26,6 +27,7 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <Navbar />
+          <ContactWidget />
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/vehicles" element={<Vehicles />} />

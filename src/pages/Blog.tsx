@@ -18,48 +18,55 @@ const Blog = () => {
           <p className="text-sm text-muted-foreground">Tin tức, kinh nghiệm & chia sẻ</p>
         </motion.div>
 
-        <div className="space-y-4">
-          {isLoading ? (
-            <div className="flex justify-center py-20">
-              <Loader2 className="h-8 w-8 animate-spin text-primary" />
-            </div>
-          ) : blogPosts.map((post, i) => (
-            <motion.div
-              key={post.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-            >
-              <Link
-                to={`/blog/${post.id}`}
-                className="group flex gap-4 overflow-hidden rounded-xl bg-card p-3 card-shadow transition-all hover:card-shadow-hover sm:p-4"
+        {isLoading ? (
+          <div className="flex justify-center py-20">
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          </div>
+        ) : (
+          <div className="grid gap-4 sm:grid-cols-2">
+            {blogPosts.map((post, i) => (
+              <motion.div
+                key={post.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.08 }}
               >
-                <img
-                  src={post.image}
-                  alt={post.title}
-                  className="h-24 w-24 flex-shrink-0 rounded-lg object-cover sm:h-32 sm:w-40"
-                  loading="lazy"
-                />
-                <div className="flex flex-col justify-center">
-                  <span className="mb-1 text-xs font-medium text-primary">
-                    {post.category}
-                  </span>
-                  <h2 className="mb-1 font-display text-sm font-bold leading-snug text-foreground group-hover:text-primary transition-colors sm:text-base">
-                    {post.title}
-                  </h2>
-                  <p className="mb-2 line-clamp-2 text-xs text-muted-foreground hidden sm:block">
-                    {post.excerpt}
-                  </p>
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                    <Clock className="h-3 w-3" />
-                    {post.readTime}
+                <Link
+                  to={`/blog/${post.id}`}
+                  className="group flex flex-col overflow-hidden rounded-xl bg-card card-shadow transition-all hover:card-shadow-hover"
+                >
+                  <div className="relative aspect-[16/9] overflow-hidden">
+                    <img
+                      src={post.image}
+                      alt={post.title}
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      loading="lazy"
+                    />
+                    <span className="absolute left-3 top-3 rounded-full bg-primary/90 px-2.5 py-0.5 text-[10px] font-semibold text-primary-foreground backdrop-blur-sm">
+                      {post.category}
+                    </span>
                   </div>
-                </div>
-              </Link>
-            </motion.div>
-          ))}
-        </div>
+                  <div className="flex flex-1 flex-col p-4">
+                    <h2 className="mb-1.5 font-display text-sm font-bold leading-snug text-foreground transition-colors group-hover:text-primary sm:text-base">
+                      {post.title}
+                    </h2>
+                    <p className="mb-3 line-clamp-2 text-xs text-muted-foreground">
+                      {post.excerpt}
+                    </p>
+                    <div className="mt-auto flex items-center justify-between text-xs text-muted-foreground">
+                      <span className="flex items-center gap-1">
+                        <Clock className="h-3 w-3" />
+                        {post.readTime}
+                      </span>
+                      <span>{post.date}</span>
+                    </div>
+                  </div>
+                </Link>
+              </motion.div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

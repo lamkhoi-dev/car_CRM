@@ -1,12 +1,17 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowLeft, Clock, User, Loader2 } from "lucide-react";
-import { useBlogPost } from "@/hooks/useBlog";
+import { ArrowLeft, Clock, User, Loader2, ChevronRight } from "lucide-react";
+import { useBlogPost, useBlogPosts } from "@/hooks/useBlog";
 
 const BlogPost = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { data: post, isLoading } = useBlogPost(id);
+  const { data: allPosts = [] } = useBlogPosts();
+
+  const relatedPosts = allPosts
+    .filter((p) => p.id !== id)
+    .slice(0, 3);
 
   if (isLoading) {
     return (
@@ -71,6 +76,47 @@ const BlogPost = () => {
             ))}
           </div>
         </motion.article>
+
+        {/* Related posts */}
+        {relatedPosts.length > 0 && (
+          <section className="mt-10">
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="font-display text-lg font-bold">Bài viết liên quan</h2>
+              <Link
+                to="/blog"
+                className="flex items-center gap-1 text-xs font-medium text-primary"
+              >
+                Xem tất cả <ChevronRight className="h-3 w-3" />
+              </Link>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-3">
+              {relatedPosts.map((rp) => (
+                <Link
+                  key={rp.id}
+                  to={`/blog/${rp.id}`}
+                  className="group overflow-hidden rounded-xl bg-card card-shadow"
+                >
+                  <div className="aspect-[16/9] overflow-hidden">
+                    <img
+                      src={rp.image}
+                      alt={rp.title}
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      loading="lazy"
+                    />
+                  </div>
+                  <div className="p-3">
+                    <span className="mb-1 block text-[10px] font-semibold text-primary">
+                      {rp.category}
+                    </span>
+                    <h3 className="line-clamp-2 text-xs font-bold leading-snug text-foreground transition-colors group-hover:text-primary">
+                      {rp.title}
+                    </h3>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
       </div>
     </div>
   );
