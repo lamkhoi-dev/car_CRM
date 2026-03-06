@@ -2,7 +2,241 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { getDb } from './_lib/mongodb';
 import { setCors, isAdmin } from './_lib/helpers';
 
-// Dữ liệu seed ban đầu — VNĐ, ảnh Cloudinary thật
+// ─── Seed: Service Types (Loại dịch vụ) ──────────────────
+
+const seedServiceTypes = [
+  {
+    name: 'Thuê xe gói 4 tiếng',
+    slug: 'hourly_4h',
+    description: 'Thuê xe kèm tài xế trong 4 tiếng, bao gồm 50km. Phù hợp cho công việc ngắn, đi lại trong thành phố.',
+    icon: 'Clock',
+    isActive: true,
+    order: 1,
+  },
+  {
+    name: 'Thuê xe gói 8 tiếng',
+    slug: 'hourly_8h',
+    description: 'Thuê xe kèm tài xế trong 8 tiếng, bao gồm 100km. Lý tưởng cho city tour, đi công việc cả ngày.',
+    icon: 'Clock',
+    isActive: true,
+    order: 2,
+  },
+  {
+    name: 'Thuê xe theo ngày',
+    slug: 'daily',
+    description: 'Thuê xe có tài xế trọn ngày (tối đa 12 tiếng, 200km). Phù hợp cho đi chơi, du lịch gần.',
+    icon: 'CalendarDays',
+    isActive: true,
+    order: 3,
+  },
+  {
+    name: 'Thuê xe nhiều ngày',
+    slug: 'multi_day',
+    description: 'Thuê xe dài ngày cho du lịch, công tác. Giá tính theo ngày, càng nhiều ngày càng ưu đãi.',
+    icon: 'CalendarRange',
+    isActive: true,
+    order: 4,
+  },
+  {
+    name: 'Thuê xe đi tỉnh',
+    slug: 'trip',
+    description: 'Thuê xe di chuyển từ TP.HCM đến các tỉnh. Giá trọn gói bao gồm xăng, tài xế, phí cầu đường.',
+    icon: 'MapPin',
+    isActive: true,
+    order: 5,
+  },
+  {
+    name: 'Đưa đón sân bay',
+    slug: 'airport',
+    description: 'Dịch vụ đưa đón sân bay bằng xe sang. Tài xế đón tận nơi, phục vụ 24/7.',
+    icon: 'Plane',
+    isActive: true,
+    order: 6,
+  },
+  {
+    name: 'Thuê xe tự lái',
+    slug: 'self_drive',
+    description: 'Thuê xe không tài xế. Yêu cầu giấy tờ tùy thân, bằng lái và đặt cọc.',
+    icon: 'Car',
+    isActive: true,
+    order: 7,
+  },
+  {
+    name: 'Thuê xe hoa — Đám cưới',
+    slug: 'wedding',
+    description: 'Xe hoa sang trọng cho ngày trọng đại. Trang trí hoa tươi, ruy-băng theo yêu cầu.',
+    icon: 'Heart',
+    isActive: true,
+    order: 8,
+  },
+];
+
+// ─── Seed: Pricing Packages (Gói giá) ────────────────────
+
+const seedPricingPackages = [
+  {
+    name: 'Gói 4 tiếng + 50km',
+    slug: 'pkg_4h',
+    serviceTypeSlug: 'hourly_4h',
+    durationHours: 4,
+    maxKm: 50,
+    price4Seat: 1000000,
+    price7Seat: 1100000,
+    price16Seat: 1500000,
+    overagePerKm4Seat: 7000,
+    overagePerKm7Seat: 8000,
+    overagePerKm16Seat: 10000,
+    overagePerHour4Seat: 80000,
+    overagePerHour7Seat: 100000,
+    overagePerHour16Seat: 100000,
+    weekendSurcharge4Seat: 100000,
+    weekendSurcharge7Seat: 100000,
+    weekendSurcharge16Seat: 300000,
+    includes: ['Xăng', 'Tài xế', 'Lương tài xế'],
+    excludes: ['VAT', 'Phí cầu đường', 'Bến bãi đậu xe'],
+    isActive: true,
+    order: 1,
+  },
+  {
+    name: 'Gói 8 tiếng + 100km',
+    slug: 'pkg_8h',
+    serviceTypeSlug: 'hourly_8h',
+    durationHours: 8,
+    maxKm: 100,
+    price4Seat: 1200000,
+    price7Seat: 1300000,
+    price16Seat: 1700000,
+    overagePerKm4Seat: 7000,
+    overagePerKm7Seat: 8000,
+    overagePerKm16Seat: 10000,
+    overagePerHour4Seat: 80000,
+    overagePerHour7Seat: 100000,
+    overagePerHour16Seat: 100000,
+    weekendSurcharge4Seat: 100000,
+    weekendSurcharge7Seat: 100000,
+    weekendSurcharge16Seat: 300000,
+    includes: ['Xăng', 'Tài xế', 'Lương tài xế'],
+    excludes: ['VAT', 'Phí cầu đường', 'Bến bãi đậu xe'],
+    isActive: true,
+    order: 2,
+  },
+  {
+    name: 'Gói 200km / 10 tiếng',
+    slug: 'pkg_200km',
+    serviceTypeSlug: 'daily',
+    durationHours: 10,
+    maxKm: 200,
+    price4Seat: 2000000,
+    price7Seat: 2200000,
+    price16Seat: 2500000,
+    overagePerKm4Seat: 6000,
+    overagePerKm7Seat: 7000,
+    overagePerKm16Seat: 8000,
+    overagePerHour4Seat: 80000,
+    overagePerHour7Seat: 100000,
+    overagePerHour16Seat: 100000,
+    weekendSurcharge4Seat: 100000,
+    weekendSurcharge7Seat: 100000,
+    weekendSurcharge16Seat: 300000,
+    includes: ['Xăng', 'Tài xế', 'Lương tài xế'],
+    excludes: ['VAT', 'Phí cầu đường', 'Bến bãi đậu xe'],
+    isActive: true,
+    order: 3,
+  },
+  {
+    name: 'Gói 300km / 12 tiếng',
+    slug: 'pkg_300km',
+    serviceTypeSlug: 'daily',
+    durationHours: 12,
+    maxKm: 300,
+    price4Seat: 3000000,
+    price7Seat: 3200000,
+    price16Seat: 3300000,
+    overagePerKm4Seat: 6000,
+    overagePerKm7Seat: 7000,
+    overagePerKm16Seat: 8000,
+    overagePerHour4Seat: 80000,
+    overagePerHour7Seat: 100000,
+    overagePerHour16Seat: 100000,
+    weekendSurcharge4Seat: 100000,
+    weekendSurcharge7Seat: 100000,
+    weekendSurcharge16Seat: 300000,
+    includes: ['Xăng', 'Tài xế', 'Lương tài xế'],
+    excludes: ['VAT', 'Phí cầu đường', 'Bến bãi đậu xe'],
+    isActive: true,
+    order: 4,
+  },
+  {
+    name: 'Gói 400km / 15 tiếng',
+    slug: 'pkg_400km',
+    serviceTypeSlug: 'daily',
+    durationHours: 15,
+    maxKm: 400,
+    price4Seat: 3800000,
+    price7Seat: 4000000,
+    price16Seat: 4300000,
+    overagePerKm4Seat: 6000,
+    overagePerKm7Seat: 7000,
+    overagePerKm16Seat: 8000,
+    overagePerHour4Seat: 80000,
+    overagePerHour7Seat: 100000,
+    overagePerHour16Seat: 100000,
+    weekendSurcharge4Seat: 100000,
+    weekendSurcharge7Seat: 100000,
+    weekendSurcharge16Seat: 300000,
+    includes: ['Xăng', 'Tài xế', 'Lương tài xế'],
+    excludes: ['VAT', 'Phí cầu đường', 'Bến bãi đậu xe'],
+    isActive: true,
+    order: 5,
+  },
+];
+
+// ─── Seed: Routes (Tuyến đường đi tỉnh) ──────────────────
+
+const seedRoutes = [
+  // TP.HCM nội thành
+  { from: 'TP.HCM', to: 'City Tour 4 tiếng/50km', province: 'TP.HCM', distance: 50, duration: '4 tiếng', price4Seat: 1000000, price7Seat: 1100000, price16Seat: 1500000, isActive: true },
+  { from: 'TP.HCM', to: 'City Tour 8 tiếng/100km', province: 'TP.HCM', distance: 100, duration: '8 tiếng', price4Seat: 1200000, price7Seat: 1300000, price16Seat: 1600000, isActive: true },
+  { from: 'TP.HCM', to: 'Tự do 10 tiếng/150km', province: 'TP.HCM', distance: 150, duration: '10 tiếng', price4Seat: 1600000, price7Seat: 1800000, price16Seat: 2000000, isActive: true },
+  // Bà Rịa Vũng Tàu
+  { from: 'TP.HCM', to: 'TP Vũng Tàu (trong ngày)', province: 'Bà Rịa Vũng Tàu', distance: 230, duration: 'trong ngày', price4Seat: 2000000, price7Seat: 2200000, price16Seat: 2500000, isActive: true },
+  { from: 'TP.HCM', to: 'Vũng Tàu (1 chiều)', province: 'Bà Rịa Vũng Tàu', distance: 110, duration: '1 chiều', price4Seat: 1600000, price7Seat: 1800000, price16Seat: 2000000, isActive: true },
+  { from: 'TP.HCM', to: 'Vũng Tàu 2 ngày 1 đêm', province: 'Bà Rịa Vũng Tàu', distance: 260, duration: '2 ngày 1 đêm', price4Seat: 3000000, price7Seat: 3300000, price16Seat: 3700000, isActive: true },
+  { from: 'TP.HCM', to: 'Long Hải - Dinh Cô', province: 'Bà Rịa Vũng Tàu', distance: 220, duration: 'trong ngày', price4Seat: 2000000, price7Seat: 2200000, price16Seat: 2500000, isActive: true },
+  { from: 'TP.HCM', to: 'Hồ Tràm (trong ngày)', province: 'Bà Rịa Vũng Tàu', distance: 230, duration: 'trong ngày', price4Seat: 2000000, price7Seat: 2300000, price16Seat: 2700000, isActive: true },
+  // Đồng Nai
+  { from: 'TP.HCM', to: 'Biên Hòa (8 tiếng)', province: 'Đồng Nai', distance: 80, duration: '8 tiếng', price4Seat: 1200000, price7Seat: 1300000, price16Seat: 1700000, isActive: true },
+  { from: 'TP.HCM', to: 'Long Khánh', province: 'Đồng Nai', distance: 160, duration: 'trong ngày', price4Seat: 1800000, price7Seat: 2000000, price16Seat: 2200000, isActive: true },
+  // Bình Dương
+  { from: 'TP.HCM', to: 'Thủ Dầu Một (8 tiếng)', province: 'Bình Dương', distance: 80, duration: '8 tiếng', price4Seat: 1300000, price7Seat: 1400000, price16Seat: 1700000, isActive: true },
+  // Tiền Giang
+  { from: 'TP.HCM', to: 'Mỹ Tho', province: 'Tiền Giang', distance: 150, duration: 'trong ngày', price4Seat: 1600000, price7Seat: 1800000, price16Seat: 2000000, isActive: true },
+  // Long An
+  { from: 'TP.HCM', to: 'Tân An (Long An)', province: 'Long An', distance: 110, duration: 'trong ngày', price4Seat: 1400000, price7Seat: 1500000, price16Seat: 1800000, isActive: true },
+  // Tây Ninh
+  { from: 'TP.HCM', to: 'Núi Bà Đen', province: 'Tây Ninh', distance: 210, duration: 'trong ngày', price4Seat: 1800000, price7Seat: 2000000, price16Seat: 2200000, isActive: true },
+  // Bình Thuận
+  { from: 'TP.HCM', to: 'Phan Thiết (trong ngày)', province: 'Bình Thuận', distance: 400, duration: 'trong ngày', price4Seat: 2500000, price7Seat: 2800000, price16Seat: 3300000, isActive: true },
+  { from: 'TP.HCM', to: 'Mũi Né 2 ngày 1 đêm', province: 'Bình Thuận', distance: 500, duration: '2 ngày 1 đêm', price4Seat: 3800000, price7Seat: 4300000, price16Seat: 5000000, isActive: true },
+  // Lâm Đồng
+  { from: 'TP.HCM', to: 'Đà Lạt (trong ngày)', province: 'Lâm Đồng', distance: 700, duration: 'trong ngày', price4Seat: 4000000, price7Seat: 4400000, price16Seat: 5000000, isActive: true },
+  { from: 'TP.HCM', to: 'Đà Lạt 2 ngày 1 đêm', province: 'Lâm Đồng', distance: 750, duration: '2 ngày 1 đêm', price4Seat: 5000000, price7Seat: 5500000, price16Seat: 6500000, isActive: true },
+  { from: 'TP.HCM', to: 'Đà Lạt 3 ngày 2 đêm', province: 'Lâm Đồng', distance: 800, duration: '3 ngày 2 đêm', price4Seat: 6200000, price7Seat: 6800000, price16Seat: 8000000, isActive: true },
+  { from: 'TP.HCM', to: 'Bảo Lộc', province: 'Lâm Đồng', distance: 420, duration: 'trong ngày', price4Seat: 2800000, price7Seat: 3000000, price16Seat: 3400000, isActive: true },
+  // Khánh Hòa
+  { from: 'TP.HCM', to: 'Nha Trang (1 chiều)', province: 'Khánh Hòa', distance: 850, duration: '1 chiều', price4Seat: 4700000, price7Seat: 5000000, price16Seat: 6000000, isActive: true },
+  { from: 'TP.HCM', to: 'Nha Trang 2 ngày 1 đêm', province: 'Khánh Hòa', distance: 900, duration: '2 ngày 1 đêm', price4Seat: 5900000, price7Seat: 6300000, price16Seat: 7500000, isActive: true },
+  // Cần Thơ
+  { from: 'TP.HCM', to: 'Cần Thơ (trong ngày)', province: 'Cần Thơ', distance: 360, duration: 'trong ngày', price4Seat: 2300000, price7Seat: 2500000, price16Seat: 3000000, isActive: true },
+  { from: 'TP.HCM', to: 'Cần Thơ 2 ngày 1 đêm', province: 'Cần Thơ', distance: 400, duration: '2 ngày 1 đêm', price4Seat: 3300000, price7Seat: 3800000, price16Seat: 4300000, isActive: true },
+  // An Giang
+  { from: 'TP.HCM', to: 'Châu Đốc (trong ngày)', province: 'An Giang', distance: 550, duration: 'trong ngày', price4Seat: 3200000, price7Seat: 3500000, price16Seat: 4500000, isActive: true },
+  // Bến Tre
+  { from: 'TP.HCM', to: 'TP Bến Tre', province: 'Bến Tre', distance: 190, duration: 'trong ngày', price4Seat: 1800000, price7Seat: 2000000, price16Seat: 2300000, isActive: true },
+];
+
+// ─── Seed: Vehicles (cập nhật thêm seatCategory) ─────────
+
 const seedVehicles = [
   {
     name: 'Mercedes-Benz S-Class',
@@ -10,6 +244,9 @@ const seedVehicles = [
     description: 'Trải nghiệm đẳng cấp thượng lưu cùng Mercedes S-Class. Nội thất sang trọng, công nghệ tiên tiến và sự êm ái tuyệt đối trên mọi cung đường.',
     pricePerDay: 8000000,
     pricePerHour: 1200000,
+    seatCategory: '5_cho',
+    selfDrivePrice: 0,
+    chauffeurIncluded: true,
     images: [
       'https://res.cloudinary.com/dpr6zwanv/image/upload/v1772344364/carCRM/vehicles/xe_A/xe_A__1_.jpg',
       'https://res.cloudinary.com/dpr6zwanv/image/upload/v1772344374/carCRM/vehicles/xe_A/xe_A__2_.jpg',
@@ -28,6 +265,9 @@ const seedVehicles = [
     description: 'BMW 7 Series kết hợp hoàn hảo giữa hiệu suất vận hành mạnh mẽ và không gian nội thất đẳng cấp. Lựa chọn lý tưởng cho những chuyến đi quan trọng.',
     pricePerDay: 7500000,
     pricePerHour: 1100000,
+    seatCategory: '5_cho',
+    selfDrivePrice: 0,
+    chauffeurIncluded: true,
     images: [
       'https://res.cloudinary.com/dpr6zwanv/image/upload/v1772344380/carCRM/vehicles/xe_B/xe_B__1_.jpg',
       'https://res.cloudinary.com/dpr6zwanv/image/upload/v1772344382/carCRM/vehicles/xe_B/xe_B__2_.jpg',
@@ -47,6 +287,9 @@ const seedVehicles = [
     description: 'Biểu tượng của sự xa xỉ — Rolls-Royce Ghost mang đến trải nghiệm lái êm ái như trên mây. Hoàn hảo cho đám cưới, sự kiện và dịp đặc biệt.',
     pricePerDay: 25000000,
     pricePerHour: 4000000,
+    seatCategory: '5_cho',
+    selfDrivePrice: 0,
+    chauffeurIncluded: true,
     images: [
       'https://res.cloudinary.com/dpr6zwanv/image/upload/v1772344385/carCRM/vehicles/xe_C/z7565410145617_6d64fe9be1a50b507016ea0d3b87c64f.jpg',
       'https://res.cloudinary.com/dpr6zwanv/image/upload/v1772344385/carCRM/vehicles/xe_C/z7565410145654_2231cf92ac380174cfe429185a0bb3e3.jpg',
@@ -68,6 +311,9 @@ const seedVehicles = [
     description: 'Bentley Continental GT — sự kết hợp giữa hiệu suất siêu xe và sự sang trọng tối thượng. Nội thất handcrafted bằng da và gỗ quý.',
     pricePerDay: 20000000,
     pricePerHour: 3500000,
+    seatCategory: '4_cho',
+    selfDrivePrice: 0,
+    chauffeurIncluded: true,
     images: [
       'https://res.cloudinary.com/dpr6zwanv/image/upload/v1772344406/carCRM/vehicles/xe_D/z7565410179977_7a0b5805eaca74f148ccd0432bfc9ed3.jpg',
       'https://res.cloudinary.com/dpr6zwanv/image/upload/v1772344407/carCRM/vehicles/xe_D/z7565410179978_9803385b05908b65e177695e272f651b.jpg',
@@ -89,6 +335,9 @@ const seedVehicles = [
     description: 'Audi A8 L — flagship sedan với trục cơ sở dài, nội thất công nghệ cao và hệ thống lái tự động cấp 3. Sự lựa chọn tinh tế cho doanh nhân.',
     pricePerDay: 6500000,
     pricePerHour: 950000,
+    seatCategory: '5_cho',
+    selfDrivePrice: 0,
+    chauffeurIncluded: true,
     images: [
       'https://res.cloudinary.com/dpr6zwanv/image/upload/v1772644895/carCRM/vehicles/xe_E/z7565410164192_bbe300a9d92eae279f53da1b1c1426b0.jpg',
       'https://res.cloudinary.com/dpr6zwanv/image/upload/v1772644896/carCRM/vehicles/xe_E/z7565410164193_df1ef02a9e112323e9bf7abd1b29a320.jpg',
@@ -109,6 +358,9 @@ const seedVehicles = [
     description: 'Porsche Panamera — gran turismo 4 cửa mang DNA thể thao thuần túy. Hiệu suất vượt trội kết hợp sự thoải mái hạng sang.',
     pricePerDay: 9500000,
     pricePerHour: 1400000,
+    seatCategory: '4_cho',
+    selfDrivePrice: 0,
+    chauffeurIncluded: true,
     images: [
       'https://res.cloudinary.com/dpr6zwanv/image/upload/v1772644901/carCRM/vehicles/xe_F/z7565410164344_49c04012167acffa7f211a5283f3b3d2.jpg',
       'https://res.cloudinary.com/dpr6zwanv/image/upload/v1772644902/carCRM/vehicles/xe_F/z7565410164345_f022be849f80c00585921b9700bc4c86.jpg',
@@ -130,6 +382,9 @@ const seedVehicles = [
     description: 'Lexus LS 500 — biểu tượng của sự tinh tế Nhật Bản. Thiết kế Kiriko Glass, nội thất bọc da semi-aniline và sự yên tĩnh hoàn hảo.',
     pricePerDay: 5500000,
     pricePerHour: 800000,
+    seatCategory: '5_cho',
+    selfDrivePrice: 0,
+    chauffeurIncluded: true,
     images: [
       'https://res.cloudinary.com/dpr6zwanv/image/upload/v1772644912/carCRM/vehicles/xe_G/z7565410179977_7a0b5805eaca74f148ccd0432bfc9ed3.jpg',
       'https://res.cloudinary.com/dpr6zwanv/image/upload/v1772644913/carCRM/vehicles/xe_G/z7565410179978_9803385b05908b65e177695e272f651b.jpg',
@@ -307,14 +562,20 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       db.collection('bookings').deleteMany({}),
       db.collection('blogPosts').deleteMany({}),
       db.collection('testimonials').deleteMany({}),
+      db.collection('serviceTypes').deleteMany({}),
+      db.collection('routes').deleteMany({}),
+      db.collection('pricingPackages').deleteMany({}),
     ]);
 
     // Insert seed data
-    const [vehiclesResult, bookingsResult, blogResult, testimonialsResult] = await Promise.all([
+    const [vehiclesResult, bookingsResult, blogResult, testimonialsResult, serviceTypesResult, routesResult, pricingPackagesResult] = await Promise.all([
       db.collection('vehicles').insertMany(seedVehicles),
       db.collection('bookings').insertMany(seedBookings),
       db.collection('blogPosts').insertMany(seedBlogPosts),
       db.collection('testimonials').insertMany(seedTestimonials),
+      db.collection('serviceTypes').insertMany(seedServiceTypes),
+      db.collection('routes').insertMany(seedRoutes),
+      db.collection('pricingPackages').insertMany(seedPricingPackages),
     ]);
 
     // Update booking vehicleIds to match actual inserted vehicle IDs
@@ -342,6 +603,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         bookings: bookingsResult.insertedCount,
         blogPosts: blogResult.insertedCount,
         testimonials: testimonialsResult.insertedCount,
+        serviceTypes: serviceTypesResult.insertedCount,
+        routes: routesResult.insertedCount,
+        pricingPackages: pricingPackagesResult.insertedCount,
       },
     });
   } catch (error: any) {

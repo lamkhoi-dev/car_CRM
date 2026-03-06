@@ -17,6 +17,7 @@ import {
 import heroBg from "@/assets/hero-bg.jpg";
 import { useVehicles } from "@/hooks/useVehicles";
 import { useTestimonials } from "@/hooks/useBlog";
+import { useServiceTypes, usePricingPackages, useRoutes } from "@/hooks/useServices";
 import VehicleCard from "@/components/VehicleCard";
 import SkeletonCard from "@/components/SkeletonCard";
 import { formatVND } from "@/lib/utils";
@@ -36,15 +37,10 @@ const GALLERY = [
 ];
 
 /* ── Pricing data ── */
-const PRICING = [
-  { name: "Lexus LS 500", price: 5500000, popular: false },
-  { name: "Audi A8 L", price: 6500000, popular: false },
-  { name: "BMW 7 Series", price: 7500000, popular: false },
-  { name: "Mercedes S-Class", price: 8000000, popular: true },
-  { name: "Porsche Panamera", price: 9500000, popular: false },
-  { name: "Bentley Continental GT", price: 20000000, popular: false },
-  { name: "Rolls-Royce Ghost", price: 25000000, popular: false },
-];
+const SERVICE_ICONS: Record<string, string> = {
+  hourly_4h: '⏰', hourly_8h: '🕐', daily: '📅', multi_day: '🗓️',
+  trip: '📍', airport: '✈️', self_drive: '🔑', wedding: '💒',
+};
 
 /* ── FAQ data ── */
 const FAQ = [
@@ -112,6 +108,10 @@ const FaqItem = ({ q, a }: { q: string; a: string }) => {
 const Index = () => {
   const { data: vehicles = [], isLoading: loadingVehicles } = useVehicles();
   const { data: testimonials = [] } = useTestimonials();
+  const { data: serviceTypes = [] } = useServiceTypes();
+  const { data: pricingPackages = [] } = usePricingPackages();
+  const { data: routes = [] } = useRoutes();
+  const [pricingTab, setPricingTab] = useState<'packages' | 'routes'>('packages');
 
   return (
     <div className="min-h-screen pb-20 md:pb-0">
@@ -427,45 +427,102 @@ const Index = () => {
               Bảng Giá Tham Khảo
             </h2>
             <p className="mx-auto max-w-md text-sm text-muted-foreground">
-              Giá thuê xe theo ngày (có tài xế). Thuê dài ngày giảm đến 25%.
+              Giá thuê xe theo từng loại dịch vụ. Liên hệ hotline để nhận ưu đãi.
             </p>
           </motion.div>
 
-          <div className="mx-auto max-w-2xl">
-            <div className="overflow-hidden rounded-xl bg-card card-shadow">
-              {/* Header */}
-              <div className="grid grid-cols-2 bg-primary/5 px-4 py-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground sm:px-6">
-                <span>Dòng xe</span>
-                <span className="text-right">Giá / ngày</span>
-              </div>
-              {/* Rows */}
-              {PRICING.map((item, i) => (
+          {/* Service types grid */}
+          {serviceTypes.length > 0 && (
+            <div className="mx-auto mb-8 grid max-w-3xl grid-cols-2 gap-3 sm:grid-cols-4">
+              {serviceTypes.filter(s => s.isActive).map((st, i) => (
                 <motion.div
-                  key={item.name}
-                  initial={{ opacity: 0, x: -10 }}
-                  whileInView={{ opacity: 1, x: 0 }}
+                  key={st.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.05 }}
-                  className={`grid grid-cols-2 items-center border-t border-border/30 px-4 py-3.5 sm:px-6 ${
-                    item.popular ? "bg-primary/5" : ""
-                  }`}
+                  className="flex flex-col items-center gap-1.5 rounded-xl bg-card p-4 card-shadow text-center"
                 >
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm font-medium text-foreground">{item.name}</span>
-                    {item.popular && (
-                      <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary">
-                        Phổ biến
-                      </span>
-                    )}
-                  </div>
-                  <span className="text-right text-sm font-bold text-foreground">
-                    {formatVND(item.price)}
-                  </span>
+                  <span className="text-2xl">{SERVICE_ICONS[st.slug] || '🚘'}</span>
+                  <span className="text-xs font-semibold">{st.name}</span>
                 </motion.div>
               ))}
             </div>
+          )}
+
+          {/* Pricing tabs */}
+          <div className="mx-auto max-w-3xl">
+            <div className="mb-4 flex gap-1 rounded-xl bg-secondary p-1">
+              <button onClick={() => setPricingTab('packages')}
+                className={`flex-1 rounded-lg px-3 py-2 text-xs font-medium transition-colors ${pricingTab === 'packages' ? 'bg-card text-foreground card-shadow' : 'text-muted-foreground'}`}>
+                Gói Thuê Xe
+              </button>
+              <button onClick={() => setPricingTab('routes')}
+                className={`flex-1 rounded-lg px-3 py-2 text-xs font-medium transition-colors ${pricingTab === 'routes' ? 'bg-card text-foreground card-shadow' : 'text-muted-foreground'}`}>
+                Thuê Xe Đi Tỉnh
+              </button>
+            </div>
+
+            {pricingTab === 'packages' && pricingPackages.length > 0 && (
+              <div className="overflow-hidden rounded-xl bg-card card-shadow">
+                <div className="grid grid-cols-5 bg-primary/5 px-4 py-3 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground sm:px-6">
+                  <span className="col-span-2">Gói</span>
+                  <span className="text-right">4 chỗ</span>
+                  <span className="text-right">7 chỗ</span>
+                  <span className="text-right">16 chỗ</span>
+                </div>
+                {pricingPackages.filter(p => p.isActive).map((pkg, i) => (
+                  <motion.div
+                    key={pkg.id}
+                    initial={{ opacity: 0, x: -10 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.05 }}
+                    className="grid grid-cols-5 items-center border-t border-border/30 px-4 py-3 sm:px-6"
+                  >
+                    <div className="col-span-2">
+                      <span className="text-sm font-medium">{pkg.name}</span>
+                      <div className="text-[11px] text-muted-foreground">{pkg.durationHours}h / {pkg.maxKm}km</div>
+                    </div>
+                    <span className="text-right text-sm font-bold">{formatVND(pkg.price4Seat)}</span>
+                    <span className="text-right text-sm font-bold">{formatVND(pkg.price7Seat)}</span>
+                    <span className="text-right text-sm font-bold">{formatVND(pkg.price16Seat)}</span>
+                  </motion.div>
+                ))}
+              </div>
+            )}
+
+            {pricingTab === 'routes' && routes.length > 0 && (
+              <div className="overflow-hidden rounded-xl bg-card card-shadow">
+                <div className="grid grid-cols-5 bg-primary/5 px-4 py-3 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground sm:px-6">
+                  <span className="col-span-2">Tuyến đường</span>
+                  <span className="text-right">4 chỗ</span>
+                  <span className="text-right">7 chỗ</span>
+                  <span className="text-right">16 chỗ</span>
+                </div>
+                {routes.filter(r => r.isActive).map((r, i) => (
+                  <motion.div
+                    key={r.id}
+                    initial={{ opacity: 0, x: -10 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.03 }}
+                    className="grid grid-cols-5 items-center border-t border-border/30 px-4 py-3 sm:px-6"
+                  >
+                    <div className="col-span-2">
+                      <span className="text-sm font-medium">{r.from} → {r.to}</span>
+                      <div className="text-[11px] text-muted-foreground">{r.distance}km · {r.duration}</div>
+                    </div>
+                    <span className="text-right text-sm font-bold">{formatVND(r.price4Seat)}</span>
+                    <span className="text-right text-sm font-bold">{formatVND(r.price7Seat)}</span>
+                    <span className="text-right text-sm font-bold">{formatVND(r.price16Seat)}</span>
+                  </motion.div>
+                ))}
+              </div>
+            )}
+
             <p className="mt-3 text-center text-xs text-muted-foreground">
-              * Giá trên chưa bao gồm phụ phí ngoại tỉnh. Liên hệ hotline <strong>0922 225 599</strong> để nhận báo giá chính xác.
+              * Giá trên chưa bao gồm phụ phí cầu đường, đậu bãi. Liên hệ hotline <strong>0922 225 599</strong> để nhận báo giá chính xác.
             </p>
           </div>
         </div>

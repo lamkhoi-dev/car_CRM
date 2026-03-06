@@ -3,17 +3,20 @@
 export interface Vehicle {
   id: string;
   name: string;
-  type: 'car' | 'bike' | 'suv' | 'luxury';
+  type: 'car' | 'suv' | 'luxury' | 'van' | 'pickup' | 'mpv' | 'electric';
   description: string;
   pricePerDay: number;
   pricePerHour: number;
   images: string[];
   features: string[];
   seats: number;
+  seatCategory: '4_cho' | '5_cho' | '7_cho' | '9_cho' | '16_cho' | '29_cho' | '45_cho';
   transmission: string;
   fuel: string;
   rating: number;
   available: boolean;
+  selfDrivePrice?: number;
+  chauffeurIncluded?: boolean;
 }
 
 export interface Booking {
@@ -22,12 +25,68 @@ export interface Booking {
   vehicleName: string;
   customerName: string;
   customerPhone: string;
+  customerEmail?: string;
   startDate: string;
   endDate: string;
   status: 'pending' | 'confirmed' | 'cancelled';
   totalPrice: number;
   deviceId: string;
   createdAt: string;
+  serviceType: string;
+  pickupLocation?: string;
+  dropoffLocation?: string;
+  tripType?: 'one_way' | 'round_trip';
+  routeId?: string;
+  note?: string;
+}
+
+export interface ServiceType {
+  id: string;
+  name: string;
+  slug: string;
+  description: string;
+  icon: string;
+  isActive: boolean;
+  order: number;
+}
+
+export interface Route {
+  id: string;
+  from: string;
+  to: string;
+  province: string;
+  distance: number;
+  duration: string;
+  price4Seat: number;
+  price7Seat: number;
+  price16Seat: number;
+  notes?: string;
+  isActive: boolean;
+}
+
+export interface PricingPackage {
+  id: string;
+  name: string;
+  slug: string;
+  serviceTypeSlug: string;
+  durationHours: number;
+  maxKm: number;
+  price4Seat: number;
+  price7Seat: number;
+  price16Seat: number;
+  overagePerKm4Seat: number;
+  overagePerKm7Seat: number;
+  overagePerKm16Seat: number;
+  overagePerHour4Seat: number;
+  overagePerHour7Seat: number;
+  overagePerHour16Seat: number;
+  weekendSurcharge4Seat: number;
+  weekendSurcharge7Seat: number;
+  weekendSurcharge16Seat: number;
+  includes: string[];
+  excludes: string[];
+  isActive: boolean;
+  order: number;
 }
 
 export interface BlogPost {
@@ -147,4 +206,55 @@ export const uploadApi = {
 
 export const seedApi = {
   seed: () => adminFetch<{ success: boolean; inserted: Record<string, number> }>('/seed', { method: 'POST' }),
+};
+
+// ─── Service Types ──────────────────────────────────────
+
+export const serviceTypesApi = {
+  getAll: () => fetchJson<ServiceType[]>('/service-types'),
+  getById: (id: string) => fetchJson<ServiceType>(`/service-types/${id}`),
+  create: (data: Omit<ServiceType, 'id'>) =>
+    adminFetch<ServiceType>('/service-types', { method: 'POST', body: JSON.stringify(data) }),
+  update: (id: string, data: Partial<ServiceType>) =>
+    adminFetch<ServiceType>(`/service-types/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+  delete: (id: string) =>
+    adminFetch<{ success: boolean }>(`/service-types/${id}`, { method: 'DELETE' }),
+};
+
+// ─── Routes ─────────────────────────────────────────────
+
+export const routesApi = {
+  getAll: (province?: string) => {
+    const params = new URLSearchParams();
+    if (province) params.set('province', province);
+    params.set('active', 'true');
+    return fetchJson<Route[]>(`/routes?${params}`);
+  },
+  getAllAdmin: () => fetchJson<Route[]>('/routes'),
+  getById: (id: string) => fetchJson<Route>(`/routes/${id}`),
+  create: (data: Omit<Route, 'id'>) =>
+    adminFetch<Route>('/routes', { method: 'POST', body: JSON.stringify(data) }),
+  update: (id: string, data: Partial<Route>) =>
+    adminFetch<Route>(`/routes/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+  delete: (id: string) =>
+    adminFetch<{ success: boolean }>(`/routes/${id}`, { method: 'DELETE' }),
+};
+
+// ─── Pricing Packages ───────────────────────────────────
+
+export const pricingPackagesApi = {
+  getAll: (serviceType?: string) => {
+    const params = new URLSearchParams();
+    if (serviceType) params.set('serviceType', serviceType);
+    params.set('active', 'true');
+    return fetchJson<PricingPackage[]>(`/pricing-packages?${params}`);
+  },
+  getAllAdmin: () => fetchJson<PricingPackage[]>('/pricing-packages'),
+  getById: (id: string) => fetchJson<PricingPackage>(`/pricing-packages/${id}`),
+  create: (data: Omit<PricingPackage, 'id'>) =>
+    adminFetch<PricingPackage>('/pricing-packages', { method: 'POST', body: JSON.stringify(data) }),
+  update: (id: string, data: Partial<PricingPackage>) =>
+    adminFetch<PricingPackage>(`/pricing-packages/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+  delete: (id: string) =>
+    adminFetch<{ success: boolean }>(`/pricing-packages/${id}`, { method: 'DELETE' }),
 };

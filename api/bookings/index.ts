@@ -20,13 +20,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     if (req.method === 'POST') {
-      const { vehicleId, vehicleName, customerName, customerPhone, startDate, endDate, totalPrice, deviceId } = req.body;
+      const { vehicleId, vehicleName, customerName, customerPhone, customerEmail, startDate, endDate, totalPrice, deviceId, serviceType, pickupLocation, dropoffLocation, tripType, routeId, note } = req.body;
 
       if (!vehicleId || !customerName || !customerPhone || !startDate || !endDate) {
         return res.status(400).json({ error: 'Missing required fields' });
       }
 
-      const doc = {
+      const doc: Record<string, any> = {
         vehicleId,
         vehicleName: vehicleName || '',
         customerName,
@@ -37,7 +37,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         totalPrice: Number(totalPrice) || 0,
         deviceId: deviceId || '',
         createdAt: new Date().toISOString(),
+        serviceType: serviceType || 'daily',
       };
+      if (customerEmail) doc.customerEmail = customerEmail;
+      if (pickupLocation) doc.pickupLocation = pickupLocation;
+      if (dropoffLocation) doc.dropoffLocation = dropoffLocation;
+      if (tripType) doc.tripType = tripType;
+      if (routeId) doc.routeId = routeId;
+      if (note) doc.note = note;
 
       const result = await col.insertOne(doc);
       return res.status(201).json({ id: result.insertedId.toString(), ...doc });
