@@ -212,13 +212,13 @@ export const seedApi = {
 
 export const serviceTypesApi = {
   getAll: () => fetchJson<ServiceType[]>('/service-types'),
-  getById: (id: string) => fetchJson<ServiceType>(`/service-types/${id}`),
+  getById: (id: string) => fetchJson<ServiceType>(`/service-types?id=${id}`),
   create: (data: Omit<ServiceType, 'id'>) =>
     adminFetch<ServiceType>('/service-types', { method: 'POST', body: JSON.stringify(data) }),
   update: (id: string, data: Partial<ServiceType>) =>
-    adminFetch<ServiceType>(`/service-types/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+    adminFetch<ServiceType>(`/service-types?id=${id}`, { method: 'PUT', body: JSON.stringify(data) }),
   delete: (id: string) =>
-    adminFetch<{ success: boolean }>(`/service-types/${id}`, { method: 'DELETE' }),
+    adminFetch<{ success: boolean }>(`/service-types?id=${id}`, { method: 'DELETE' }),
 };
 
 // ─── Routes ─────────────────────────────────────────────
@@ -231,13 +231,13 @@ export const routesApi = {
     return fetchJson<Route[]>(`/routes?${params}`);
   },
   getAllAdmin: () => fetchJson<Route[]>('/routes'),
-  getById: (id: string) => fetchJson<Route>(`/routes/${id}`),
+  getById: (id: string) => fetchJson<Route>(`/routes?id=${id}`),
   create: (data: Omit<Route, 'id'>) =>
     adminFetch<Route>('/routes', { method: 'POST', body: JSON.stringify(data) }),
   update: (id: string, data: Partial<Route>) =>
-    adminFetch<Route>(`/routes/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+    adminFetch<Route>(`/routes?id=${id}`, { method: 'PUT', body: JSON.stringify(data) }),
   delete: (id: string) =>
-    adminFetch<{ success: boolean }>(`/routes/${id}`, { method: 'DELETE' }),
+    adminFetch<{ success: boolean }>(`/routes?id=${id}`, { method: 'DELETE' }),
 };
 
 // ─── Pricing Packages ───────────────────────────────────
@@ -250,11 +250,11 @@ export const pricingPackagesApi = {
     return fetchJson<PricingPackage[]>(`/pricing-packages?${params}`);
   },
   getAllAdmin: () => fetchJson<PricingPackage[]>('/pricing-packages'),
-  getById: (id: string) => fetchJson<PricingPackage>(`/pricing-packages/${id}`),
+  getById: (id: string) => fetchJson<PricingPackage>(`/pricing-packages?id=${id}`),
   create: (data: Omit<PricingPackage, 'id'>) =>
     adminFetch<PricingPackage>('/pricing-packages', { method: 'POST', body: JSON.stringify(data) }),
   update: (id: string, data: Partial<PricingPackage>) =>
-    adminFetch<PricingPackage>(`/pricing-packages/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+    adminFetch<PricingPackage>(`/pricing-packages?id=${id}`, { method: 'PUT', body: JSON.stringify(data) }),
   delete: (id: string) =>
-    adminFetch<{ success: boolean }>(`/pricing-packages/${id}`, { method: 'DELETE' }),
+    adminFetch<{ success: boolean }>(`/pricing-packages?id=${id}`, { method: 'DELETE' }),
 };
