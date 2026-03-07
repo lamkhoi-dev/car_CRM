@@ -13,15 +13,23 @@ import {
   Car,
   Users,
   Calendar,
+  Mail,
+  MessageCircle,
+  Fuel,
+  BadgeCheck,
+  Globe,
+  HeartHandshake,
+  Sparkles,
+  Navigation,
 } from "lucide-react";
 import heroBg from "@/assets/hero-bg.jpg";
 import { useVehicles } from "@/hooks/useVehicles";
-import { useTestimonials } from "@/hooks/useBlog";
+import { useTestimonials, useBlogPosts } from "@/hooks/useBlog";
 import { useServiceTypes, usePricingPackages, useRoutes } from "@/hooks/useServices";
 import VehicleCard from "@/components/VehicleCard";
 import SkeletonCard from "@/components/SkeletonCard";
 import { formatVND } from "@/lib/utils";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 
 /* ── Cloudinary URLs ── */
 const VIDEO_URL =
@@ -36,7 +44,7 @@ const GALLERY = [
   "https://res.cloudinary.com/dpr6zwanv/image/upload/v1772344362/carCRM/landing/landingpage__7_.jpg",
 ];
 
-/* ── Pricing data ── */
+/* ── Service icons ── */
 const SERVICE_ICONS: Record<string, string> = {
   hourly_4h: '⏰', hourly_8h: '🕐', daily: '📅', multi_day: '🗓️',
   trip: '📍', airport: '✈️', self_drive: '🔑', wedding: '💒',
@@ -67,6 +75,14 @@ const FAQ = [
   {
     q: "Thuê dài ngày có được giảm giá không?",
     a: "Thuê từ 3 ngày giảm 10%, từ 7 ngày giảm 15%, từ 30 ngày giảm 25%. Liên hệ để nhận báo giá tốt nhất.",
+  },
+  {
+    q: "Phương thức thanh toán nào được hỗ trợ?",
+    a: "Chúng tôi chấp nhận tiền mặt, chuyển khoản ngân hàng, ví điện tử (MoMo, ZaloPay) và thẻ tín dụng (Visa/Mastercard).",
+  },
+  {
+    q: "Có dịch vụ giao xe tận nơi không?",
+    a: "Có! Giao xe tận nơi miễn phí trong nội thành TP.HCM. Ngoại thành phụ thu từ 100.000₫ tùy khoảng cách.",
   },
 ];
 
@@ -108,10 +124,32 @@ const FaqItem = ({ q, a }: { q: string; a: string }) => {
 const Index = () => {
   const { data: vehicles = [], isLoading: loadingVehicles } = useVehicles();
   const { data: testimonials = [] } = useTestimonials();
+  const { data: blogPosts = [] } = useBlogPosts();
   const { data: serviceTypes = [] } = useServiceTypes();
   const { data: pricingPackages = [] } = usePricingPackages();
   const { data: routes = [] } = useRoutes();
   const [pricingTab, setPricingTab] = useState<'packages' | 'routes'>('packages');
+  const [routeProvince, setRouteProvince] = useState<string>('all');
+
+  // Group routes by province for filter
+  const provinces = useMemo(() => {
+    const set = new Set(routes.filter(r => r.isActive).map(r => r.province));
+    return Array.from(set).sort();
+  }, [routes]);
+
+  const filteredRoutes = useMemo(() => {
+    const active = routes.filter(r => r.isActive);
+    if (routeProvince === 'all') return active;
+    return active.filter(r => r.province === routeProvince);
+  }, [routes, routeProvince]);
+
+  // Popular routes (top 6 by price — most popular destinations)
+  const popularRoutes = useMemo(() => {
+    return routes
+      .filter(r => r.isActive && r.province !== 'TP.HCM')
+      .sort((a, b) => a.price4Seat - b.price4Seat)
+      .slice(0, 6);
+  }, [routes]);
 
   return (
     <div className="min-h-screen pb-20 md:pb-0">
@@ -138,17 +176,19 @@ const Index = () => {
               transition={{ delay: 0.3 }}
               className="mb-4 inline-block rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-xs font-medium text-primary backdrop-blur-sm"
             >
-              Dịch vụ cho thuê xe sang
+              Dịch vụ cho thuê xe sang #1 TP.HCM
             </motion.span>
 
             <h1 className="mb-6 font-display text-4xl font-black leading-tight tracking-tight text-foreground sm:text-5xl md:text-7xl">
               Trải nghiệm{" "}
               <span className="gradient-text">Đẳng Cấp</span>
+              <br className="hidden sm:block" />
+              <span className="text-3xl sm:text-4xl md:text-5xl"> Trên Mọi Hành Trình</span>
             </h1>
 
             <p className="mx-auto mb-8 max-w-xl text-base text-muted-foreground sm:text-lg">
-              Cho thuê xe sang cho mọi dịp. Đặt xe nhanh chóng,
-              dịch vụ chuyên nghiệp, trải nghiệm khó quên.
+              Cho thuê xe sang cho mọi dịp — du lịch, sự kiện, đám cưới, công tác.
+              Đặt xe nhanh chóng, tài xế chuyên nghiệp, giá minh bạch.
             </p>
 
             <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
@@ -166,6 +206,20 @@ const Index = () => {
                 <Phone className="h-4 w-4" />
                 0922 225 599
               </a>
+            </div>
+
+            {/* Quick info badges */}
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+              {[
+                { icon: Shield, text: "Bảo hiểm toàn diện" },
+                { icon: Fuel, text: "Xăng + Tài xế kèm" },
+                { icon: Navigation, text: "Giao xe tận nơi" },
+              ].map((badge) => (
+                <span key={badge.text} className="flex items-center gap-1.5 rounded-full bg-background/60 px-3 py-1.5 text-xs font-medium text-foreground backdrop-blur-sm">
+                  <badge.icon className="h-3.5 w-3.5 text-primary" />
+                  {badge.text}
+                </span>
+              ))}
             </div>
           </motion.div>
         </div>
@@ -212,8 +266,58 @@ const Index = () => {
         </div>
       </section>
 
+      {/* ────────── Service Types (Full descriptions) ────────── */}
+      {serviceTypes.length > 0 && (
+        <section className="py-16">
+          <div className="container">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="mb-10 text-center"
+            >
+              <h2 className="mb-2 font-display text-2xl font-bold sm:text-3xl">
+                Dịch Vụ Cho Thuê Xe
+              </h2>
+              <p className="mx-auto max-w-lg text-sm text-muted-foreground">
+                Đa dạng hình thức thuê xe phù hợp với mọi nhu cầu — từ di chuyển nội thành đến du lịch dài ngày
+              </p>
+            </motion.div>
+
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              {serviceTypes.filter(s => s.isActive).map((st, i) => (
+                <motion.div
+                  key={st.id}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.05 }}
+                  className="group rounded-xl bg-card p-5 card-shadow transition-all hover:shadow-lg"
+                >
+                  <div className="mb-3 flex items-center gap-3">
+                    <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-xl">
+                      {SERVICE_ICONS[st.slug] || '🚘'}
+                    </span>
+                    <h3 className="text-sm font-bold text-foreground leading-tight">{st.name}</h3>
+                  </div>
+                  <p className="mb-3 text-xs leading-relaxed text-muted-foreground line-clamp-3">
+                    {st.description}
+                  </p>
+                  <Link
+                    to="/vehicles"
+                    className="inline-flex items-center gap-1 text-xs font-semibold text-primary transition-colors hover:underline"
+                  >
+                    Xem giá <ChevronRight className="h-3 w-3" />
+                  </Link>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* ────────── Video Showcase ────────── */}
-      <section className="py-16">
+      <section className="bg-card/30 py-16">
         <div className="container">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -249,7 +353,7 @@ const Index = () => {
       </section>
 
       {/* ────────── How It Works ────────── */}
-      <section className="bg-card/30 py-16">
+      <section className="py-16">
         <div className="container">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -292,7 +396,7 @@ const Index = () => {
       </section>
 
       {/* ────────── Features ────────── */}
-      <section className="py-16">
+      <section className="bg-card/30 py-16">
         <div className="container">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -337,7 +441,7 @@ const Index = () => {
       </section>
 
       {/* ────────── Featured Vehicles – 6 items ────────── */}
-      <section className="bg-card/30 py-16">
+      <section className="py-16">
         <div className="container">
           <div className="mb-8 flex items-center justify-between">
             <div>
@@ -372,6 +476,81 @@ const Index = () => {
           </Link>
         </div>
       </section>
+
+      {/* ────────── Popular Routes ────────── */}
+      {popularRoutes.length > 0 && (
+        <section className="bg-card/30 py-16">
+          <div className="container">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="mb-8 text-center"
+            >
+              <h2 className="mb-2 font-display text-2xl font-bold sm:text-3xl">
+                Tuyến Đường Phổ Biến
+              </h2>
+              <p className="mx-auto max-w-md text-sm text-muted-foreground">
+                Các tuyến đường thuê xe đi tỉnh được đặt nhiều nhất từ TP.HCM
+              </p>
+            </motion.div>
+
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {popularRoutes.map((route, i) => (
+                <motion.div
+                  key={route.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.05 }}
+                  className="rounded-xl bg-card p-5 card-shadow"
+                >
+                  <div className="mb-3 flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
+                        <Navigation className="h-4 w-4 text-primary" />
+                      </div>
+                      <div>
+                        <h3 className="text-sm font-bold text-foreground">{route.to}</h3>
+                        <p className="text-[11px] text-muted-foreground">{route.distance}km · {route.duration}</p>
+                      </div>
+                    </div>
+                    <span className="rounded-full bg-primary/10 px-2.5 py-1 text-[11px] font-semibold text-primary">
+                      {route.province}
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-3 gap-2 rounded-lg bg-secondary/50 p-3">
+                    <div className="text-center">
+                      <div className="text-[10px] text-muted-foreground">4 chỗ</div>
+                      <div className="text-xs font-bold text-foreground">{formatVND(route.price4Seat)}</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-[10px] text-muted-foreground">7 chỗ</div>
+                      <div className="text-xs font-bold text-foreground">{formatVND(route.price7Seat)}</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-[10px] text-muted-foreground">16 chỗ</div>
+                      <div className="text-xs font-bold text-foreground">{formatVND(route.price16Seat)}</div>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+
+            <div className="mt-6 text-center">
+              <button
+                onClick={() => {
+                  setPricingTab('routes');
+                  document.getElementById('pricing-section')?.scrollIntoView({ behavior: 'smooth' });
+                }}
+                className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline"
+              >
+                Xem đầy đủ bảng giá <ChevronRight className="h-4 w-4" />
+              </button>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* ────────── Gallery ────────── */}
       <section className="py-16">
@@ -415,7 +594,7 @@ const Index = () => {
       </section>
 
       {/* ────────── Pricing Table ────────── */}
-      <section className="bg-card/30 py-16">
+      <section id="pricing-section" className="bg-card/30 py-16">
         <div className="container">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -431,41 +610,24 @@ const Index = () => {
             </p>
           </motion.div>
 
-          {/* Service types grid */}
-          {serviceTypes.length > 0 && (
-            <div className="mx-auto mb-8 grid max-w-3xl grid-cols-2 gap-3 sm:grid-cols-4">
-              {serviceTypes.filter(s => s.isActive).map((st, i) => (
-                <motion.div
-                  key={st.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.05 }}
-                  className="flex flex-col items-center gap-1.5 rounded-xl bg-card p-4 card-shadow text-center"
-                >
-                  <span className="text-2xl">{SERVICE_ICONS[st.slug] || '🚘'}</span>
-                  <span className="text-xs font-semibold">{st.name}</span>
-                </motion.div>
-              ))}
-            </div>
-          )}
-
-          {/* Pricing tabs */}
-          <div className="mx-auto max-w-3xl">
+          <div className="mx-auto max-w-4xl">
+            {/* Pricing tabs */}
             <div className="mb-4 flex gap-1 rounded-xl bg-secondary p-1">
               <button onClick={() => setPricingTab('packages')}
-                className={`flex-1 rounded-lg px-3 py-2 text-xs font-medium transition-colors ${pricingTab === 'packages' ? 'bg-card text-foreground card-shadow' : 'text-muted-foreground'}`}>
-                Gói Thuê Xe
+                className={`flex-1 rounded-lg px-3 py-2.5 text-xs font-medium transition-colors sm:text-sm ${pricingTab === 'packages' ? 'bg-card text-foreground card-shadow' : 'text-muted-foreground'}`}>
+                📋 Gói Thuê Xe
               </button>
               <button onClick={() => setPricingTab('routes')}
-                className={`flex-1 rounded-lg px-3 py-2 text-xs font-medium transition-colors ${pricingTab === 'routes' ? 'bg-card text-foreground card-shadow' : 'text-muted-foreground'}`}>
-                Thuê Xe Đi Tỉnh
+                className={`flex-1 rounded-lg px-3 py-2.5 text-xs font-medium transition-colors sm:text-sm ${pricingTab === 'routes' ? 'bg-card text-foreground card-shadow' : 'text-muted-foreground'}`}>
+                🗺️ Thuê Xe Đi Tỉnh
               </button>
             </div>
 
+            {/* Packages table */}
             {pricingTab === 'packages' && pricingPackages.length > 0 && (
               <div className="overflow-hidden rounded-xl bg-card card-shadow">
-                <div className="grid grid-cols-5 bg-primary/5 px-4 py-3 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground sm:px-6">
+                {/* Desktop table header */}
+                <div className="hidden grid-cols-5 bg-primary/5 px-6 py-3 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground sm:grid">
                   <span className="col-span-2">Gói</span>
                   <span className="text-right">4 chỗ</span>
                   <span className="text-right">7 chỗ</span>
@@ -478,46 +640,141 @@ const Index = () => {
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: i * 0.05 }}
-                    className="grid grid-cols-5 items-center border-t border-border/30 px-4 py-3 sm:px-6"
+                    className="border-t border-border/30"
                   >
-                    <div className="col-span-2">
-                      <span className="text-sm font-medium">{pkg.name}</span>
-                      <div className="text-[11px] text-muted-foreground">{pkg.durationHours}h / {pkg.maxKm}km</div>
+                    {/* Desktop row */}
+                    <div className="hidden grid-cols-5 items-center px-6 py-3 sm:grid">
+                      <div className="col-span-2">
+                        <span className="text-sm font-medium">{pkg.name}</span>
+                        <div className="text-[11px] text-muted-foreground">{pkg.durationHours}h / {pkg.maxKm}km</div>
+                      </div>
+                      <span className="text-right text-sm font-bold">{formatVND(pkg.price4Seat)}</span>
+                      <span className="text-right text-sm font-bold">{formatVND(pkg.price7Seat)}</span>
+                      <span className="text-right text-sm font-bold">{formatVND(pkg.price16Seat)}</span>
                     </div>
-                    <span className="text-right text-sm font-bold">{formatVND(pkg.price4Seat)}</span>
-                    <span className="text-right text-sm font-bold">{formatVND(pkg.price7Seat)}</span>
-                    <span className="text-right text-sm font-bold">{formatVND(pkg.price16Seat)}</span>
+                    {/* Mobile card */}
+                    <div className="p-4 sm:hidden">
+                      <div className="mb-2 font-medium text-sm">{pkg.name}</div>
+                      <div className="mb-2 text-[11px] text-muted-foreground">{pkg.durationHours}h / {pkg.maxKm}km</div>
+                      <div className="grid grid-cols-3 gap-2 rounded-lg bg-secondary/50 p-2.5">
+                        <div className="text-center">
+                          <div className="text-[10px] text-muted-foreground">4 chỗ</div>
+                          <div className="text-xs font-bold">{formatVND(pkg.price4Seat)}</div>
+                        </div>
+                        <div className="text-center">
+                          <div className="text-[10px] text-muted-foreground">7 chỗ</div>
+                          <div className="text-xs font-bold">{formatVND(pkg.price7Seat)}</div>
+                        </div>
+                        <div className="text-center">
+                          <div className="text-[10px] text-muted-foreground">16 chỗ</div>
+                          <div className="text-xs font-bold">{formatVND(pkg.price16Seat)}</div>
+                        </div>
+                      </div>
+                    </div>
                   </motion.div>
                 ))}
+
+                {/* Package includes/excludes */}
+                {pricingPackages.filter(p => p.isActive).length > 0 && (
+                  <div className="border-t border-border/30 p-4 sm:p-6">
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      <div>
+                        <h4 className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Bao gồm</h4>
+                        <div className="flex flex-wrap gap-1.5">
+                          {pricingPackages[0].includes.map(item => (
+                            <span key={item} className="flex items-center gap-1 rounded-full bg-success/10 px-2.5 py-1 text-[11px] font-medium text-success">
+                              <CheckCircle2 className="h-3 w-3" /> {item}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                      <div>
+                        <h4 className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Chưa bao gồm</h4>
+                        <div className="flex flex-wrap gap-1.5">
+                          {pricingPackages[0].excludes.map(item => (
+                            <span key={item} className="rounded-full bg-destructive/10 px-2.5 py-1 text-[11px] font-medium text-destructive">
+                              {item}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
 
+            {/* Routes table */}
             {pricingTab === 'routes' && routes.length > 0 && (
-              <div className="overflow-hidden rounded-xl bg-card card-shadow">
-                <div className="grid grid-cols-5 bg-primary/5 px-4 py-3 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground sm:px-6">
-                  <span className="col-span-2">Tuyến đường</span>
-                  <span className="text-right">4 chỗ</span>
-                  <span className="text-right">7 chỗ</span>
-                  <span className="text-right">16 chỗ</span>
-                </div>
-                {routes.filter(r => r.isActive).map((r, i) => (
-                  <motion.div
-                    key={r.id}
-                    initial={{ opacity: 0, x: -10 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: i * 0.03 }}
-                    className="grid grid-cols-5 items-center border-t border-border/30 px-4 py-3 sm:px-6"
+              <div>
+                {/* Province filter */}
+                <div className="mb-4 flex flex-wrap gap-1.5">
+                  <button
+                    onClick={() => setRouteProvince('all')}
+                    className={`rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${routeProvince === 'all' ? 'bg-primary text-primary-foreground' : 'bg-secondary text-muted-foreground hover:text-foreground'}`}
                   >
-                    <div className="col-span-2">
-                      <span className="text-sm font-medium">{r.from} → {r.to}</span>
-                      <div className="text-[11px] text-muted-foreground">{r.distance}km · {r.duration}</div>
-                    </div>
-                    <span className="text-right text-sm font-bold">{formatVND(r.price4Seat)}</span>
-                    <span className="text-right text-sm font-bold">{formatVND(r.price7Seat)}</span>
-                    <span className="text-right text-sm font-bold">{formatVND(r.price16Seat)}</span>
-                  </motion.div>
-                ))}
+                    Tất cả
+                  </button>
+                  {provinces.map(p => (
+                    <button
+                      key={p}
+                      onClick={() => setRouteProvince(p)}
+                      className={`rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${routeProvince === p ? 'bg-primary text-primary-foreground' : 'bg-secondary text-muted-foreground hover:text-foreground'}`}
+                    >
+                      {p}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="overflow-hidden rounded-xl bg-card card-shadow">
+                  {/* Desktop header */}
+                  <div className="hidden grid-cols-5 bg-primary/5 px-6 py-3 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground sm:grid">
+                    <span className="col-span-2">Tuyến đường</span>
+                    <span className="text-right">4 chỗ</span>
+                    <span className="text-right">7 chỗ</span>
+                    <span className="text-right">16 chỗ</span>
+                  </div>
+                  {filteredRoutes.map((r, i) => (
+                    <motion.div
+                      key={r.id}
+                      initial={{ opacity: 0, x: -10 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: i * 0.03 }}
+                      className="border-t border-border/30"
+                    >
+                      {/* Desktop row */}
+                      <div className="hidden grid-cols-5 items-center px-6 py-3 sm:grid">
+                        <div className="col-span-2">
+                          <span className="text-sm font-medium">{r.from} → {r.to}</span>
+                          <div className="text-[11px] text-muted-foreground">{r.distance}km · {r.duration}</div>
+                        </div>
+                        <span className="text-right text-sm font-bold">{formatVND(r.price4Seat)}</span>
+                        <span className="text-right text-sm font-bold">{formatVND(r.price7Seat)}</span>
+                        <span className="text-right text-sm font-bold">{formatVND(r.price16Seat)}</span>
+                      </div>
+                      {/* Mobile card */}
+                      <div className="p-4 sm:hidden">
+                        <div className="mb-1 text-sm font-medium">{r.from} → {r.to}</div>
+                        <div className="mb-2 text-[11px] text-muted-foreground">{r.distance}km · {r.duration}</div>
+                        <div className="grid grid-cols-3 gap-2 rounded-lg bg-secondary/50 p-2.5">
+                          <div className="text-center">
+                            <div className="text-[10px] text-muted-foreground">4 chỗ</div>
+                            <div className="text-xs font-bold">{formatVND(r.price4Seat)}</div>
+                          </div>
+                          <div className="text-center">
+                            <div className="text-[10px] text-muted-foreground">7 chỗ</div>
+                            <div className="text-xs font-bold">{formatVND(r.price7Seat)}</div>
+                          </div>
+                          <div className="text-center">
+                            <div className="text-[10px] text-muted-foreground">16 chỗ</div>
+                            <div className="text-xs font-bold">{formatVND(r.price16Seat)}</div>
+                          </div>
+                        </div>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
               </div>
             )}
 
@@ -528,8 +785,62 @@ const Index = () => {
         </div>
       </section>
 
-      {/* ────────── Testimonials ────────── */}
+      {/* ────────── About Us ────────── */}
       <section className="py-16">
+        <div className="container">
+          <div className="grid items-center gap-8 lg:grid-cols-2">
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+            >
+              <span className="mb-2 inline-block text-xs font-semibold uppercase tracking-wider text-primary">Về chúng tôi</span>
+              <h2 className="mb-4 font-display text-2xl font-bold sm:text-3xl">
+                DriveFlux — Đối Tác Tin Cậy Cho Mọi Hành Trình
+              </h2>
+              <p className="mb-4 text-sm leading-relaxed text-muted-foreground">
+                Với đội xe sang hơn 50 chiếc từ Mercedes, BMW, Rolls-Royce đến Bentley, Porsche — DriveFlux tự hào là đơn vị cho thuê xe sang hàng đầu tại TP.HCM.
+                Chúng tôi phục vụ mọi nhu cầu: du lịch, đám cưới, sự kiện doanh nghiệp, đưa đón sân bay và công tác dài ngày.
+              </p>
+              <div className="mb-6 grid grid-cols-2 gap-3">
+                {[
+                  { icon: BadgeCheck, text: "Uy tín từ 2018" },
+                  { icon: Sparkles, text: "Xe đời mới, bảo dưỡng định kỳ" },
+                  { icon: HeartHandshake, text: "Hơn 2,000 khách tin dùng" },
+                  { icon: Globe, text: "Phục vụ toàn quốc" },
+                ].map(item => (
+                  <div key={item.text} className="flex items-start gap-2">
+                    <item.icon className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                    <span className="text-xs font-medium text-foreground">{item.text}</span>
+                  </div>
+                ))}
+              </div>
+              <Link
+                to="/vehicles"
+                className="inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground hover:opacity-90"
+              >
+                Xem đội xe <ArrowRight className="h-4 w-4" />
+              </Link>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="grid grid-cols-2 gap-2"
+            >
+              {GALLERY.slice(1, 5).map((src, i) => (
+                <div key={i} className={`overflow-hidden rounded-xl ${i === 0 ? 'row-span-2' : ''}`}>
+                  <img src={src} alt={`About ${i}`} className="h-full w-full object-cover" loading="lazy" />
+                </div>
+              ))}
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* ────────── Testimonials ────────── */}
+      <section className="bg-card/30 py-16">
         <div className="container">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -576,6 +887,72 @@ const Index = () => {
         </div>
       </section>
 
+      {/* ────────── Blog Preview ────────── */}
+      {blogPosts.length > 0 && (
+        <section className="py-16">
+          <div className="container">
+            <div className="mb-8 flex items-center justify-between">
+              <div>
+                <h2 className="font-display text-2xl font-bold sm:text-3xl">
+                  Tin Tức & Kinh Nghiệm
+                </h2>
+                <p className="text-sm text-muted-foreground">
+                  Chia sẻ kinh nghiệm thuê xe và tin tức mới nhất
+                </p>
+              </div>
+              <Link
+                to="/blog"
+                className="hidden items-center gap-1 text-sm font-medium text-primary sm:flex"
+              >
+                Xem tất cả <ChevronRight className="h-4 w-4" />
+              </Link>
+            </div>
+
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {blogPosts.slice(0, 3).map((post, i) => (
+                <motion.div
+                  key={post.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1 }}
+                >
+                  <Link to={`/blog/${post.id}`} className="group block overflow-hidden rounded-xl bg-card card-shadow">
+                    <div className="aspect-[16/9] overflow-hidden">
+                      <img
+                        src={post.image}
+                        alt={post.title}
+                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        loading="lazy"
+                      />
+                    </div>
+                    <div className="p-4">
+                      <div className="mb-2 flex items-center gap-2">
+                        <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary">
+                          {post.category}
+                        </span>
+                        <span className="text-[10px] text-muted-foreground">{post.readTime}</span>
+                      </div>
+                      <h3 className="mb-1.5 text-sm font-bold text-foreground line-clamp-2 group-hover:text-primary transition-colors">
+                        {post.title}
+                      </h3>
+                      <p className="text-xs text-muted-foreground line-clamp-2">{post.excerpt}</p>
+                    </div>
+                  </Link>
+                </motion.div>
+              ))}
+            </div>
+
+            <Link
+              to="/blog"
+              className="mt-6 flex items-center justify-center gap-1 text-sm font-medium text-primary sm:hidden"
+            >
+              Xem tất cả bài viết <ChevronRight className="h-4 w-4" />
+            </Link>
+          </div>
+        </section>
+      )}
+
       {/* ────────── FAQ ────────── */}
       <section className="bg-card/30 py-16">
         <div className="container">
@@ -601,23 +978,48 @@ const Index = () => {
         </div>
       </section>
 
-      {/* ────────── CTA ────────── */}
+      {/* ────────── Contact / CTA ────────── */}
       <section className="py-16">
         <div className="container">
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="relative overflow-hidden rounded-2xl bg-card p-8 text-center card-shadow sm:p-12"
+            className="relative overflow-hidden rounded-2xl bg-card p-8 card-shadow sm:p-12"
           >
             <div className="absolute inset-0 opacity-20" style={{ background: "var(--gradient-primary)" }} />
             <div className="relative z-10">
-              <h2 className="mb-3 font-display text-2xl font-bold sm:text-4xl">
+              <h2 className="mb-3 font-display text-2xl font-bold text-center sm:text-4xl">
                 Sẵn Sàng Lên Đường?
               </h2>
-              <p className="mx-auto mb-6 max-w-md text-sm text-muted-foreground">
-                Khám phá đội xe và đặt xe mơ ước chỉ trong vài phút.
+              <p className="mx-auto mb-8 max-w-md text-center text-sm text-muted-foreground">
+                Liên hệ ngay để được tư vấn và nhận báo giá tốt nhất.
               </p>
+
+              {/* Contact methods grid */}
+              <div className="mx-auto mb-8 grid max-w-2xl gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                {[
+                  { icon: Phone, label: "Hotline", value: "0922 225 599", href: "tel:0922225599" },
+                  { icon: MessageCircle, label: "Zalo", value: "0922 225 599", href: "https://zalo.me/0922225599" },
+                  { icon: Mail, label: "Email", value: "driveflux@gmail.com", href: "mailto:driveflux@gmail.com" },
+                  { icon: MapPin, label: "Văn phòng", value: "TP. Hồ Chí Minh", href: "#" },
+                ].map((contact) => (
+                  <a
+                    key={contact.label}
+                    href={contact.href}
+                    className="flex items-center gap-3 rounded-xl bg-secondary/50 p-3 transition-colors hover:bg-secondary"
+                  >
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+                      <contact.icon className="h-4 w-4 text-primary" />
+                    </div>
+                    <div className="min-w-0">
+                      <div className="text-[10px] uppercase tracking-wider text-muted-foreground">{contact.label}</div>
+                      <div className="truncate text-xs font-semibold text-foreground">{contact.value}</div>
+                    </div>
+                  </a>
+                ))}
+              </div>
+
               <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
                 <Link
                   to="/vehicles"
@@ -640,22 +1042,29 @@ const Index = () => {
       {/* ────────── Footer ────────── */}
       <footer className="border-t border-border/50 py-10">
         <div className="container">
-          <div className="grid gap-8 sm:grid-cols-3">
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
             <div>
               <h3 className="mb-3 font-display text-lg font-bold text-foreground">DriveFlux</h3>
-              <p className="text-sm text-muted-foreground">
+              <p className="mb-3 text-sm text-muted-foreground">
                 Dịch vụ cho thuê xe sang hàng đầu Việt Nam. Uy tín, chuyên nghiệp, giá tốt nhất thị trường.
               </p>
+              <div className="flex gap-2">
+                {['🌐', '📘', '📷'].map((icon, i) => (
+                  <span key={i} className="flex h-8 w-8 items-center justify-center rounded-lg bg-secondary text-sm">
+                    {icon}
+                  </span>
+                ))}
+              </div>
             </div>
             <div>
-              <h4 className="mb-3 text-sm font-semibold text-foreground">Liên hệ</h4>
+              <h4 className="mb-3 text-sm font-semibold text-foreground">Dịch vụ</h4>
               <div className="space-y-2 text-sm text-muted-foreground">
-                <div className="flex items-center gap-2">
-                  <Phone className="h-3.5 w-3.5" /> 0922 225 599
-                </div>
-                <div className="flex items-center gap-2">
-                  <MapPin className="h-3.5 w-3.5" /> TP. Hồ Chí Minh, Việt Nam
-                </div>
+                <div>Thuê xe có tài xế</div>
+                <div>Thuê xe tự lái</div>
+                <div>Thuê xe đi tỉnh</div>
+                <div>Đưa đón sân bay</div>
+                <div>Xe hoa đám cưới</div>
+                <div>Thuê xe dài hạn</div>
               </div>
             </div>
             <div>
@@ -666,9 +1075,36 @@ const Index = () => {
                 <Link to="/my-bookings" className="block text-muted-foreground hover:text-primary">Đơn của tôi</Link>
               </div>
             </div>
+            <div>
+              <h4 className="mb-3 text-sm font-semibold text-foreground">Liên hệ</h4>
+              <div className="space-y-2 text-sm text-muted-foreground">
+                <div className="flex items-center gap-2">
+                  <Phone className="h-3.5 w-3.5 shrink-0" /> 0922 225 599
+                </div>
+                <div className="flex items-center gap-2">
+                  <Mail className="h-3.5 w-3.5 shrink-0" /> driveflux@gmail.com
+                </div>
+                <div className="flex items-start gap-2">
+                  <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0" /> TP. Hồ Chí Minh, Việt Nam
+                </div>
+                <div className="flex items-center gap-2">
+                  <Clock className="h-3.5 w-3.5 shrink-0" /> 8:00 — 20:00 (Hàng ngày)
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="mt-8 border-t border-border/50 pt-6 text-center">
-            <p className="text-xs text-muted-foreground">
+
+          {/* Payment methods */}
+          <div className="mt-8 border-t border-border/50 pt-6">
+            <div className="mb-4 flex flex-wrap items-center justify-center gap-3">
+              <span className="text-xs text-muted-foreground">Phương thức thanh toán:</span>
+              {['💵 Tiền mặt', '🏦 Chuyển khoản', '📱 MoMo', '📱 ZaloPay', '💳 Visa/MC'].map(method => (
+                <span key={method} className="rounded-full bg-secondary px-2.5 py-1 text-[11px] font-medium text-muted-foreground">
+                  {method}
+                </span>
+              ))}
+            </div>
+            <p className="text-center text-xs text-muted-foreground">
               © 2026 DriveFlux. Mọi quyền được bảo lưu.
             </p>
           </div>

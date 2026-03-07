@@ -5,7 +5,10 @@ import { ObjectId } from 'mongodb';
 export interface VehicleDoc {
   _id?: ObjectId;
   name: string;
+  brand: string;                   // Thương hiệu: Mercedes-Benz, BMW, ...
   type: 'car' | 'suv' | 'luxury' | 'van' | 'pickup' | 'mpv' | 'electric';
+  year: number;                    // Năm sản xuất
+  color: string;                   // Màu xe
   description: string;
   pricePerDay: number;
   pricePerHour: number;
@@ -19,6 +22,8 @@ export interface VehicleDoc {
   available: boolean;
   selfDrivePrice?: number;        // Giá tự lái /ngày (nếu có)
   chauffeurIncluded?: boolean;     // Có tài xế kèm theo mặc định?
+  licensePlate?: string;           // Biển số xe (admin only)
+  createdAt?: string;
 }
 
 // ─── Booking ─────────────────────────────────────────────
@@ -42,7 +47,10 @@ export interface BookingDoc {
   dropoffLocation?: string;        // Điểm đến
   tripType?: 'one_way' | 'round_trip';
   routeId?: string;                // ID tuyến đường (nếu thuê đi tỉnh)
+  packageId?: string;              // ID gói giá (nếu thuê theo gói)
+  passengers?: number;             // Số hành khách
   note?: string;
+  updatedAt?: string;
 }
 
 // ─── Service Type (Loại dịch vụ — admin config) ──────────
@@ -53,6 +61,7 @@ export interface ServiceTypeDoc {
   slug: string;           // 'hourly_4h', 'hourly_8h', 'daily', 'multi_day', 'trip', 'self_drive', 'wedding', 'airport'
   description: string;
   icon: string;           // lucide icon name
+  image?: string;         // URL hình ảnh banner cho dịch vụ
   isActive: boolean;
   order: number;          // thứ tự hiển thị
 }
@@ -71,6 +80,7 @@ export interface RouteDoc {
   price16Seat: number;    // Giá xe 16 chỗ
   notes?: string;         // Ghi chú đặc biệt
   isActive: boolean;
+  createdAt?: string;
 }
 
 // ─── Pricing Package (Gói giá theo giờ/km — admin config) ──
@@ -102,6 +112,7 @@ export interface PricingPackageDoc {
   excludes: string[];     // ["VAT", "Phí cầu đường", "Bến bãi"]
   isActive: boolean;
   order: number;
+  createdAt?: string;
 }
 
 // ─── Blog & Testimonials ─────────────────────────────────
@@ -116,6 +127,8 @@ export interface BlogPostDoc {
   date: string;
   readTime: string;
   category: string;
+  tags?: string[];         // Tags cho SEO/filtering
+  isPublished?: boolean;   // true = xuất bản, false = bản nháp
 }
 
 export interface TestimonialDoc {
@@ -125,6 +138,7 @@ export interface TestimonialDoc {
   content: string;
   rating: number;
   avatar: string;
+  date?: string;           // Ngày đánh giá
 }
 
 /** Chuyển MongoDB document sang plain object với id string */

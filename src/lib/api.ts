@@ -3,7 +3,10 @@
 export interface Vehicle {
   id: string;
   name: string;
+  brand: string;
   type: 'car' | 'suv' | 'luxury' | 'van' | 'pickup' | 'mpv' | 'electric';
+  year: number;
+  color: string;
   description: string;
   pricePerDay: number;
   pricePerHour: number;
@@ -17,6 +20,8 @@ export interface Vehicle {
   available: boolean;
   selfDrivePrice?: number;
   chauffeurIncluded?: boolean;
+  licensePlate?: string;
+  createdAt?: string;
 }
 
 export interface Booking {
@@ -37,7 +42,10 @@ export interface Booking {
   dropoffLocation?: string;
   tripType?: 'one_way' | 'round_trip';
   routeId?: string;
+  packageId?: string;
+  passengers?: number;
   note?: string;
+  updatedAt?: string;
 }
 
 export interface ServiceType {
@@ -46,6 +54,7 @@ export interface ServiceType {
   slug: string;
   description: string;
   icon: string;
+  image?: string;
   isActive: boolean;
   order: number;
 }
@@ -62,6 +71,7 @@ export interface Route {
   price16Seat: number;
   notes?: string;
   isActive: boolean;
+  createdAt?: string;
 }
 
 export interface PricingPackage {
@@ -87,6 +97,7 @@ export interface PricingPackage {
   excludes: string[];
   isActive: boolean;
   order: number;
+  createdAt?: string;
 }
 
 export interface BlogPost {
@@ -99,6 +110,8 @@ export interface BlogPost {
   date: string;
   readTime: string;
   category: string;
+  tags?: string[];
+  isPublished?: boolean;
 }
 
 export interface Testimonial {
@@ -108,6 +121,7 @@ export interface Testimonial {
   content: string;
   rating: number;
   avatar: string;
+  date?: string;
 }
 
 // ─── Helpers ────────────────────────────────────────────
