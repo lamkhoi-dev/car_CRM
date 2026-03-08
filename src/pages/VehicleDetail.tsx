@@ -1,14 +1,14 @@
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowLeft, Star, Users, Fuel, Settings, ChevronRight, Loader2, Tag } from "lucide-react";
+import { ArrowLeft, Star, Users, Fuel, Settings, ChevronRight, Loader2, Tag, Timer, Clock, CalendarDays, CalendarRange, MapPin, Plane, KeyRound, Heart, Car, type LucideIcon } from "lucide-react";
 import { useState, useMemo } from "react";
 import { useVehicle } from "@/hooks/useVehicles";
 import { useServiceTypes } from "@/hooks/useServices";
 import { formatVND } from "@/lib/utils";
 
-const SERVICE_ICONS: Record<string, string> = {
-  hourly_4h: '⏰', hourly_8h: '🕐', daily: '📅', multi_day: '🗓️',
-  trip: '📍', airport: '✈️', self_drive: '🔑', wedding: '💒',
+const SERVICE_ICONS: Record<string, LucideIcon> = {
+  hourly_4h: Timer, hourly_8h: Clock, daily: CalendarDays, multi_day: CalendarRange,
+  trip: MapPin, airport: Plane, self_drive: KeyRound, wedding: Heart,
 };
 
 const VehicleDetail = () => {
@@ -135,12 +135,13 @@ const VehicleDetail = () => {
               <div className="space-y-2">
                 {activePackages.map((pkg) => {
                   const st = serviceTypes.find((s) => s.slug === pkg.serviceTypeSlug);
+                  const Icon = SERVICE_ICONS[pkg.serviceTypeSlug] || Car;
                   return (
                     <div
                       key={pkg.id}
                       className="flex items-center gap-3 rounded-lg border border-border p-3 transition-colors hover:border-primary/30"
                     >
-                      <span className="text-lg">{SERVICE_ICONS[pkg.serviceTypeSlug] || '🚘'}</span>
+                      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/10"><Icon className="h-4 w-4 text-primary" /></span>
                       <div className="flex-1 min-w-0">
                         <div className="text-sm font-semibold">{pkg.name}</div>
                         <div className="text-xs text-muted-foreground">

@@ -21,6 +21,13 @@ import {
   HeartHandshake,
   Sparkles,
   Navigation,
+  Timer,
+  CalendarDays,
+  CalendarRange,
+  Plane,
+  KeyRound,
+  Heart,
+  type LucideIcon,
 } from "lucide-react";
 import heroBg from "@/assets/hero-bg.jpg";
 import { useVehicles } from "@/hooks/useVehicles";
@@ -44,10 +51,10 @@ const GALLERY = [
   "https://res.cloudinary.com/dpr6zwanv/image/upload/v1772344362/carCRM/landing/landingpage__7_.jpg",
 ];
 
-/* ── Service icons ── */
-const SERVICE_ICONS: Record<string, string> = {
-  hourly_4h: '⏰', hourly_8h: '🕐', daily: '📅', multi_day: '🗓️',
-  trip: '📍', airport: '✈️', self_drive: '🔑', wedding: '💒',
+/* ── Service icons (Lucide) ── */
+const SERVICE_ICONS: Record<string, LucideIcon> = {
+  hourly_4h: Timer, hourly_8h: Clock, daily: CalendarDays, multi_day: CalendarRange,
+  trip: MapPin, airport: Plane, self_drive: KeyRound, wedding: Heart,
 };
 
 /* ── FAQ data ── */
@@ -285,7 +292,9 @@ const Index = () => {
             </motion.div>
 
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              {serviceTypes.filter(s => s.isActive).map((st, i) => (
+              {serviceTypes.filter(s => s.isActive).map((st, i) => {
+                const Icon = SERVICE_ICONS[st.slug] || Car;
+                return (
                 <motion.div
                   key={st.id}
                   initial={{ opacity: 0, y: 30 }}
@@ -295,8 +304,8 @@ const Index = () => {
                   className="group rounded-xl bg-card p-5 card-shadow transition-all hover:shadow-lg"
                 >
                   <div className="mb-3 flex items-center gap-3">
-                    <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-xl">
-                      {SERVICE_ICONS[st.slug] || '🚘'}
+                    <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10">
+                      <Icon className="h-5 w-5 text-primary" />
                     </span>
                     <h3 className="text-sm font-bold text-foreground leading-tight">{st.name}</h3>
                   </div>
@@ -310,7 +319,8 @@ const Index = () => {
                     Xem giá <ChevronRight className="h-3 w-3" />
                   </Link>
                 </motion.div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </section>
