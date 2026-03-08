@@ -4,10 +4,10 @@ import { ArrowLeft, CalendarDays, Check, Loader2, MapPin, Clock, Car, ChevronRig
 import { useState, useMemo } from "react";
 import { useVehicle } from "@/hooks/useVehicles";
 import { useCreateBooking } from "@/hooks/useBookings";
-import { useServiceTypes, useRoutes, usePricingPackages } from "@/hooks/useServices";
+import { useServiceTypes, useRoutes } from "@/hooks/useServices";
 import { toast } from "sonner";
 import { formatVND, getDeviceId } from "@/lib/utils";
-import type { ServiceType, Route as RouteType, PricingPackage } from "@/lib/api";
+import type { Route as RouteType } from "@/lib/api";
 
 type Step = 'service' | 'details' | 'confirm';
 
@@ -42,18 +42,27 @@ const BookingPage = () => {
   const [step, setStep] = useState<Step>('service');
   const [selectedServiceSlug, setSelectedServiceSlug] = useState('');
   const [selectedRouteId, setSelectedRouteId] = useState('');
-  const [selectedPackageId, setSelectedPackageId] = useState('');
   const [tripType, setTripType] = useState<'one_way' | 'round_trip'>('one_way');
 
-  // Load routes and packages based on selected service
   const isTrip = selectedServiceSlug === 'trip' || selectedServiceSlug === 'airport';
   const isHourly = selectedServiceSlug?.startsWith('hourly_');
   const { data: routes = [] } = useRoutes(undefined);
-  const { data: packages = [] } = usePricingPackages(selectedServiceSlug || undefined);
 
   const selectedService = serviceTypes.find(s => s.slug === selectedServiceSlug);
   const selectedRoute = routes.find(r => r.id === selectedRouteId);
-  const selectedPackage = packages.find(p => p.id === selectedPackageId);
+
+  // Get the vehicle's package for the selected service type
+  const vehiclePackage = useMemo(() => {
+    if (!vehicle?.packages || !selectedServiceSlug) return null;
+    return vehicle.packages.find(p => p.serviceTypeSlug === selectedServiceSlug && p.isActive) || null;
+  }, [vehicle, selectedServiceSlug]);
+
+  // Available service types: only those the vehicle has active packages for
+  const availableServiceTypes = useMemo(() => {
+    if (!vehicle?.packages) return [];
+    const slugs = new Set(vehicle.packages.filter(p => p.isActive).map(p => p.serviceTypeSlug));
+    return serviceTypes.filter(s => s.isActive && slugs.has(s.slug));
+  }, [vehicle, serviceTypes]);
 
   const [form, setForm] = useState({
     name: "",
@@ -69,7 +78,7 @@ const BookingPage = () => {
 
   const today = new Date().toISOString().split('T')[0];
 
-  // Determine seat category price key
+  // Determine seat category price key for routes
   const seatKey = useMemo(() => {
     if (!vehicle) return '4Seat';
     const cat = vehicle.seatCategory || '4_cho';
@@ -78,7 +87,7 @@ const BookingPage = () => {
     return '4Seat';
   }, [vehicle]);
 
-  // Calculate total price based on service type
+  // Calculate total price from vehicle packages
   const { totalPrice, priceBreakdown } = useMemo(() => {
     if (!vehicle) return { totalPrice: 0, priceBreakdown: '' };
 
@@ -92,23 +101,21 @@ const BookingPage = () => {
       return { totalPrice: total, priceBreakdown: label };
     }
 
-    // Hourly — package-based pricing
-    if (isHourly && selectedPackage) {
-      const pkgPrice = selectedPackage[`price${seatKey}` as keyof PricingPackage] as number || 0;
-      return { totalPrice: pkgPrice, priceBreakdown: `${selectedPackage.name}: ${formatVND(pkgPrice)}` };
-    }
-
-    // Daily / Multi-day — pricePerDay
-    if (form.startDate && form.endDate) {
-      const start = new Date(form.startDate);
-      const end = new Date(form.endDate);
-      const days = Math.max(1, Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)));
-      const total = days * vehicle.pricePerDay;
-      return { totalPrice: total, priceBreakdown: `${formatVND(vehicle.pricePerDay)} x ${days} ngày` };
+    // Package-based (hourly, self_drive, wedding, etc.)
+    if (vehiclePackage) {
+      // For daily/multi_day — may need date range
+      if ((selectedServiceSlug === 'daily' || selectedServiceSlug === 'multi_day') && form.startDate && form.endDate) {
+        const start = new Date(form.startDate);
+        const end = new Date(form.endDate);
+        const days = Math.max(1, Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)));
+        const total = days * vehiclePackage.price;
+        return { totalPrice: total, priceBreakdown: `${formatVND(vehiclePackage.price)} x ${days} ngày` };
+      }
+      return { totalPrice: vehiclePackage.price, priceBreakdown: `${vehiclePackage.name}: ${formatVND(vehiclePackage.price)}` };
     }
 
     return { totalPrice: 0, priceBreakdown: '' };
-  }, [vehicle, selectedServiceSlug, selectedRoute, selectedPackage, seatKey, tripType, form.startDate, form.endDate, isTrip, isHourly]);
+  }, [vehicle, selectedServiceSlug, selectedRoute, vehiclePackage, seatKey, tripType, form.startDate, form.endDate, isTrip]);
 
   if (isLoading) {
     return (
@@ -129,7 +136,6 @@ const BookingPage = () => {
   const handleSelectService = (slug: string) => {
     setSelectedServiceSlug(slug);
     setSelectedRouteId('');
-    setSelectedPackageId('');
     setStep('details');
   };
 
@@ -271,7 +277,9 @@ const BookingPage = () => {
                 <h2 className="mb-1 font-display text-lg font-bold">Chọn loại dịch vụ</h2>
                 <p className="mb-4 text-xs text-muted-foreground">Chọn hình thức thuê xe phù hợp</p>
                 <div className="space-y-2">
-                  {serviceTypes.filter(s => s.isActive).map((st) => (
+                  {availableServiceTypes.map((st) => {
+                    const pkg = vehicle!.packages?.find(p => p.serviceTypeSlug === st.slug && p.isActive);
+                    return (
                     <button
                       key={st.id}
                       onClick={() => handleSelectService(st.slug)}
@@ -284,9 +292,16 @@ const BookingPage = () => {
                         <div className="text-sm font-semibold">{st.name}</div>
                         <div className="text-xs text-muted-foreground truncate">{st.description}</div>
                       </div>
+                      {pkg && (
+                        <span className="text-xs font-bold text-primary shrink-0">{formatVND(pkg.price)}</span>
+                      )}
                       <ChevronRight className="h-4 w-4 text-muted-foreground shrink-0" />
                     </button>
-                  ))}
+                    );
+                  })}
+                  {availableServiceTypes.length === 0 && (
+                    <p className="py-8 text-center text-sm text-muted-foreground">Xe này chưa có gói dịch vụ nào</p>
+                  )}
                 </div>
               </motion.div>
             )}
@@ -350,37 +365,25 @@ const BookingPage = () => {
                     </div>
                   )}
 
-                  {/* Package selection for hourly */}
-                  {isHourly && packages.length > 0 && (
-                    <div>
-                      <label className="mb-2 block text-sm font-medium">Chọn gói</label>
-                      <div className="space-y-1.5">
-                        {packages.filter(p => p.isActive).map((pkg) => {
-                          const price = pkg[`price${seatKey}` as keyof PricingPackage] as number || 0;
-                          return (
-                            <button
-                              key={pkg.id}
-                              type="button"
-                              onClick={() => setSelectedPackageId(pkg.id)}
-                              className={`flex w-full items-center gap-2 rounded-lg border p-3 text-left transition-colors ${
-                                selectedPackageId === pkg.id ? 'border-primary bg-primary/5' : 'border-border bg-card'
-                              }`}
-                            >
-                              <Clock className="h-4 w-4 text-primary shrink-0" />
-                              <div className="flex-1 min-w-0">
-                                <div className="text-xs font-semibold">{pkg.name}</div>
-                                <div className="text-[11px] text-muted-foreground">{pkg.durationHours}h · {pkg.maxKm}km</div>
-                              </div>
-                              <span className="text-xs font-bold text-primary shrink-0">{formatVND(price)}</span>
-                            </button>
-                          );
-                        })}
+                  {/* Vehicle package info for selected service */}
+                  {vehiclePackage && !isTrip && (
+                    <div className="rounded-lg border border-primary/20 bg-primary/5 p-3">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <div className="text-xs font-semibold">{vehiclePackage.name}</div>
+                          <div className="text-[11px] text-muted-foreground">
+                            {vehiclePackage.durationHours ? `${vehiclePackage.durationHours}h` : ''}
+                            {vehiclePackage.maxKm ? ` · ${vehiclePackage.maxKm}km` : ''}
+                            {vehiclePackage.description ? ` · ${vehiclePackage.description}` : ''}
+                          </div>
+                        </div>
+                        <span className="text-sm font-bold text-primary">{formatVND(vehiclePackage.price)}</span>
                       </div>
                     </div>
                   )}
 
                   {/* Date range for daily / multi-day */}
-                  {!isTrip && !isHourly && (
+                  {(selectedServiceSlug === 'daily' || selectedServiceSlug === 'multi_day') && (
                     <div className="grid grid-cols-2 gap-3">
                       <div>
                         <label className="mb-1.5 block text-sm font-medium">Ngày bắt đầu</label>
@@ -403,8 +406,8 @@ const BookingPage = () => {
                     </div>
                   )}
 
-                  {/* Start date for hourly/trip */}
-                  {(isTrip || isHourly) && (
+                  {/* Start date for hourly/trip/other */}
+                  {selectedServiceSlug && selectedServiceSlug !== 'daily' && selectedServiceSlug !== 'multi_day' && (
                     <div>
                       <label className="mb-1.5 block text-sm font-medium">Ngày giờ đi</label>
                       <input type="datetime-local" value={form.startDate}
@@ -471,10 +474,10 @@ const BookingPage = () => {
                       <span className="font-medium">{tripType === 'round_trip' ? 'Khứ hồi' : '1 chiều'}</span>
                     </div>
                   )}
-                  {selectedPackage && (
+                  {vehiclePackage && (
                     <div className="flex items-center justify-between text-sm">
                       <span className="text-muted-foreground">Gói</span>
-                      <span className="font-medium">{selectedPackage.name}</span>
+                      <span className="font-medium">{vehiclePackage.name}</span>
                     </div>
                   )}
                   {form.pickupLocation && (

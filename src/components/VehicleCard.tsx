@@ -135,10 +135,14 @@ const VehicleCard = ({ vehicle, index = 0 }: VehicleCardProps) => {
 
           <div className="flex items-center justify-between border-t border-border/50 pt-3">
             <div>
+              <span className="text-xs text-muted-foreground">Từ </span>
               <span className="text-xl font-bold text-foreground">
-                {formatVND(vehicle.pricePerDay)}
+                {formatVND(
+                  vehicle.packages?.length
+                    ? Math.min(...vehicle.packages.filter(p => p.isActive).map(p => p.price))
+                    : vehicle.pricePerDay
+                )}
               </span>
-              <span className="text-sm text-muted-foreground">/ngày</span>
             </div>
             <span className="rounded-lg bg-secondary px-3 py-1.5 text-xs font-medium text-secondary-foreground transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
               Xem chi tiết

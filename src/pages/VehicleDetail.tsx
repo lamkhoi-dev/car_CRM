@@ -1,15 +1,32 @@
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowLeft, Star, Users, Fuel, Settings, ChevronRight, Loader2 } from "lucide-react";
-import { useState } from "react";
+import { ArrowLeft, Star, Users, Fuel, Settings, ChevronRight, Loader2, Tag } from "lucide-react";
+import { useState, useMemo } from "react";
 import { useVehicle } from "@/hooks/useVehicles";
+import { useServiceTypes } from "@/hooks/useServices";
 import { formatVND } from "@/lib/utils";
+
+const SERVICE_ICONS: Record<string, string> = {
+  hourly_4h: '⏰', hourly_8h: '🕐', daily: '📅', multi_day: '🗓️',
+  trip: '📍', airport: '✈️', self_drive: '🔑', wedding: '💒',
+};
 
 const VehicleDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { data: vehicle, isLoading } = useVehicle(id);
+  const { data: serviceTypes = [] } = useServiceTypes();
   const [activeImage, setActiveImage] = useState(0);
+
+  const activePackages = useMemo(() => {
+    if (!vehicle?.packages) return [];
+    return vehicle.packages.filter((p) => p.isActive);
+  }, [vehicle]);
+
+  const minPrice = useMemo(() => {
+    if (!activePackages.length) return vehicle?.pricePerDay || 0;
+    return Math.min(...activePackages.map((p) => p.price));
+  }, [activePackages, vehicle]);
 
   if (isLoading) {
     return (
@@ -109,17 +126,54 @@ const VehicleDetail = () => {
             </div>
           </div>
 
+          {/* ── Per-vehicle packages ── */}
+          {activePackages.length > 0 && (
+            <div className="mb-4">
+              <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold">
+                <Tag className="h-4 w-4 text-primary" /> Bảng Giá Dịch Vụ
+              </h3>
+              <div className="space-y-2">
+                {activePackages.map((pkg) => {
+                  const st = serviceTypes.find((s) => s.slug === pkg.serviceTypeSlug);
+                  return (
+                    <div
+                      key={pkg.id}
+                      className="flex items-center gap-3 rounded-lg border border-border p-3 transition-colors hover:border-primary/30"
+                    >
+                      <span className="text-lg">{SERVICE_ICONS[pkg.serviceTypeSlug] || '🚘'}</span>
+                      <div className="flex-1 min-w-0">
+                        <div className="text-sm font-semibold">{pkg.name}</div>
+                        <div className="text-xs text-muted-foreground">
+                          {st?.name || pkg.serviceTypeSlug}
+                          {pkg.durationHours ? ` · ${pkg.durationHours}h` : ''}
+                          {pkg.maxKm ? ` · ${pkg.maxKm}km` : ''}
+                        </div>
+                        {pkg.description && (
+                          <div className="text-[11px] text-muted-foreground mt-0.5">{pkg.description}</div>
+                        )}
+                      </div>
+                      <span className="text-sm font-bold text-primary whitespace-nowrap">
+                        {formatVND(pkg.price)}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
           {/* Pricing + Book Now */}
           <div className="rounded-lg bg-secondary p-4">
             <div className="mb-3 flex items-baseline justify-between">
               <div>
                 <div className="text-xs text-muted-foreground">Giá từ</div>
-                <span className="font-display text-2xl font-bold">{formatVND(vehicle.pricePerDay)}</span>
-                <span className="text-sm text-muted-foreground">/ngày</span>
+                <span className="font-display text-2xl font-bold">{formatVND(minPrice)}</span>
               </div>
-              <div className="text-right text-xs text-muted-foreground">
-                hoặc {formatVND(vehicle.pricePerHour)}/giờ
-              </div>
+              {activePackages.length > 0 && (
+                <div className="text-right text-xs text-muted-foreground">
+                  {activePackages.length} gói dịch vụ
+                </div>
+              )}
             </div>
             <Link
               to={`/booking/${vehicle.id}`}

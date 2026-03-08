@@ -1,5 +1,18 @@
 import { ObjectId } from 'mongodb';
 
+// ─── Vehicle Package (embedded per-vehicle) ─────────────
+
+export interface VehiclePackageDoc {
+  id: string;                // UUID do frontend/admin tạo
+  serviceTypeSlug: string;   // 'hourly_4h', 'daily', 'wedding', ...
+  name: string;              // "Gói 4 tiếng", "Theo ngày", ...
+  price: number;             // Giá riêng cho xe này
+  durationHours?: number;
+  maxKm?: number;
+  description?: string;
+  isActive: boolean;
+}
+
 // ─── Vehicle ─────────────────────────────────────────────
 
 export interface VehicleDoc {
@@ -23,6 +36,7 @@ export interface VehicleDoc {
   selfDrivePrice?: number;        // Giá tự lái /ngày (nếu có)
   chauffeurIncluded?: boolean;     // Có tài xế kèm theo mặc định?
   licensePlate?: string;           // Biển số xe (admin only)
+  packages?: VehiclePackageDoc[];  // Gói dịch vụ riêng cho xe này
   createdAt?: string;
 }
 

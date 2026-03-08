@@ -14,7 +14,7 @@ import {
   useAllPricingPackages, useCreatePricingPackage, useUpdatePricingPackage, useDeletePricingPackage,
 } from "@/hooks/useServices";
 import { uploadApi, seedApi } from "@/lib/api";
-import type { Vehicle, Booking, BlogPost, ServiceType, Route, PricingPackage } from "@/lib/api";
+import type { Vehicle, VehiclePackage, Booking, BlogPost, ServiceType, Route, PricingPackage } from "@/lib/api";
 import { toast } from "sonner";
 import { formatVND, formatDateTime } from "@/lib/utils";
 
@@ -51,6 +51,7 @@ interface VehicleFormProps {
 }
 
 const VehicleForm = ({ initial, onSubmit, onCancel, loading }: VehicleFormProps) => {
+  const { data: serviceTypes = [] } = useServiceTypes();
   const [form, setForm] = useState({
     name: initial?.name || '',
     type: initial?.type || 'car' as Vehicle['type'],
@@ -64,6 +65,7 @@ const VehicleForm = ({ initial, onSubmit, onCancel, loading }: VehicleFormProps)
     fuel: initial?.fuel || 'Petrol',
     rating: initial?.rating || 0,
     available: initial?.available !== false,
+    packages: (initial?.packages || []) as VehiclePackage[],
   });
   const [uploading, setUploading] = useState(false);
 
@@ -98,6 +100,7 @@ const VehicleForm = ({ initial, onSubmit, onCancel, loading }: VehicleFormProps)
       fuel: form.fuel,
       rating: Number(form.rating),
       available: form.available,
+      packages: form.packages,
     });
   };
 
@@ -116,7 +119,8 @@ const VehicleForm = ({ initial, onSubmit, onCancel, loading }: VehicleFormProps)
             <option value="car">Sedan</option>
             <option value="suv">SUV</option>
             <option value="luxury">Sang trọng</option>
-            <option value="bike">Xe máy</option>
+            <option value="van">Xe Van/MPV</option>
+            <option value="electric">Xe điện</option>
           </select>
         </div>
       </div>
@@ -205,6 +209,151 @@ const VehicleForm = ({ initial, onSubmit, onCancel, loading }: VehicleFormProps)
             className="w-full rounded-lg border border-border bg-secondary px-3 py-2 text-sm focus:border-primary focus:outline-none" />
         </div>
       </div>
+
+      {/* ── Gói dịch vụ (packages) ── */}
+      <div className="border-t border-border pt-3">
+        <div className="mb-2 flex items-center justify-between">
+          <label className="text-xs font-semibold">Gói Dịch Vụ ({form.packages.length})</label>
+          <button
+            type="button"
+            onClick={() => {
+              const newPkg: VehiclePackage = {
+                id: `pkg-${Date.now()}`,
+                serviceTypeSlug: serviceTypes[0]?.slug || 'daily',
+                name: '',
+                price: 0,
+                isActive: true,
+              };
+              setForm((f) => ({ ...f, packages: [...f.packages, newPkg] }));
+            }}
+            className="flex items-center gap-1 rounded-lg bg-primary/10 px-2 py-1 text-xs font-medium text-primary hover:bg-primary/20"
+          >
+            <Plus className="h-3 w-3" /> Thêm gói
+          </button>
+        </div>
+        <div className="space-y-2 max-h-80 overflow-y-auto pr-1">
+          {form.packages.map((pkg, idx) => (
+            <div key={pkg.id} className="rounded-lg border border-border bg-secondary/50 p-2.5 space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-semibold text-muted-foreground">Gói #{idx + 1}</span>
+                <div className="flex items-center gap-2">
+                  <label className="flex items-center gap-1 text-[11px]">
+                    <input
+                      type="checkbox"
+                      checked={pkg.isActive}
+                      onChange={(e) => {
+                        const updated = [...form.packages];
+                        updated[idx] = { ...updated[idx], isActive: e.target.checked };
+                        setForm((f) => ({ ...f, packages: updated }));
+                      }}
+                      className="h-3 w-3"
+                    />
+                    Hoạt động
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => setForm((f) => ({ ...f, packages: f.packages.filter((_, i) => i !== idx) }))}
+                    className="rounded p-0.5 text-destructive hover:bg-destructive/10"
+                  >
+                    <Trash2 className="h-3 w-3" />
+                  </button>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <label className="mb-0.5 block text-[11px] text-muted-foreground">Loại dịch vụ</label>
+                  <select
+                    value={pkg.serviceTypeSlug}
+                    onChange={(e) => {
+                      const updated = [...form.packages];
+                      updated[idx] = { ...updated[idx], serviceTypeSlug: e.target.value };
+                      setForm((f) => ({ ...f, packages: updated }));
+                    }}
+                    className="w-full rounded border border-border bg-card px-2 py-1.5 text-xs focus:border-primary focus:outline-none"
+                  >
+                    {serviceTypes.filter(s => s.isActive).map((st) => (
+                      <option key={st.id} value={st.slug}>{st.name}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="mb-0.5 block text-[11px] text-muted-foreground">Tên gói</label>
+                  <input
+                    value={pkg.name}
+                    onChange={(e) => {
+                      const updated = [...form.packages];
+                      updated[idx] = { ...updated[idx], name: e.target.value };
+                      setForm((f) => ({ ...f, packages: updated }));
+                    }}
+                    placeholder="Gói 4 tiếng, Theo ngày..."
+                    className="w-full rounded border border-border bg-card px-2 py-1.5 text-xs focus:border-primary focus:outline-none"
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-3 gap-2">
+                <div>
+                  <label className="mb-0.5 block text-[11px] text-muted-foreground">Giá (VNĐ)</label>
+                  <input
+                    type="number"
+                    value={pkg.price}
+                    onChange={(e) => {
+                      const updated = [...form.packages];
+                      updated[idx] = { ...updated[idx], price: Number(e.target.value) };
+                      setForm((f) => ({ ...f, packages: updated }));
+                    }}
+                    className="w-full rounded border border-border bg-card px-2 py-1.5 text-xs focus:border-primary focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="mb-0.5 block text-[11px] text-muted-foreground">Giờ</label>
+                  <input
+                    type="number"
+                    value={pkg.durationHours || ''}
+                    onChange={(e) => {
+                      const updated = [...form.packages];
+                      updated[idx] = { ...updated[idx], durationHours: e.target.value ? Number(e.target.value) : undefined };
+                      setForm((f) => ({ ...f, packages: updated }));
+                    }}
+                    placeholder="4"
+                    className="w-full rounded border border-border bg-card px-2 py-1.5 text-xs focus:border-primary focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="mb-0.5 block text-[11px] text-muted-foreground">Km tối đa</label>
+                  <input
+                    type="number"
+                    value={pkg.maxKm || ''}
+                    onChange={(e) => {
+                      const updated = [...form.packages];
+                      updated[idx] = { ...updated[idx], maxKm: e.target.value ? Number(e.target.value) : undefined };
+                      setForm((f) => ({ ...f, packages: updated }));
+                    }}
+                    placeholder="100"
+                    className="w-full rounded border border-border bg-card px-2 py-1.5 text-xs focus:border-primary focus:outline-none"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="mb-0.5 block text-[11px] text-muted-foreground">Mô tả</label>
+                <input
+                  value={pkg.description || ''}
+                  onChange={(e) => {
+                    const updated = [...form.packages];
+                    updated[idx] = { ...updated[idx], description: e.target.value || undefined };
+                    setForm((f) => ({ ...f, packages: updated }));
+                  }}
+                  placeholder="Ghi chú thêm..."
+                  className="w-full rounded border border-border bg-card px-2 py-1.5 text-xs focus:border-primary focus:outline-none"
+                />
+              </div>
+            </div>
+          ))}
+          {form.packages.length === 0 && (
+            <p className="py-4 text-center text-xs text-muted-foreground">Chưa có gói dịch vụ nào. Nhấn "Thêm gói" để bắt đầu.</p>
+          )}
+        </div>
+      </div>
+
       <div className="flex gap-2 pt-2">
         <button type="submit" disabled={loading}
           className="flex-1 rounded-lg bg-primary py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-50">

@@ -304,7 +304,7 @@ const Index = () => {
                     {st.description}
                   </p>
                   <Link
-                    to="/vehicles"
+                    to={`/vehicles?service=${st.slug}`}
                     className="inline-flex items-center gap-1 text-xs font-semibold text-primary transition-colors hover:underline"
                   >
                     Xem giá <ChevronRight className="h-3 w-3" />

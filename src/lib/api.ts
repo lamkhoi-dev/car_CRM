@@ -1,5 +1,16 @@
 // Frontend API client — gọi tới Vercel Serverless Functions
 
+export interface VehiclePackage {
+  id: string;
+  serviceTypeSlug: string;
+  name: string;
+  price: number;
+  durationHours?: number;
+  maxKm?: number;
+  description?: string;
+  isActive: boolean;
+}
+
 export interface Vehicle {
   id: string;
   name: string;
@@ -21,6 +32,7 @@ export interface Vehicle {
   selfDrivePrice?: number;
   chauffeurIncluded?: boolean;
   licensePlate?: string;
+  packages?: VehiclePackage[];
   createdAt?: string;
 }
 
