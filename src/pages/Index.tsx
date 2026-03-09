@@ -40,7 +40,7 @@ import { useState, useMemo } from "react";
 
 /* ── Cloudinary URLs ── */
 const VIDEO_URL =
-  "https://res.cloudinary.com/dpr6zwanv/video/upload/v1772344373/carCRM/vehicles/xe_A/xe_A__1_.mp4";
+  "https://res.cloudinary.com/dpr6zwanv/video/upload/v1773070670/carCRM/landing/banner.mp4";
 const GALLERY = [
   "https://res.cloudinary.com/dpr6zwanv/image/upload/v1772344344/carCRM/landing/landingpage__1_.jpg",
   "https://res.cloudinary.com/dpr6zwanv/image/upload/v1772344350/carCRM/landing/landingpage__2_.jpg",
@@ -1028,7 +1028,7 @@ const Index = () => {
                   { icon: Phone, label: "Hotline", value: "0922 225 599", href: "tel:0922225599" },
                   { icon: MessageCircle, label: "Zalo", value: "0922 225 599", href: "https://zalo.me/0922225599" },
                   { icon: Mail, label: "Email", value: "tuduocthanh.gc@gmail.com", href: "mailto:tuduocthanh.gc@gmail.com" },
-                  { icon: MapPin, label: "Văn phòng", value: "TP. Hồ Chí Minh", href: "#" },
+                  { icon: MapPin, label: "Văn phòng", value: "67/16/3 Nguyễn Văn Yến, P.Tân Thới Hoà, Q.Tân Phú", href: "https://maps.app.goo.gl/5QEJbUC8w8DjHfvC7" },
                 ].map((contact) => (
                   <a
                     key={contact.label}
@@ -1061,6 +1061,39 @@ const Index = () => {
                 </a>
               </div>
             </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ────────── Google Maps ────────── */}
+      <section className="py-12 bg-card/30">
+        <div className="container">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mb-6 text-center"
+          >
+            <h2 className="mb-2 font-display text-2xl font-bold sm:text-3xl">Vị Trí Văn Phòng</h2>
+            <p className="text-sm text-muted-foreground">67/16/3 Nguyễn Văn Yến, P.Tân Thới Hoà, Q.Tân Phú, TP.HCM</p>
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            className="mx-auto max-w-4xl overflow-hidden rounded-2xl card-shadow"
+          >
+            <iframe
+              title="Thành Thịnh - Google Maps"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d979.6!2d106.6325!3d10.7950!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x317527dc252891f1%3A0x6c816e684fd3fd63!2sDu%20l%E1%BB%8Bch%20Thanhthinh!5e0!3m2!1svi!2svn!4v1773070000000"
+              width="100%"
+              height="400"
+              style={{ border: 0 }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              className="w-full"
+            />
           </motion.div>
         </div>
       </section>
@@ -1108,9 +1141,9 @@ const Index = () => {
                 <div className="flex items-center gap-2">
                   <Mail className="h-3.5 w-3.5 shrink-0" /> tuduocthanh.gc@gmail.com
                 </div>
-                <div className="flex items-start gap-2">
-                  <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0" /> TP. Hồ Chí Minh, Việt Nam
-                </div>
+                <a href="https://maps.app.goo.gl/5QEJbUC8w8DjHfvC7" target="_blank" rel="noopener noreferrer" className="flex items-start gap-2 hover:text-primary transition-colors">
+                  <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0" /> 67/16/3 Nguyễn Văn Yến, P.Tân Thới Hoà, Q.Tân Phú, TP.HCM
+                </a>
                 <div className="flex items-center gap-2">
                   <Clock className="h-3.5 w-3.5 shrink-0" /> 8:00 — 20:00 (Hàng ngày)
                 </div>
