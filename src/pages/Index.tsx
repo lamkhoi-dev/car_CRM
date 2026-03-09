@@ -415,7 +415,7 @@ const Index = () => {
             className="mb-10 text-center"
           >
             <h2 className="mb-2 font-display text-2xl font-bold sm:text-3xl">
-              Tại Sao Chọn DriveFlux
+              Tại Sao Chọn Thành Thịnh
             </h2>
             <p className="text-sm text-muted-foreground">
               Dịch vụ cao cấp ở mọi khâu
@@ -575,7 +575,7 @@ const Index = () => {
               Hình Ảnh Thực Tế
             </h2>
             <p className="text-sm text-muted-foreground">
-              Cận cảnh đội xe sang của DriveFlux
+              Cận cảnh đội xe sang của Thành Thịnh
             </p>
           </motion.div>
 
@@ -593,7 +593,7 @@ const Index = () => {
               >
                 <img
                   src={src}
-                  alt={`DriveFlux gallery ${i + 1}`}
+                  alt={`Thành Thịnh gallery ${i + 1}`}
                   className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
                   loading="lazy"
                 />
@@ -806,10 +806,10 @@ const Index = () => {
             >
               <span className="mb-2 inline-block text-xs font-semibold uppercase tracking-wider text-primary">Về chúng tôi</span>
               <h2 className="mb-4 font-display text-2xl font-bold sm:text-3xl">
-                DriveFlux — Đối Tác Tin Cậy Cho Mọi Hành Trình
+                Thành Thịnh — Đối Tác Tin Cậy Cho Mọi Hành Trình
               </h2>
               <p className="mb-4 text-sm leading-relaxed text-muted-foreground">
-                Với đội xe sang hơn 50 chiếc từ Mercedes, BMW, Rolls-Royce đến Bentley, Porsche — DriveFlux tự hào là đơn vị cho thuê xe sang hàng đầu tại TP.HCM.
+                Với đội xe sang hơn 50 chiếc từ Mercedes, BMW, Rolls-Royce đến Bentley, Porsche — Thành Thịnh tự hào là đơn vị cho thuê xe sang hàng đầu tại TP.HCM.
                 Chúng tôi phục vụ mọi nhu cầu: du lịch, đám cưới, sự kiện doanh nghiệp, đưa đón sân bay và công tác dài ngày.
               </p>
               <div className="mb-6 grid grid-cols-2 gap-3">
@@ -1011,7 +1011,7 @@ const Index = () => {
                 {[
                   { icon: Phone, label: "Hotline", value: "0922 225 599", href: "tel:0922225599" },
                   { icon: MessageCircle, label: "Zalo", value: "0922 225 599", href: "https://zalo.me/0922225599" },
-                  { icon: Mail, label: "Email", value: "driveflux@gmail.com", href: "mailto:driveflux@gmail.com" },
+                  { icon: Mail, label: "Email", value: "tuduocthanh.gc@gmail.com", href: "mailto:tuduocthanh.gc@gmail.com" },
                   { icon: MapPin, label: "Văn phòng", value: "TP. Hồ Chí Minh", href: "#" },
                 ].map((contact) => (
                   <a
@@ -1054,16 +1054,14 @@ const Index = () => {
         <div className="container">
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
             <div>
-              <h3 className="mb-3 font-display text-lg font-bold text-foreground">DriveFlux</h3>
+              <h3 className="mb-3 font-display text-lg font-bold text-foreground">Thành Thịnh</h3>
               <p className="mb-3 text-sm text-muted-foreground">
                 Dịch vụ cho thuê xe sang hàng đầu Việt Nam. Uy tín, chuyên nghiệp, giá tốt nhất thị trường.
               </p>
               <div className="flex gap-2">
-                {['🌐', '📘', '📷'].map((icon, i) => (
-                  <span key={i} className="flex h-8 w-8 items-center justify-center rounded-lg bg-secondary text-sm">
-                    {icon}
-                  </span>
-                ))}
+                <a href="https://www.facebook.com/tour.thanhthinh.9" target="_blank" rel="noopener noreferrer" className="flex h-8 w-8 items-center justify-center rounded-lg bg-secondary text-sm hover:bg-primary/10 transition-colors">📘</a>
+                <a href="mailto:tuduocthanh.gc@gmail.com" className="flex h-8 w-8 items-center justify-center rounded-lg bg-secondary text-sm hover:bg-primary/10 transition-colors">✉️</a>
+                <a href="tel:0922225599" className="flex h-8 w-8 items-center justify-center rounded-lg bg-secondary text-sm hover:bg-primary/10 transition-colors">📞</a>
               </div>
             </div>
             <div>
@@ -1092,7 +1090,7 @@ const Index = () => {
                   <Phone className="h-3.5 w-3.5 shrink-0" /> 0922 225 599
                 </div>
                 <div className="flex items-center gap-2">
-                  <Mail className="h-3.5 w-3.5 shrink-0" /> driveflux@gmail.com
+                  <Mail className="h-3.5 w-3.5 shrink-0" /> tuduocthanh.gc@gmail.com
                 </div>
                 <div className="flex items-start gap-2">
                   <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0" /> TP. Hồ Chí Minh, Việt Nam
@@ -1115,7 +1113,7 @@ const Index = () => {
               ))}
             </div>
             <p className="text-center text-xs text-muted-foreground">
-              © 2026 DriveFlux. Mọi quyền được bảo lưu.
+              © 2026 Thành Thịnh. Mọi quyền được bảo lưu.
             </p>
           </div>
         </div>
