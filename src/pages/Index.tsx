@@ -529,7 +529,7 @@ const Index = () => {
                       {route.province}
                     </span>
                   </div>
-                  <div className="grid grid-cols-3 gap-2 rounded-lg bg-secondary/50 p-3">
+                  <div className="grid grid-cols-4 gap-2 rounded-lg bg-secondary/50 p-3">
                     <div className="text-center">
                       <div className="text-[10px] text-muted-foreground">4 chỗ</div>
                       <div className="text-xs font-bold text-foreground">{formatVND(route.price4Seat)}</div>
@@ -539,8 +539,12 @@ const Index = () => {
                       <div className="text-xs font-bold text-foreground">{formatVND(route.price7Seat)}</div>
                     </div>
                     <div className="text-center">
-                      <div className="text-[10px] text-muted-foreground">16 chỗ</div>
-                      <div className="text-xs font-bold text-foreground">{formatVND(route.price16Seat)}</div>
+                      <div className="text-[10px] text-muted-foreground">18 chỗ</div>
+                      <div className="text-xs font-bold text-foreground">{formatVND(route.price18Seat)}</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-[10px] text-muted-foreground">29 chỗ</div>
+                      <div className="text-xs font-bold text-foreground">{formatVND(route.price29Seat)}</div>
                     </div>
                   </div>
                 </motion.div>
@@ -637,11 +641,12 @@ const Index = () => {
             {pricingTab === 'packages' && pricingPackages.length > 0 && (
               <div className="overflow-hidden rounded-xl bg-card card-shadow">
                 {/* Desktop table header */}
-                <div className="hidden grid-cols-5 bg-primary/5 px-6 py-3 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground sm:grid">
+                <div className="hidden grid-cols-6 bg-primary/5 px-6 py-3 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground sm:grid">
                   <span className="col-span-2">Gói</span>
                   <span className="text-right">4 chỗ</span>
                   <span className="text-right">7 chỗ</span>
-                  <span className="text-right">16 chỗ</span>
+                  <span className="text-right">18 chỗ</span>
+                  <span className="text-right">29 chỗ</span>
                 </div>
                 {pricingPackages.filter(p => p.isActive).map((pkg, i) => (
                   <motion.div
@@ -653,20 +658,21 @@ const Index = () => {
                     className="border-t border-border/30"
                   >
                     {/* Desktop row */}
-                    <div className="hidden grid-cols-5 items-center px-6 py-3 sm:grid">
+                    <div className="hidden grid-cols-6 items-center px-6 py-3 sm:grid">
                       <div className="col-span-2">
                         <span className="text-sm font-medium">{pkg.name}</span>
                         <div className="text-[11px] text-muted-foreground">{pkg.durationHours}h / {pkg.maxKm}km</div>
                       </div>
                       <span className="text-right text-sm font-bold">{formatVND(pkg.price4Seat)}</span>
                       <span className="text-right text-sm font-bold">{formatVND(pkg.price7Seat)}</span>
-                      <span className="text-right text-sm font-bold">{formatVND(pkg.price16Seat)}</span>
+                      <span className="text-right text-sm font-bold">{formatVND(pkg.price18Seat)}</span>
+                      <span className="text-right text-sm font-bold">{formatVND(pkg.price29Seat)}</span>
                     </div>
                     {/* Mobile card */}
                     <div className="p-4 sm:hidden">
                       <div className="mb-2 font-medium text-sm">{pkg.name}</div>
                       <div className="mb-2 text-[11px] text-muted-foreground">{pkg.durationHours}h / {pkg.maxKm}km</div>
-                      <div className="grid grid-cols-3 gap-2 rounded-lg bg-secondary/50 p-2.5">
+                      <div className="grid grid-cols-4 gap-2 rounded-lg bg-secondary/50 p-2.5">
                         <div className="text-center">
                           <div className="text-[10px] text-muted-foreground">4 chỗ</div>
                           <div className="text-xs font-bold">{formatVND(pkg.price4Seat)}</div>
@@ -676,8 +682,12 @@ const Index = () => {
                           <div className="text-xs font-bold">{formatVND(pkg.price7Seat)}</div>
                         </div>
                         <div className="text-center">
-                          <div className="text-[10px] text-muted-foreground">16 chỗ</div>
-                          <div className="text-xs font-bold">{formatVND(pkg.price16Seat)}</div>
+                          <div className="text-[10px] text-muted-foreground">18 chỗ</div>
+                          <div className="text-xs font-bold">{formatVND(pkg.price18Seat)}</div>
+                        </div>
+                        <div className="text-center">
+                          <div className="text-[10px] text-muted-foreground">29 chỗ</div>
+                          <div className="text-xs font-bold">{formatVND(pkg.price29Seat)}</div>
                         </div>
                       </div>
                     </div>
@@ -738,11 +748,12 @@ const Index = () => {
 
                 <div className="overflow-hidden rounded-xl bg-card card-shadow">
                   {/* Desktop header */}
-                  <div className="hidden grid-cols-5 bg-primary/5 px-6 py-3 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground sm:grid">
+                  <div className="hidden grid-cols-6 bg-primary/5 px-6 py-3 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground sm:grid">
                     <span className="col-span-2">Tuyến đường</span>
                     <span className="text-right">4 chỗ</span>
                     <span className="text-right">7 chỗ</span>
-                    <span className="text-right">16 chỗ</span>
+                    <span className="text-right">18 chỗ</span>
+                    <span className="text-right">29 chỗ</span>
                   </div>
                   {filteredRoutes.map((r, i) => (
                     <motion.div
@@ -754,20 +765,21 @@ const Index = () => {
                       className="border-t border-border/30"
                     >
                       {/* Desktop row */}
-                      <div className="hidden grid-cols-5 items-center px-6 py-3 sm:grid">
+                      <div className="hidden grid-cols-6 items-center px-6 py-3 sm:grid">
                         <div className="col-span-2">
                           <span className="text-sm font-medium">{r.from} → {r.to}</span>
                           <div className="text-[11px] text-muted-foreground">{r.distance}km · {r.duration}</div>
                         </div>
                         <span className="text-right text-sm font-bold">{formatVND(r.price4Seat)}</span>
                         <span className="text-right text-sm font-bold">{formatVND(r.price7Seat)}</span>
-                        <span className="text-right text-sm font-bold">{formatVND(r.price16Seat)}</span>
+                        <span className="text-right text-sm font-bold">{formatVND(r.price18Seat)}</span>
+                        <span className="text-right text-sm font-bold">{formatVND(r.price29Seat)}</span>
                       </div>
                       {/* Mobile card */}
                       <div className="p-4 sm:hidden">
                         <div className="mb-1 text-sm font-medium">{r.from} → {r.to}</div>
                         <div className="mb-2 text-[11px] text-muted-foreground">{r.distance}km · {r.duration}</div>
-                        <div className="grid grid-cols-3 gap-2 rounded-lg bg-secondary/50 p-2.5">
+                        <div className="grid grid-cols-4 gap-2 rounded-lg bg-secondary/50 p-2.5">
                           <div className="text-center">
                             <div className="text-[10px] text-muted-foreground">4 chỗ</div>
                             <div className="text-xs font-bold">{formatVND(r.price4Seat)}</div>
@@ -777,8 +789,12 @@ const Index = () => {
                             <div className="text-xs font-bold">{formatVND(r.price7Seat)}</div>
                           </div>
                           <div className="text-center">
-                            <div className="text-[10px] text-muted-foreground">16 chỗ</div>
-                            <div className="text-xs font-bold">{formatVND(r.price16Seat)}</div>
+                            <div className="text-[10px] text-muted-foreground">18 chỗ</div>
+                            <div className="text-xs font-bold">{formatVND(r.price18Seat)}</div>
+                          </div>
+                          <div className="text-center">
+                            <div className="text-[10px] text-muted-foreground">29 chỗ</div>
+                            <div className="text-xs font-bold">{formatVND(r.price29Seat)}</div>
                           </div>
                         </div>
                       </div>

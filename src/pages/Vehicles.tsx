@@ -8,7 +8,7 @@ import VehicleCard from "@/components/VehicleCard";
 import SkeletonCard from "@/components/SkeletonCard";
 
 const typeFilters = ["all", "car", "suv", "luxury", "van", "electric"] as const;
-const seatOptions = [4, 5, 7, 16] as const;
+const seatOptions = [4, 5, 7, 18, 29] as const;
 const sortOptions = [
   { value: "default", label: "Mặc định" },
   { value: "price_asc", label: "Giá tăng dần" },

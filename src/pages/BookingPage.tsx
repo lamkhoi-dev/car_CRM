@@ -16,7 +16,7 @@ const seatLabels: Record<string, string> = {
   '5_cho': '5 chỗ',
   '7_cho': '7 chỗ',
   '9_cho': '9 chỗ',
-  '16_cho': '16 chỗ',
+  '18_cho': '18 chỗ',
   '29_cho': '29 chỗ',
   '45_cho': '45 chỗ',
 };
@@ -82,7 +82,8 @@ const BookingPage = () => {
   const seatKey = useMemo(() => {
     if (!vehicle) return '4Seat';
     const cat = vehicle.seatCategory || '4_cho';
-    if (cat.includes('16') || cat.includes('29') || cat.includes('45')) return '16Seat';
+    if (cat.includes('29') || cat.includes('45')) return '29Seat';
+    if (cat.includes('18')) return '18Seat';
     if (cat.includes('7') || cat.includes('9')) return '7Seat';
     return '4Seat';
   }, [vehicle]);

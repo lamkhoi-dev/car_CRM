@@ -16,7 +16,7 @@ Th�nh Th?nh là hệ thống CRM cho thuê xe Full-stack, giao diện tiếng 
 | **Đặt xe** | Wizard 3 bước: chọn dịch vụ → chi tiết chuyến → xác nhận & liên hệ |
 | **Xe** | 18 xe cao cấp (sedan, SUV, van, luxury, electric). Mỗi xe có gói dịch vụ riêng với giá riêng |
 | **Dịch vụ** | 8 loại: Gói 4h, Gói 8h, Theo ngày, Nhiều ngày, Đi tỉnh, Sân bay, Tự lái, Đám cưới |
-| **Tuyến đường** | 26 tuyến HCM đi tỉnh, 3 mức giá (4 chỗ / 7 chỗ / 16 chỗ) |
+| **Tuyến đường** | 26 tuyến HCM đi tỉnh, 4 mức giá (4 chỗ / 7 chỗ / 18 chỗ / 29 chỗ) |
 | **Gói giá** | Bảng giá global (landing page) + gói giá riêng per-vehicle |
 | **Blog** | 8 bài viết, hỗ trợ draft/publish, tags, SEO |
 | **Đánh giá** | Testimonials khách hàng hiển thị trên trang chủ |
@@ -201,7 +201,7 @@ CMR_car/
 | description | string | Mô tả chi tiết |
 | pricePerDay | number | Giá thuê /ngày (VNĐ) |
 | pricePerHour | number | Giá thuê /giờ |
-| seatCategory | string | `4_cho`, `5_cho`, `7_cho`, `16_cho` |
+| seatCategory | string | `4_cho`, `5_cho`, `7_cho`, `18_cho`, `29_cho` |
 | selfDrivePrice | number? | Giá tự lái /ngày |
 | chauffeurIncluded | boolean? | Có tài xế mặc định |
 | licensePlate | string? | Biển số (admin only) |
@@ -265,7 +265,7 @@ CMR_car/
 | province | string | Nhóm tỉnh |
 | distance | number | Km (cả đi lẫn về) |
 | duration | string | "trong ngày", "2 ngày 1 đêm" |
-| price4Seat / price7Seat / price16Seat | number | Giá theo loại xe |
+| price4Seat / price7Seat / price18Seat / price29Seat | number | Giá theo loại xe |
 | notes | string? | Ghi chú |
 | isActive | boolean | Đang hoạt động |
 
@@ -275,7 +275,7 @@ CMR_car/
 | name / slug | string | Tên + slug gói |
 | serviceTypeSlug | string | Liên kết ServiceType |
 | durationHours / maxKm | number | Giới hạn giờ / km |
-| price4Seat / price7Seat / price16Seat | number | Giá theo loại xe |
+| price4Seat / price7Seat / price18Seat / price29Seat | number | Giá theo loại xe |
 | overagePerKm* / overagePerHour* | number | Phí vượt km / giờ |
 | weekendSurcharge* | number | Phụ thu cuối tuần |
 | includes / excludes | string[] | Bao gồm / không bao gồm |
@@ -366,7 +366,7 @@ Chạy `POST /api/seed` sẽ xóa & tạo lại:
 
 | Collection | Số lượng | Chi tiết |
 |---|---|---|
-| vehicles | 18 | Mercedes S-Class, BMW 7 Series, Rolls-Royce Ghost, Bentley Continental GT, Audi A8 L, Porsche Panamera, Lexus LS 500, Mercedes E-Class, BMW 5 Series, Mercedes GLS 450, Toyota Alphard, Lexus LX 600, Ford Transit 16 chỗ, Mercedes Sprinter VIP 16 chỗ, Toyota Fortuner, Honda CR-V, VinFast VF9, BMW X7 |
+| vehicles | 20 | Mercedes S-Class, BMW 7 Series, Rolls-Royce Ghost, Bentley Continental GT, Audi A8 L, Porsche Panamera, Lexus LS 500, Mercedes E-Class, BMW 5 Series, Mercedes GLS 450, Toyota Alphard, Lexus LX 600, Ford Transit 18 chỗ, Mercedes Sprinter VIP 18 chỗ, Toyota Fortuner, Honda CR-V, VinFast VF9, BMW X7, Hyundai County 29 chỗ, Thaco Town 29 chỗ |
 | serviceTypes | 8 | hourly_4h, hourly_8h, daily, multi_day, trip, airport, self_drive, wedding |
 | routes | 26 | HCM → Vũng Tàu, Đà Lạt, Phan Thiết, Nha Trang, Cần Thơ, Long An, Bình Dương... (3 mức giá) |
 | pricingPackages | 5 | Bảng giá global cho landing page |
@@ -381,7 +381,7 @@ Chạy `POST /api/seed` sẽ xóa & tạo lại:
 | luxury | 7 | S-Class, BMW 7, Rolls-Royce, Bentley, Audi A8L, Panamera, Lexus LS |
 | car (sedan) | 2 | Mercedes E-Class, BMW 5 Series |
 | suv | 5 | GLS 450, LX 600, Fortuner, CR-V, BMW X7 |
-| van | 3 | Alphard, Transit 16 chỗ, Sprinter VIP 16 chỗ |
+| van | 5 | Alphard, Transit 18 chỗ, Sprinter VIP 18 chỗ, Hyundai County 29 chỗ, Thaco Town 29 chỗ |
 | electric | 1 | VinFast VF9 |
 
 ### Xe hỗ trợ tự lái
