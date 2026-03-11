@@ -82,18 +82,22 @@ const seedPricingPackages = [
     maxKm: 50,
     price4Seat: 1000000,
     price7Seat: 1100000,
+    price16Seat: 1300000,
     price18Seat: 1500000,
     price29Seat: 1800000,
     overagePerKm4Seat: 7000,
     overagePerKm7Seat: 8000,
+    overagePerKm16Seat: 9000,
     overagePerKm18Seat: 10000,
     overagePerKm29Seat: 12000,
     overagePerHour4Seat: 80000,
     overagePerHour7Seat: 100000,
+    overagePerHour16Seat: 100000,
     overagePerHour18Seat: 100000,
     overagePerHour29Seat: 120000,
     weekendSurcharge4Seat: 100000,
     weekendSurcharge7Seat: 100000,
+    weekendSurcharge16Seat: 200000,
     weekendSurcharge18Seat: 300000,
     weekendSurcharge29Seat: 400000,
     includes: ['Xăng', 'Tài xế', 'Lương tài xế'],
@@ -109,18 +113,22 @@ const seedPricingPackages = [
     maxKm: 100,
     price4Seat: 1200000,
     price7Seat: 1300000,
+    price16Seat: 1500000,
     price18Seat: 1700000,
     price29Seat: 2200000,
     overagePerKm4Seat: 7000,
     overagePerKm7Seat: 8000,
+    overagePerKm16Seat: 9000,
     overagePerKm18Seat: 10000,
     overagePerKm29Seat: 12000,
     overagePerHour4Seat: 80000,
     overagePerHour7Seat: 100000,
+    overagePerHour16Seat: 100000,
     overagePerHour18Seat: 100000,
     overagePerHour29Seat: 120000,
     weekendSurcharge4Seat: 100000,
     weekendSurcharge7Seat: 100000,
+    weekendSurcharge16Seat: 200000,
     weekendSurcharge18Seat: 300000,
     weekendSurcharge29Seat: 400000,
     includes: ['Xăng', 'Tài xế', 'Lương tài xế'],
@@ -136,18 +144,22 @@ const seedPricingPackages = [
     maxKm: 200,
     price4Seat: 2000000,
     price7Seat: 2200000,
+    price16Seat: 2350000,
     price18Seat: 2500000,
     price29Seat: 3200000,
     overagePerKm4Seat: 6000,
     overagePerKm7Seat: 7000,
+    overagePerKm16Seat: 7500,
     overagePerKm18Seat: 8000,
     overagePerKm29Seat: 10000,
     overagePerHour4Seat: 80000,
     overagePerHour7Seat: 100000,
+    overagePerHour16Seat: 100000,
     overagePerHour18Seat: 100000,
     overagePerHour29Seat: 120000,
     weekendSurcharge4Seat: 100000,
     weekendSurcharge7Seat: 100000,
+    weekendSurcharge16Seat: 200000,
     weekendSurcharge18Seat: 300000,
     weekendSurcharge29Seat: 400000,
     includes: ['Xăng', 'Tài xế', 'Lương tài xế'],
@@ -163,18 +175,22 @@ const seedPricingPackages = [
     maxKm: 300,
     price4Seat: 3000000,
     price7Seat: 3200000,
+    price16Seat: 3250000,
     price18Seat: 3300000,
     price29Seat: 4200000,
     overagePerKm4Seat: 6000,
     overagePerKm7Seat: 7000,
+    overagePerKm16Seat: 7500,
     overagePerKm18Seat: 8000,
     overagePerKm29Seat: 10000,
     overagePerHour4Seat: 80000,
     overagePerHour7Seat: 100000,
+    overagePerHour16Seat: 100000,
     overagePerHour18Seat: 100000,
     overagePerHour29Seat: 120000,
     weekendSurcharge4Seat: 100000,
     weekendSurcharge7Seat: 100000,
+    weekendSurcharge16Seat: 200000,
     weekendSurcharge18Seat: 300000,
     weekendSurcharge29Seat: 400000,
     includes: ['Xăng', 'Tài xế', 'Lương tài xế'],
@@ -190,18 +206,22 @@ const seedPricingPackages = [
     maxKm: 400,
     price4Seat: 3800000,
     price7Seat: 4000000,
+    price16Seat: 4150000,
     price18Seat: 4300000,
     price29Seat: 5500000,
     overagePerKm4Seat: 6000,
     overagePerKm7Seat: 7000,
+    overagePerKm16Seat: 7500,
     overagePerKm18Seat: 8000,
     overagePerKm29Seat: 10000,
     overagePerHour4Seat: 80000,
     overagePerHour7Seat: 100000,
+    overagePerHour16Seat: 100000,
     overagePerHour18Seat: 100000,
     overagePerHour29Seat: 120000,
     weekendSurcharge4Seat: 100000,
     weekendSurcharge7Seat: 100000,
+    weekendSurcharge16Seat: 200000,
     weekendSurcharge18Seat: 300000,
     weekendSurcharge29Seat: 400000,
     includes: ['Xăng', 'Tài xế', 'Lương tài xế'],
@@ -215,44 +235,44 @@ const seedPricingPackages = [
 
 const seedRoutes = [
   // TP.HCM nội thành
-  { from: 'TP.HCM', to: 'City Tour 4 tiếng/50km', province: 'TP.HCM', distance: 50, duration: '4 tiếng', price4Seat: 1000000, price7Seat: 1100000, price18Seat: 1500000, price29Seat: 1800000, isActive: true },
-  { from: 'TP.HCM', to: 'City Tour 8 tiếng/100km', province: 'TP.HCM', distance: 100, duration: '8 tiếng', price4Seat: 1200000, price7Seat: 1300000, price18Seat: 1600000, price29Seat: 2000000, isActive: true },
-  { from: 'TP.HCM', to: 'Tự do 10 tiếng/150km', province: 'TP.HCM', distance: 150, duration: '10 tiếng', price4Seat: 1600000, price7Seat: 1800000, price18Seat: 2000000, price29Seat: 2500000, isActive: true },
+  { from: 'TP.HCM', to: 'City Tour 4 tiếng/50km', province: 'TP.HCM', distance: 50, duration: '4 tiếng', price4Seat: 1000000, price7Seat: 1100000, price16Seat: 1300000, price18Seat: 1500000, price29Seat: 1800000, isActive: true },
+  { from: 'TP.HCM', to: 'City Tour 8 tiếng/100km', province: 'TP.HCM', distance: 100, duration: '8 tiếng', price4Seat: 1200000, price7Seat: 1300000, price16Seat: 1450000, price18Seat: 1600000, price29Seat: 2000000, isActive: true },
+  { from: 'TP.HCM', to: 'Tự do 10 tiếng/150km', province: 'TP.HCM', distance: 150, duration: '10 tiếng', price4Seat: 1600000, price7Seat: 1800000, price16Seat: 1900000, price18Seat: 2000000, price29Seat: 2500000, isActive: true },
   // Bà Rịa Vũng Tàu
-  { from: 'TP.HCM', to: 'TP Vũng Tàu (trong ngày)', province: 'Bà Rịa Vũng Tàu', distance: 230, duration: 'trong ngày', price4Seat: 2000000, price7Seat: 2200000, price18Seat: 2500000, price29Seat: 3000000, isActive: true },
-  { from: 'TP.HCM', to: 'Vũng Tàu (1 chiều)', province: 'Bà Rịa Vũng Tàu', distance: 110, duration: '1 chiều', price4Seat: 1600000, price7Seat: 1800000, price18Seat: 2000000, price29Seat: 2500000, isActive: true },
-  { from: 'TP.HCM', to: 'Vũng Tàu 2 ngày 1 đêm', province: 'Bà Rịa Vũng Tàu', distance: 260, duration: '2 ngày 1 đêm', price4Seat: 3000000, price7Seat: 3300000, price18Seat: 3700000, price29Seat: 4500000, isActive: true },
-  { from: 'TP.HCM', to: 'Long Hải - Dinh Cô', province: 'Bà Rịa Vũng Tàu', distance: 220, duration: 'trong ngày', price4Seat: 2000000, price7Seat: 2200000, price18Seat: 2500000, price29Seat: 3000000, isActive: true },
-  { from: 'TP.HCM', to: 'Hồ Tràm (trong ngày)', province: 'Bà Rịa Vũng Tàu', distance: 230, duration: 'trong ngày', price4Seat: 2000000, price7Seat: 2300000, price18Seat: 2700000, price29Seat: 3300000, isActive: true },
+  { from: 'TP.HCM', to: 'TP Vũng Tàu (trong ngày)', province: 'Bà Rịa Vũng Tàu', distance: 230, duration: 'trong ngày', price4Seat: 2000000, price7Seat: 2200000, price16Seat: 2300000, price18Seat: 2500000, price29Seat: 3000000, isActive: true },
+  { from: 'TP.HCM', to: 'Vũng Tàu (1 chiều)', province: 'Bà Rịa Vũng Tàu', distance: 110, duration: '1 chiều', price4Seat: 1600000, price7Seat: 1800000, price16Seat: 1900000, price18Seat: 2000000, price29Seat: 2500000, isActive: true },
+  { from: 'TP.HCM', to: 'Vũng Tàu 2 ngày 1 đêm', province: 'Bà Rịa Vũng Tàu', distance: 260, duration: '2 ngày 1 đêm', price4Seat: 3000000, price7Seat: 3300000, price16Seat: 3500000, price18Seat: 3700000, price29Seat: 4500000, isActive: true },
+  { from: 'TP.HCM', to: 'Long Hải - Dinh Cô', province: 'Bà Rịa Vũng Tàu', distance: 220, duration: 'trong ngày', price4Seat: 2000000, price7Seat: 2200000, price16Seat: 2300000, price18Seat: 2500000, price29Seat: 3000000, isActive: true },
+  { from: 'TP.HCM', to: 'Hồ Tràm (trong ngày)', province: 'Bà Rịa Vũng Tàu', distance: 230, duration: 'trong ngày', price4Seat: 2000000, price7Seat: 2300000, price16Seat: 2500000, price18Seat: 2700000, price29Seat: 3300000, isActive: true },
   // Đồng Nai
-  { from: 'TP.HCM', to: 'Biên Hòa (8 tiếng)', province: 'Đồng Nai', distance: 80, duration: '8 tiếng', price4Seat: 1200000, price7Seat: 1300000, price18Seat: 1700000, price29Seat: 2100000, isActive: true },
-  { from: 'TP.HCM', to: 'Long Khánh', province: 'Đồng Nai', distance: 160, duration: 'trong ngày', price4Seat: 1800000, price7Seat: 2000000, price18Seat: 2200000, price29Seat: 2800000, isActive: true },
+  { from: 'TP.HCM', to: 'Biên Hòa (8 tiếng)', province: 'Đồng Nai', distance: 80, duration: '8 tiếng', price4Seat: 1200000, price7Seat: 1300000, price16Seat: 1500000, price18Seat: 1700000, price29Seat: 2100000, isActive: true },
+  { from: 'TP.HCM', to: 'Long Khánh', province: 'Đồng Nai', distance: 160, duration: 'trong ngày', price4Seat: 1800000, price7Seat: 2000000, price16Seat: 2100000, price18Seat: 2200000, price29Seat: 2800000, isActive: true },
   // Bình Dương
-  { from: 'TP.HCM', to: 'Thủ Dầu Một (8 tiếng)', province: 'Bình Dương', distance: 80, duration: '8 tiếng', price4Seat: 1300000, price7Seat: 1400000, price18Seat: 1700000, price29Seat: 2100000, isActive: true },
+  { from: 'TP.HCM', to: 'Thủ Dầu Một (8 tiếng)', province: 'Bình Dương', distance: 80, duration: '8 tiếng', price4Seat: 1300000, price7Seat: 1400000, price16Seat: 1600000, price18Seat: 1700000, price29Seat: 2100000, isActive: true },
   // Tiền Giang
-  { from: 'TP.HCM', to: 'Mỹ Tho', province: 'Tiền Giang', distance: 150, duration: 'trong ngày', price4Seat: 1600000, price7Seat: 1800000, price18Seat: 2000000, price29Seat: 2500000, isActive: true },
+  { from: 'TP.HCM', to: 'Mỹ Tho', province: 'Tiền Giang', distance: 150, duration: 'trong ngày', price4Seat: 1600000, price7Seat: 1800000, price16Seat: 1900000, price18Seat: 2000000, price29Seat: 2500000, isActive: true },
   // Long An
-  { from: 'TP.HCM', to: 'Tân An (Long An)', province: 'Long An', distance: 110, duration: 'trong ngày', price4Seat: 1400000, price7Seat: 1500000, price18Seat: 1800000, price29Seat: 2200000, isActive: true },
+  { from: 'TP.HCM', to: 'Tân An (Long An)', province: 'Long An', distance: 110, duration: 'trong ngày', price4Seat: 1400000, price7Seat: 1500000, price16Seat: 1650000, price18Seat: 1800000, price29Seat: 2200000, isActive: true },
   // Tây Ninh
-  { from: 'TP.HCM', to: 'Núi Bà Đen', province: 'Tây Ninh', distance: 210, duration: 'trong ngày', price4Seat: 1800000, price7Seat: 2000000, price18Seat: 2200000, price29Seat: 2800000, isActive: true },
+  { from: 'TP.HCM', to: 'Núi Bà Đen', province: 'Tây Ninh', distance: 210, duration: 'trong ngày', price4Seat: 1800000, price7Seat: 2000000, price16Seat: 2100000, price18Seat: 2200000, price29Seat: 2800000, isActive: true },
   // Bình Thuận
-  { from: 'TP.HCM', to: 'Phan Thiết (trong ngày)', province: 'Bình Thuận', distance: 400, duration: 'trong ngày', price4Seat: 2500000, price7Seat: 2800000, price18Seat: 3300000, price29Seat: 4000000, isActive: true },
-  { from: 'TP.HCM', to: 'Mũi Né 2 ngày 1 đêm', province: 'Bình Thuận', distance: 500, duration: '2 ngày 1 đêm', price4Seat: 3800000, price7Seat: 4300000, price18Seat: 5000000, price29Seat: 6000000, isActive: true },
+  { from: 'TP.HCM', to: 'Phan Thiết (trong ngày)', province: 'Bình Thuận', distance: 400, duration: 'trong ngày', price4Seat: 2500000, price7Seat: 2800000, price16Seat: 3000000, price18Seat: 3300000, price29Seat: 4000000, isActive: true },
+  { from: 'TP.HCM', to: 'Mũi Né 2 ngày 1 đêm', province: 'Bình Thuận', distance: 500, duration: '2 ngày 1 đêm', price4Seat: 3800000, price7Seat: 4300000, price16Seat: 4600000, price18Seat: 5000000, price29Seat: 6000000, isActive: true },
   // Lâm Đồng
-  { from: 'TP.HCM', to: 'Đà Lạt (trong ngày)', province: 'Lâm Đồng', distance: 700, duration: 'trong ngày', price4Seat: 4000000, price7Seat: 4400000, price18Seat: 5000000, price29Seat: 6000000, isActive: true },
-  { from: 'TP.HCM', to: 'Đà Lạt 2 ngày 1 đêm', province: 'Lâm Đồng', distance: 750, duration: '2 ngày 1 đêm', price4Seat: 5000000, price7Seat: 5500000, price18Seat: 6500000, price29Seat: 8000000, isActive: true },
-  { from: 'TP.HCM', to: 'Đà Lạt 3 ngày 2 đêm', province: 'Lâm Đồng', distance: 800, duration: '3 ngày 2 đêm', price4Seat: 6200000, price7Seat: 6800000, price18Seat: 8000000, price29Seat: 9800000, isActive: true },
-  { from: 'TP.HCM', to: 'Bảo Lộc', province: 'Lâm Đồng', distance: 420, duration: 'trong ngày', price4Seat: 2800000, price7Seat: 3000000, price18Seat: 3400000, price29Seat: 4200000, isActive: true },
+  { from: 'TP.HCM', to: 'Đà Lạt (trong ngày)', province: 'Lâm Đồng', distance: 700, duration: 'trong ngày', price4Seat: 4000000, price7Seat: 4400000, price16Seat: 4700000, price18Seat: 5000000, price29Seat: 6000000, isActive: true },
+  { from: 'TP.HCM', to: 'Đà Lạt 2 ngày 1 đêm', province: 'Lâm Đồng', distance: 750, duration: '2 ngày 1 đêm', price4Seat: 5000000, price7Seat: 5500000, price16Seat: 6000000, price18Seat: 6500000, price29Seat: 8000000, isActive: true },
+  { from: 'TP.HCM', to: 'Đà Lạt 3 ngày 2 đêm', province: 'Lâm Đồng', distance: 800, duration: '3 ngày 2 đêm', price4Seat: 6200000, price7Seat: 6800000, price16Seat: 7400000, price18Seat: 8000000, price29Seat: 9800000, isActive: true },
+  { from: 'TP.HCM', to: 'Bảo Lộc', province: 'Lâm Đồng', distance: 420, duration: 'trong ngày', price4Seat: 2800000, price7Seat: 3000000, price16Seat: 3200000, price18Seat: 3400000, price29Seat: 4200000, isActive: true },
   // Khánh Hòa
-  { from: 'TP.HCM', to: 'Nha Trang (1 chiều)', province: 'Khánh Hòa', distance: 850, duration: '1 chiều', price4Seat: 4700000, price7Seat: 5000000, price18Seat: 6000000, price29Seat: 7200000, isActive: true },
-  { from: 'TP.HCM', to: 'Nha Trang 2 ngày 1 đêm', province: 'Khánh Hòa', distance: 900, duration: '2 ngày 1 đêm', price4Seat: 5900000, price7Seat: 6300000, price18Seat: 7500000, price29Seat: 9000000, isActive: true },
+  { from: 'TP.HCM', to: 'Nha Trang (1 chiều)', province: 'Khánh Hòa', distance: 850, duration: '1 chiều', price4Seat: 4700000, price7Seat: 5000000, price16Seat: 5500000, price18Seat: 6000000, price29Seat: 7200000, isActive: true },
+  { from: 'TP.HCM', to: 'Nha Trang 2 ngày 1 đêm', province: 'Khánh Hòa', distance: 900, duration: '2 ngày 1 đêm', price4Seat: 5900000, price7Seat: 6300000, price16Seat: 6900000, price18Seat: 7500000, price29Seat: 9000000, isActive: true },
   // Cần Thơ
-  { from: 'TP.HCM', to: 'Cần Thơ (trong ngày)', province: 'Cần Thơ', distance: 360, duration: 'trong ngày', price4Seat: 2300000, price7Seat: 2500000, price18Seat: 3000000, price29Seat: 3600000, isActive: true },
-  { from: 'TP.HCM', to: 'Cần Thơ 2 ngày 1 đêm', province: 'Cần Thơ', distance: 400, duration: '2 ngày 1 đêm', price4Seat: 3300000, price7Seat: 3800000, price18Seat: 4300000, price29Seat: 5200000, isActive: true },
+  { from: 'TP.HCM', to: 'Cần Thơ (trong ngày)', province: 'Cần Thơ', distance: 360, duration: 'trong ngày', price4Seat: 2300000, price7Seat: 2500000, price16Seat: 2750000, price18Seat: 3000000, price29Seat: 3600000, isActive: true },
+  { from: 'TP.HCM', to: 'Cần Thơ 2 ngày 1 đêm', province: 'Cần Thơ', distance: 400, duration: '2 ngày 1 đêm', price4Seat: 3300000, price7Seat: 3800000, price16Seat: 4000000, price18Seat: 4300000, price29Seat: 5200000, isActive: true },
   // An Giang
-  { from: 'TP.HCM', to: 'Châu Đốc (trong ngày)', province: 'An Giang', distance: 550, duration: 'trong ngày', price4Seat: 3200000, price7Seat: 3500000, price18Seat: 4500000, price29Seat: 5500000, isActive: true },
+  { from: 'TP.HCM', to: 'Châu Đốc (trong ngày)', province: 'An Giang', distance: 550, duration: 'trong ngày', price4Seat: 3200000, price7Seat: 3500000, price16Seat: 4000000, price18Seat: 4500000, price29Seat: 5500000, isActive: true },
   // Bến Tre
-  { from: 'TP.HCM', to: 'TP Bến Tre', province: 'Bến Tre', distance: 190, duration: 'trong ngày', price4Seat: 1800000, price7Seat: 2000000, price18Seat: 2300000, price29Seat: 2800000, isActive: true },
+  { from: 'TP.HCM', to: 'TP Bến Tre', province: 'Bến Tre', distance: 190, duration: 'trong ngày', price4Seat: 1800000, price7Seat: 2000000, price16Seat: 2150000, price18Seat: 2300000, price29Seat: 2800000, isActive: true },
 ];
 
 // ─── Seed: Vehicles (with per-vehicle packages) ──────────
@@ -1262,6 +1282,58 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       }
 
       return res.status(200).json({ success: true, message: 'Database updated (no reset)', details: results });
+    }
+
+    // ─── MODE: ADD16SEAT (add price16Seat back to routes + packages) ───
+    if (mode === 'add16seat') {
+      const results: string[] = [];
+
+      const route16Map: Record<string, number> = {
+        'City Tour 4 tiếng/50km': 1300000,
+        'City Tour 8 tiếng/100km': 1450000,
+        'Tự do 10 tiếng/150km': 1900000,
+        'TP Vũng Tàu (trong ngày)': 2300000,
+        'Vũng Tàu (1 chiều)': 1900000,
+        'Vũng Tàu 2 ngày 1 đêm': 3500000,
+        'Long Hải - Dinh Cô': 2300000,
+        'Hồ Tràm (trong ngày)': 2500000,
+        'Biên Hòa (8 tiếng)': 1500000,
+        'Long Khánh': 2100000,
+        'Thủ Dầu Một (8 tiếng)': 1600000,
+        'Mỹ Tho': 1900000,
+        'Tân An (Long An)': 1650000,
+        'Núi Bà Đen': 2100000,
+        'Phan Thiết (trong ngày)': 3000000,
+        'Mũi Né 2 ngày 1 đêm': 4600000,
+        'Đà Lạt (trong ngày)': 4700000,
+        'Đà Lạt 2 ngày 1 đêm': 6000000,
+        'Đà Lạt 3 ngày 2 đêm': 7400000,
+        'Bảo Lộc': 3200000,
+        'Nha Trang (1 chiều)': 5500000,
+        'Nha Trang 2 ngày 1 đêm': 6900000,
+        'Cần Thơ (trong ngày)': 2750000,
+        'Cần Thơ 2 ngày 1 đêm': 4000000,
+        'Châu Đốc (trong ngày)': 4000000,
+        'TP Bến Tre': 2150000,
+      };
+      for (const [to, price16] of Object.entries(route16Map)) {
+        await db.collection('routes').updateOne({ to }, { $set: { price16Seat: price16 } });
+      }
+      results.push(`Routes: set price16Seat for ${Object.keys(route16Map).length} routes`);
+
+      const pkg16Updates: Record<string, Record<string, number>> = {
+        'pkg_4h':    { price16Seat: 1300000, overagePerKm16Seat: 9000, overagePerHour16Seat: 100000, weekendSurcharge16Seat: 200000 },
+        'pkg_8h':    { price16Seat: 1500000, overagePerKm16Seat: 9000, overagePerHour16Seat: 100000, weekendSurcharge16Seat: 200000 },
+        'pkg_200km': { price16Seat: 2350000, overagePerKm16Seat: 7500, overagePerHour16Seat: 100000, weekendSurcharge16Seat: 200000 },
+        'pkg_300km': { price16Seat: 3250000, overagePerKm16Seat: 7500, overagePerHour16Seat: 100000, weekendSurcharge16Seat: 200000 },
+        'pkg_400km': { price16Seat: 4150000, overagePerKm16Seat: 7500, overagePerHour16Seat: 100000, weekendSurcharge16Seat: 200000 },
+      };
+      for (const [slug, fields] of Object.entries(pkg16Updates)) {
+        await db.collection('pricingPackages').updateOne({ slug }, { $set: fields });
+      }
+      results.push(`PricingPackages: set 16-seat fields for ${Object.keys(pkg16Updates).length} packages`);
+
+      return res.status(200).json({ success: true, message: 'Added price16Seat to routes + packages', details: results });
     }
 
     // ─── MODE: RESET (full re-seed) ─────────────────────

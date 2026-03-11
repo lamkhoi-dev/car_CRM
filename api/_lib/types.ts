@@ -91,6 +91,7 @@ export interface RouteDoc {
   duration: string;       // "trong ngày", "2 ngày 1 đêm"
   price4Seat: number;     // Giá xe 4 chỗ
   price7Seat: number;     // Giá xe 7 chỗ
+  price16Seat: number;    // Giá xe 16 chỗ
   price18Seat: number;    // Giá xe 18 chỗ
   price29Seat: number;    // Giá xe 29 chỗ
   notes?: string;         // Ghi chú đặc biệt
@@ -110,21 +111,25 @@ export interface PricingPackageDoc {
   // Giá gốc theo loại xe
   price4Seat: number;
   price7Seat: number;
+  price16Seat: number;
   price18Seat: number;
   price29Seat: number;
   // Phí phát sinh vượt km
   overagePerKm4Seat: number;
   overagePerKm7Seat: number;
+  overagePerKm16Seat: number;
   overagePerKm18Seat: number;
   overagePerKm29Seat: number;
   // Phí phát sinh vượt giờ
   overagePerHour4Seat: number;
   overagePerHour7Seat: number;
+  overagePerHour16Seat: number;
   overagePerHour18Seat: number;
   overagePerHour29Seat: number;
   // Phụ thu cuối tuần
   weekendSurcharge4Seat: number;
   weekendSurcharge7Seat: number;
+  weekendSurcharge16Seat: number;
   weekendSurcharge18Seat: number;
   weekendSurcharge29Seat: number;
   includes: string[];     // ["Xăng", "Tài xế", "Lương tài xế"]

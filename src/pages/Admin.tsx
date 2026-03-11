@@ -464,9 +464,10 @@ const RouteForm = ({ initial, onSubmit, onCancel, loading }: RouteFormProps) => 
     duration: initial?.duration || '',
     price4Seat: initial?.price4Seat || 0,
     price7Seat: initial?.price7Seat || 0,
+    price16Seat: initial?.price16Seat || 0,
     price18Seat: initial?.price18Seat || 0,
     price29Seat: initial?.price29Seat || 0,
-    notes: initial?.notes || '',
+    notes: initial?.notes || ''
     isActive: initial?.isActive !== false,
   });
 
@@ -477,6 +478,7 @@ const RouteForm = ({ initial, onSubmit, onCancel, loading }: RouteFormProps) => 
       distance: Number(form.distance),
       price4Seat: Number(form.price4Seat),
       price7Seat: Number(form.price7Seat),
+      price16Seat: Number(form.price16Seat),
       price18Seat: Number(form.price18Seat),
       price29Seat: Number(form.price29Seat),
     });
@@ -521,7 +523,7 @@ const RouteForm = ({ initial, onSubmit, onCancel, loading }: RouteFormProps) => 
           </label>
         </div>
       </div>
-      <div className="grid grid-cols-4 gap-3">
+      <div className="grid grid-cols-5 gap-3">
         <div>
           <label className="mb-1 block text-xs font-medium">Giá xe 4 chỗ (VNĐ)</label>
           <input type="number" value={form.price4Seat} onChange={(e) => setForm({ ...form, price4Seat: Number(e.target.value) })}
@@ -530,6 +532,11 @@ const RouteForm = ({ initial, onSubmit, onCancel, loading }: RouteFormProps) => 
         <div>
           <label className="mb-1 block text-xs font-medium">Giá xe 7 chỗ (VNĐ)</label>
           <input type="number" value={form.price7Seat} onChange={(e) => setForm({ ...form, price7Seat: Number(e.target.value) })}
+            className="w-full rounded-lg border border-border bg-secondary px-3 py-2 text-sm focus:border-primary focus:outline-none" />
+        </div>
+        <div>
+          <label className="mb-1 block text-xs font-medium">Giá xe 16 chỗ (VNĐ)</label>
+          <input type="number" value={form.price16Seat} onChange={(e) => setForm({ ...form, price16Seat: Number(e.target.value) })}
             className="w-full rounded-lg border border-border bg-secondary px-3 py-2 text-sm focus:border-primary focus:outline-none" />
         </div>
         <div>
@@ -577,18 +584,22 @@ const PricingPackageForm = ({ initial, serviceTypes, onSubmit, onCancel, loading
     maxKm: initial?.maxKm || 0,
     price4Seat: initial?.price4Seat || 0,
     price7Seat: initial?.price7Seat || 0,
+    price16Seat: initial?.price16Seat || 0,
     price18Seat: initial?.price18Seat || 0,
     price29Seat: initial?.price29Seat || 0,
     overagePerKm4Seat: initial?.overagePerKm4Seat || 0,
     overagePerKm7Seat: initial?.overagePerKm7Seat || 0,
+    overagePerKm16Seat: initial?.overagePerKm16Seat || 0,
     overagePerKm18Seat: initial?.overagePerKm18Seat || 0,
     overagePerKm29Seat: initial?.overagePerKm29Seat || 0,
     overagePerHour4Seat: initial?.overagePerHour4Seat || 0,
     overagePerHour7Seat: initial?.overagePerHour7Seat || 0,
+    overagePerHour16Seat: initial?.overagePerHour16Seat || 0,
     overagePerHour18Seat: initial?.overagePerHour18Seat || 0,
     overagePerHour29Seat: initial?.overagePerHour29Seat || 0,
     weekendSurcharge4Seat: initial?.weekendSurcharge4Seat || 0,
     weekendSurcharge7Seat: initial?.weekendSurcharge7Seat || 0,
+    weekendSurcharge16Seat: initial?.weekendSurcharge16Seat || 0,
     weekendSurcharge18Seat: initial?.weekendSurcharge18Seat || 0,
     weekendSurcharge29Seat: initial?.weekendSurcharge29Seat || 0,
     includes: initial?.includes?.join('\n') || '',
@@ -607,18 +618,22 @@ const PricingPackageForm = ({ initial, serviceTypes, onSubmit, onCancel, loading
       maxKm: Number(form.maxKm),
       price4Seat: Number(form.price4Seat),
       price7Seat: Number(form.price7Seat),
+      price16Seat: Number(form.price16Seat),
       price18Seat: Number(form.price18Seat),
       price29Seat: Number(form.price29Seat),
       overagePerKm4Seat: Number(form.overagePerKm4Seat),
       overagePerKm7Seat: Number(form.overagePerKm7Seat),
+      overagePerKm16Seat: Number(form.overagePerKm16Seat),
       overagePerKm18Seat: Number(form.overagePerKm18Seat),
       overagePerKm29Seat: Number(form.overagePerKm29Seat),
       overagePerHour4Seat: Number(form.overagePerHour4Seat),
       overagePerHour7Seat: Number(form.overagePerHour7Seat),
+      overagePerHour16Seat: Number(form.overagePerHour16Seat),
       overagePerHour18Seat: Number(form.overagePerHour18Seat),
       overagePerHour29Seat: Number(form.overagePerHour29Seat),
       weekendSurcharge4Seat: Number(form.weekendSurcharge4Seat),
       weekendSurcharge7Seat: Number(form.weekendSurcharge7Seat),
+      weekendSurcharge16Seat: Number(form.weekendSurcharge16Seat),
       weekendSurcharge18Seat: Number(form.weekendSurcharge18Seat),
       weekendSurcharge29Seat: Number(form.weekendSurcharge29Seat),
       includes: form.includes.split('\n').map(s => s.trim()).filter(Boolean),
@@ -674,36 +689,40 @@ const PricingPackageForm = ({ initial, serviceTypes, onSubmit, onCancel, loading
       </div>
       <div className="rounded-lg bg-secondary/50 p-3 space-y-2">
         <div className="text-xs font-semibold text-muted-foreground mb-1">Giá theo loại xe (VNĐ)</div>
-        <div className="grid grid-cols-4 gap-3">
+        <div className="grid grid-cols-5 gap-3">
           {numField('Giá 4 chỗ', 'price4Seat')}
           {numField('Giá 7 chỗ', 'price7Seat')}
+          {numField('Giá 16 chỗ', 'price16Seat')}
           {numField('Giá 18 chỗ', 'price18Seat')}
           {numField('Giá 29 chỗ', 'price29Seat')}
         </div>
       </div>
       <div className="rounded-lg bg-secondary/50 p-3 space-y-2">
         <div className="text-xs font-semibold text-muted-foreground mb-1">Phụ phí vượt km (VNĐ/km)</div>
-        <div className="grid grid-cols-4 gap-3">
+        <div className="grid grid-cols-5 gap-3">
           {numField('4 chỗ', 'overagePerKm4Seat')}
           {numField('7 chỗ', 'overagePerKm7Seat')}
+          {numField('16 chỗ', 'overagePerKm16Seat')}
           {numField('18 chỗ', 'overagePerKm18Seat')}
           {numField('29 chỗ', 'overagePerKm29Seat')}
         </div>
       </div>
       <div className="rounded-lg bg-secondary/50 p-3 space-y-2">
         <div className="text-xs font-semibold text-muted-foreground mb-1">Phụ phí vượt giờ (VNĐ/giờ)</div>
-        <div className="grid grid-cols-4 gap-3">
+        <div className="grid grid-cols-5 gap-3">
           {numField('4 chỗ', 'overagePerHour4Seat')}
           {numField('7 chỗ', 'overagePerHour7Seat')}
+          {numField('16 chỗ', 'overagePerHour16Seat')}
           {numField('18 chỗ', 'overagePerHour18Seat')}
           {numField('29 chỗ', 'overagePerHour29Seat')}
         </div>
       </div>
       <div className="rounded-lg bg-secondary/50 p-3 space-y-2">
         <div className="text-xs font-semibold text-muted-foreground mb-1">Phụ thu cuối tuần (VNĐ)</div>
-        <div className="grid grid-cols-4 gap-3">
+        <div className="grid grid-cols-5 gap-3">
           {numField('4 chỗ', 'weekendSurcharge4Seat')}
           {numField('7 chỗ', 'weekendSurcharge7Seat')}
+          {numField('16 chỗ', 'weekendSurcharge16Seat')}
           {numField('18 chỗ', 'weekendSurcharge18Seat')}
           {numField('29 chỗ', 'weekendSurcharge29Seat')}
         </div>
@@ -1369,7 +1388,7 @@ const Admin = () => {
                         {r.province} · {r.distance}km · {r.duration}
                       </div>
                       <div className="text-xs text-muted-foreground mt-0.5">
-                        4 chỗ: {formatVND(r.price4Seat)} · 7 chỗ: {formatVND(r.price7Seat)} · 18 chỗ: {formatVND(r.price18Seat)} · 29 chỗ: {formatVND(r.price29Seat)}
+                        4 chỗ: {formatVND(r.price4Seat)} · 7 chỗ: {formatVND(r.price7Seat)} · 16 chỗ: {formatVND(r.price16Seat)} · 18 chỗ: {formatVND(r.price18Seat)} · 29 chỗ: {formatVND(r.price29Seat)}
                       </div>
                     </div>
                     <span className={`rounded-full px-2 py-0.5 text-[10px] font-medium ${r.isActive ? 'bg-success/10 text-success' : 'bg-destructive/10 text-destructive'}`}>
@@ -1437,7 +1456,7 @@ const Admin = () => {
                         </button>
                       </div>
                     </div>
-                    <div className="grid grid-cols-4 gap-2 text-xs">
+                    <div className="grid grid-cols-5 gap-2 text-xs">
                       <div className="rounded-lg bg-secondary p-2">
                         <div className="text-muted-foreground">4 chỗ</div>
                         <div className="font-semibold">{formatVND(pkg.price4Seat)}</div>
@@ -1447,6 +1466,11 @@ const Admin = () => {
                         <div className="text-muted-foreground">7 chỗ</div>
                         <div className="font-semibold">{formatVND(pkg.price7Seat)}</div>
                         <div className="text-muted-foreground mt-0.5">+{formatVND(pkg.overagePerKm7Seat)}/km · +{formatVND(pkg.overagePerHour7Seat)}/h</div>
+                      </div>
+                      <div className="rounded-lg bg-secondary p-2">
+                        <div className="text-muted-foreground">16 chỗ</div>
+                        <div className="font-semibold">{formatVND(pkg.price16Seat)}</div>
+                        <div className="text-muted-foreground mt-0.5">+{formatVND(pkg.overagePerKm16Seat)}/km · +{formatVND(pkg.overagePerHour16Seat)}/h</div>
                       </div>
                       <div className="rounded-lg bg-secondary p-2">
                         <div className="text-muted-foreground">18 chỗ</div>
