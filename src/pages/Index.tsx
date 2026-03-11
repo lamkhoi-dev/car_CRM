@@ -42,9 +42,9 @@ import { useState, useMemo } from "react";
 const VIDEO_URL =
   "https://res.cloudinary.com/dpr6zwanv/video/upload/v1773070670/carCRM/landing/banner.mp4";
 const GALLERY = [
-  "https://res.cloudinary.com/dpr6zwanv/image/upload/v1772344344/carCRM/landing/landingpage__1_.jpg",
+  "https://res.cloudinary.com/dpr6zwanv/image/upload/v1773231543/carCRM/landing/seat291.jpg",
   "https://res.cloudinary.com/dpr6zwanv/image/upload/v1772344350/carCRM/landing/landingpage__2_.jpg",
-  "https://res.cloudinary.com/dpr6zwanv/image/upload/v1772344352/carCRM/landing/landingpage__3_.jpg",
+  "https://res.cloudinary.com/dpr6zwanv/image/upload/v1773236164/carCRM/landing/seat292.jpg",
   "https://res.cloudinary.com/dpr6zwanv/image/upload/v1772344354/carCRM/landing/landingpage__4_.jpg",
   "https://res.cloudinary.com/dpr6zwanv/image/upload/v1772344357/carCRM/landing/landingpage__5_.jpg",
   "https://res.cloudinary.com/dpr6zwanv/image/upload/v1772344360/carCRM/landing/landingpage__6_.jpg",
