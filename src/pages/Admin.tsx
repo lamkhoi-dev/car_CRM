@@ -467,7 +467,7 @@ const RouteForm = ({ initial, onSubmit, onCancel, loading }: RouteFormProps) => 
     price16Seat: initial?.price16Seat || 0,
     price18Seat: initial?.price18Seat || 0,
     price29Seat: initial?.price29Seat || 0,
-    notes: initial?.notes || ''
+    notes: initial?.notes || '',
     isActive: initial?.isActive !== false,
   });
 
