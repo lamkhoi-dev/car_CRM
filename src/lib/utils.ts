@@ -10,6 +10,13 @@ export function formatVND(amount: number): string {
   return (amount ?? 0).toLocaleString('vi-VN') + '₫';
 }
 
+/** Format price in millions: 1500000 → "1.5 triệu", 1850000 → "1.85 triệu" */
+export function formatTrieu(amount: number): string {
+  const n = (amount ?? 0) / 1_000_000;
+  const rounded = parseFloat(n.toFixed(2));
+  return rounded.toLocaleString('vi-VN') + ' triệu';
+}
+
 /** Lấy hoặc tạo Device ID duy nhất cho thiết bị này */
 export function getDeviceId(): string {
   const KEY = 'driveflux_device_id';

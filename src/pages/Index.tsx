@@ -35,7 +35,7 @@ import { useTestimonials, useBlogPosts } from "@/hooks/useBlog";
 import { useServiceTypes, usePricingPackages, useRoutes } from "@/hooks/useServices";
 import VehicleCard from "@/components/VehicleCard";
 import SkeletonCard from "@/components/SkeletonCard";
-import { formatVND } from "@/lib/utils";
+import { formatVND, formatTrieu } from "@/lib/utils";
 import { useState, useMemo } from "react";
 
 /* ── Cloudinary URLs ── */
@@ -532,23 +532,23 @@ const Index = () => {
                   <div className="grid grid-cols-5 gap-2 rounded-lg bg-secondary/50 p-3">
                     <div className="text-center">
                       <div className="text-[10px] text-muted-foreground">4 chỗ</div>
-                      <div className="text-xs font-bold text-foreground">{formatVND(route.price4Seat)}</div>
+                      <div className="text-xs font-bold text-foreground">{formatTrieu(route.price4Seat)}</div>
                     </div>
                     <div className="text-center">
                       <div className="text-[10px] text-muted-foreground">7 chỗ</div>
-                      <div className="text-xs font-bold text-foreground">{formatVND(route.price7Seat)}</div>
+                      <div className="text-xs font-bold text-foreground">{formatTrieu(route.price7Seat)}</div>
                     </div>
                     <div className="text-center">
                       <div className="text-[10px] text-muted-foreground">16 chỗ</div>
-                      <div className="text-xs font-bold text-foreground">{formatVND(route.price16Seat)}</div>
+                      <div className="text-xs font-bold text-foreground">{formatTrieu(route.price16Seat)}</div>
                     </div>
                     <div className="text-center">
                       <div className="text-[10px] text-muted-foreground">18 chỗ</div>
-                      <div className="text-xs font-bold text-foreground">{formatVND(route.price18Seat)}</div>
+                      <div className="text-xs font-bold text-foreground">{formatTrieu(route.price18Seat)}</div>
                     </div>
                     <div className="text-center">
                       <div className="text-[10px] text-muted-foreground">29 chỗ</div>
-                      <div className="text-xs font-bold text-foreground">{formatVND(route.price29Seat)}</div>
+                      <div className="text-xs font-bold text-foreground">{formatTrieu(route.price29Seat)}</div>
                     </div>
                   </div>
                 </motion.div>
@@ -668,11 +668,11 @@ const Index = () => {
                         <span className="text-sm font-medium">{pkg.name}</span>
                         <div className="text-[11px] text-muted-foreground">{pkg.durationHours}h / {pkg.maxKm}km</div>
                       </div>
-                      <span className="text-right text-sm font-bold">{formatVND(pkg.price4Seat)}</span>
-                      <span className="text-right text-sm font-bold">{formatVND(pkg.price7Seat)}</span>
-                      <span className="text-right text-sm font-bold">{formatVND(pkg.price16Seat)}</span>
-                      <span className="text-right text-sm font-bold">{formatVND(pkg.price18Seat)}</span>
-                      <span className="text-right text-sm font-bold">{formatVND(pkg.price29Seat)}</span>
+                      <span className="text-right text-sm font-bold">{formatTrieu(pkg.price4Seat)}</span>
+                      <span className="text-right text-sm font-bold">{formatTrieu(pkg.price7Seat)}</span>
+                      <span className="text-right text-sm font-bold">{formatTrieu(pkg.price16Seat)}</span>
+                      <span className="text-right text-sm font-bold">{formatTrieu(pkg.price18Seat)}</span>
+                      <span className="text-right text-sm font-bold">{formatTrieu(pkg.price29Seat)}</span>
                     </div>
                     {/* Mobile card */}
                     <div className="p-4 sm:hidden">
@@ -681,23 +681,23 @@ const Index = () => {
                       <div className="grid grid-cols-5 gap-2 rounded-lg bg-secondary/50 p-2.5">
                         <div className="text-center">
                           <div className="text-[10px] text-muted-foreground">4 chỗ</div>
-                          <div className="text-xs font-bold">{formatVND(pkg.price4Seat)}</div>
+                          <div className="text-xs font-bold">{formatTrieu(pkg.price4Seat)}</div>
                         </div>
                         <div className="text-center">
                           <div className="text-[10px] text-muted-foreground">7 chỗ</div>
-                          <div className="text-xs font-bold">{formatVND(pkg.price7Seat)}</div>
+                          <div className="text-xs font-bold">{formatTrieu(pkg.price7Seat)}</div>
                         </div>
                         <div className="text-center">
                           <div className="text-[10px] text-muted-foreground">16 chỗ</div>
-                          <div className="text-xs font-bold">{formatVND(pkg.price16Seat)}</div>
+                          <div className="text-xs font-bold">{formatTrieu(pkg.price16Seat)}</div>
                         </div>
                         <div className="text-center">
                           <div className="text-[10px] text-muted-foreground">18 chỗ</div>
-                          <div className="text-xs font-bold">{formatVND(pkg.price18Seat)}</div>
+                          <div className="text-xs font-bold">{formatTrieu(pkg.price18Seat)}</div>
                         </div>
                         <div className="text-center">
                           <div className="text-[10px] text-muted-foreground">29 chỗ</div>
-                          <div className="text-xs font-bold">{formatVND(pkg.price29Seat)}</div>
+                          <div className="text-xs font-bold">{formatTrieu(pkg.price29Seat)}</div>
                         </div>
                       </div>
                     </div>
@@ -781,11 +781,11 @@ const Index = () => {
                           <span className="text-sm font-medium">{r.from} → {r.to}</span>
                           <div className="text-[11px] text-muted-foreground">{r.distance}km · {r.duration}</div>
                         </div>
-                        <span className="text-right text-sm font-bold">{formatVND(r.price4Seat)}</span>
-                        <span className="text-right text-sm font-bold">{formatVND(r.price7Seat)}</span>
-                        <span className="text-right text-sm font-bold">{formatVND(r.price16Seat)}</span>
-                        <span className="text-right text-sm font-bold">{formatVND(r.price18Seat)}</span>
-                        <span className="text-right text-sm font-bold">{formatVND(r.price29Seat)}</span>
+                        <span className="text-right text-sm font-bold">{formatTrieu(r.price4Seat)}</span>
+                        <span className="text-right text-sm font-bold">{formatTrieu(r.price7Seat)}</span>
+                        <span className="text-right text-sm font-bold">{formatTrieu(r.price16Seat)}</span>
+                        <span className="text-right text-sm font-bold">{formatTrieu(r.price18Seat)}</span>
+                        <span className="text-right text-sm font-bold">{formatTrieu(r.price29Seat)}</span>
                       </div>
                       {/* Mobile card */}
                       <div className="p-4 sm:hidden">
@@ -794,23 +794,23 @@ const Index = () => {
                         <div className="grid grid-cols-5 gap-2 rounded-lg bg-secondary/50 p-2.5">
                           <div className="text-center">
                             <div className="text-[10px] text-muted-foreground">4 chỗ</div>
-                            <div className="text-xs font-bold">{formatVND(r.price4Seat)}</div>
+                            <div className="text-xs font-bold">{formatTrieu(r.price4Seat)}</div>
                           </div>
                           <div className="text-center">
                             <div className="text-[10px] text-muted-foreground">7 chỗ</div>
-                            <div className="text-xs font-bold">{formatVND(r.price7Seat)}</div>
+                            <div className="text-xs font-bold">{formatTrieu(r.price7Seat)}</div>
                           </div>
                           <div className="text-center">
                             <div className="text-[10px] text-muted-foreground">16 chỗ</div>
-                            <div className="text-xs font-bold">{formatVND(r.price16Seat)}</div>
+                            <div className="text-xs font-bold">{formatTrieu(r.price16Seat)}</div>
                           </div>
                           <div className="text-center">
                             <div className="text-[10px] text-muted-foreground">18 chỗ</div>
-                            <div className="text-xs font-bold">{formatVND(r.price18Seat)}</div>
+                            <div className="text-xs font-bold">{formatTrieu(r.price18Seat)}</div>
                           </div>
                           <div className="text-center">
                             <div className="text-[10px] text-muted-foreground">29 chỗ</div>
-                            <div className="text-xs font-bold">{formatVND(r.price29Seat)}</div>
+                            <div className="text-xs font-bold">{formatTrieu(r.price29Seat)}</div>
                           </div>
                         </div>
                       </div>
